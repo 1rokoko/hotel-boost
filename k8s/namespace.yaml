@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hotel-bot
+  labels:
+    name: hotel-bot
+    environment: production
+    app: whatsapp-hotel-bot
+  annotations:
+    description: "WhatsApp Hotel Bot production namespace"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hotel-bot-staging
+  labels:
+    name: hotel-bot-staging
+    environment: staging
+    app: whatsapp-hotel-bot
+  annotations:
+    description: "WhatsApp Hotel Bot staging namespace"
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: whatsapp-hotel-bot
+  namespace: hotel-bot
+  labels:
+    app: whatsapp-hotel-bot
+    component: service-account
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: whatsapp-hotel-bot
+  namespace: hotel-bot-staging
+  labels:
+    app: whatsapp-hotel-bot
+    component: service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: hotel-bot
+  name: whatsapp-hotel-bot-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: hotel-bot-staging
+  name: whatsapp-hotel-bot-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: whatsapp-hotel-bot-rolebinding
+  namespace: hotel-bot
+subjects:
+- kind: ServiceAccount
+  name: whatsapp-hotel-bot
+  namespace: hotel-bot
+roleRef:
+  kind: Role
+  name: whatsapp-hotel-bot-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: whatsapp-hotel-bot-rolebinding
+  namespace: hotel-bot-staging
+subjects:
+- kind: ServiceAccount
+  name: whatsapp-hotel-bot
+  namespace: hotel-bot-staging
+roleRef:
+  kind: Role
+  name: whatsapp-hotel-bot-role
+  apiGroup: rbac.authorization.k8s.io

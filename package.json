@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "task-master-ai": "^0.19.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1"
+  }
+}

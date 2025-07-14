@@ -1,0 +1,156 @@
+# Production-specific requirements for WhatsApp Hotel Bot
+# These are additional packages needed for production deployment
+
+# Production WSGI server
+gunicorn==21.2.0
+
+# Production monitoring and observability
+prometheus-client==0.19.0
+prometheus-fastapi-instrumentator==6.1.0
+
+# Enhanced logging
+structlog==23.2.0
+python-json-logger==2.0.7
+
+# Security enhancements
+cryptography==41.0.8
+passlib[bcrypt]==1.7.4
+
+# Performance optimizations
+uvloop==0.19.0  # Faster event loop for asyncio
+orjson==3.9.10  # Faster JSON serialization
+
+# Production database optimizations
+psycopg2-binary==2.9.9  # PostgreSQL adapter with C extensions
+asyncpg==0.29.0  # Async PostgreSQL driver
+
+# Redis optimizations
+redis[hiredis]==5.0.1  # Redis with C extensions
+
+# HTTP client optimizations
+httpx[http2]==0.25.2  # HTTP client with HTTP/2 support
+
+# Backup and maintenance tools
+pg_dump==1.0.0  # PostgreSQL backup utilities wrapper
+
+# Container health checks
+psutil==5.9.6  # System and process utilities
+
+# Production error tracking (optional)
+sentry-sdk[fastapi]==1.38.0
+
+# Rate limiting
+slowapi==0.1.9
+
+# CORS handling
+fastapi-cors==0.0.6
+
+# Request ID tracking
+asgi-correlation-id==4.3.1
+
+# Timezone handling
+pytz==2023.3.post1
+
+# Email notifications (for alerts)
+aiosmtplib==3.0.1
+email-validator==2.1.0
+
+# File handling and compression
+aiofiles==23.2.1
+
+# Advanced validation
+pydantic[email]==2.5.0
+
+# Production configuration management
+python-decouple==3.8
+
+# Health check endpoints
+fastapi-health==0.4.0
+
+# API documentation enhancements
+fastapi-utils==0.2.1
+
+# Background task monitoring
+flower==2.0.1  # Celery monitoring
+
+# Memory profiling (for debugging)
+memory-profiler==0.61.0
+
+# CPU profiling (for debugging)
+py-spy==0.3.14
+
+# Network utilities
+netaddr==0.9.0
+
+# Advanced datetime handling
+pendulum==2.1.2
+
+# Configuration validation
+pydantic-settings==2.1.0
+
+# Advanced caching
+aiocache==0.12.2
+
+# Request/response middleware
+starlette-context==0.3.6
+
+# Advanced serialization
+msgpack==1.0.7
+
+# Compression middleware
+brotli==1.1.0
+
+# Advanced HTTP handling
+urllib3==2.1.0
+
+# SSL/TLS utilities
+certifi==2023.11.17
+
+# Advanced async utilities
+anyio==4.2.0
+
+# Production-ready session handling
+itsdangerous==2.1.2
+
+# Advanced templating (if needed)
+jinja2==3.1.2
+
+# File type detection
+python-magic==0.4.27
+
+# Advanced string processing
+unidecode==1.3.7
+
+# Production metrics collection
+statsd==4.0.1
+
+# Advanced retry mechanisms
+tenacity==8.2.3
+
+# Production-ready HTTP middleware
+asgi-lifespan==2.1.0
+
+# Advanced async context management
+contextlib2==21.6.0
+
+# Production logging formatters
+colorlog==6.8.0
+
+# Advanced configuration parsing
+toml==0.10.2
+pyyaml==6.0.1
+
+# Production-ready dependency injection
+dependency-injector==4.41.0
+
+# Advanced async testing (for production validation)
+pytest-asyncio==0.21.1
+
+# Production database migration tools
+alembic==1.13.1
+
+# Advanced ORM features
+sqlalchemy[asyncio]==2.0.23
+
+# Production-ready connection pooling
+sqlalchemy-pool==1.3.0

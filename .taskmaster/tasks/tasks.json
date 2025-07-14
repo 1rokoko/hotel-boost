@@ -1,0 +1,1702 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Setup and Infrastructure",
+        "description": "Initialize project structure, setup FastAPI backend, configure development environment",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Create project structure with FastAPI, setup virtual environment, configure Docker, setup basic CI/CD pipeline, initialize Git repository with proper .gitignore",
+        "testStrategy": "Verify project builds successfully, API starts without errors, Docker containers run properly",
+        "modules": [
+          "infrastructure",
+          "setup"
+        ],
+        "phase": "foundation",
+        "subtasks": [
+          {
+            "id": "1.1",
+            "title": "Создание FastAPI проекта",
+            "description": "Инициализация FastAPI приложения с базовой структурой",
+            "estimatedHours": 2,
+            "files": [
+              "main.py",
+              "requirements.txt",
+              "app/__init__.py",
+              "app/api/__init__.py"
+            ],
+            "details": "Создать основную структуру FastAPI с роутерами, middleware, CORS настройками"
+          },
+          {
+            "id": "1.2",
+            "title": "Настройка виртуального окружения",
+            "description": "Создание и настройка Python виртуального окружения",
+            "estimatedHours": 1,
+            "files": [
+              "requirements.txt",
+              ".env.example",
+              "pyproject.toml"
+            ],
+            "details": "Poetry или pip-tools для управления зависимостями"
+          },
+          {
+            "id": "1.3",
+            "title": "Docker конфигурация",
+            "description": "Создание Dockerfile и docker-compose для разработки",
+            "estimatedHours": 2,
+            "files": [
+              "Dockerfile",
+              "docker-compose.yml",
+              ".dockerignore"
+            ],
+            "details": "Multi-stage build, оптимизация размера образа"
+          },
+          {
+            "id": "1.4",
+            "title": "Git репозиторий и CI/CD",
+            "description": "Инициализация Git и базовая CI/CD настройка",
+            "estimatedHours": 2,
+            "files": [
+              ".gitignore",
+              ".github/workflows/ci.yml",
+              "README.md"
+            ],
+            "details": "GitHub Actions для тестирования и линтинга"
+          },
+          {
+            "id": "1.5",
+            "title": "Базовые тесты инфраструктуры",
+            "description": "Тесты запуска приложения и базовых endpoint'ов",
+            "estimatedHours": 1,
+            "files": [
+              "tests/__init__.py",
+              "tests/test_main.py",
+              "pytest.ini"
+            ],
+            "details": "Pytest конфигурация и базовые health check тесты"
+          },
+          {
+            "id": "1.6",
+            "title": "Структурированное логирование",
+            "description": "Настройка structlog для детального логирования",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/logging.py",
+              "app/utils/logger.py",
+              "logs/.gitkeep"
+            ],
+            "details": "Correlation ID, JSON форматирование, ротация логов"
+          },
+          {
+            "id": "1.7",
+            "title": "Детальные интеграционные тесты",
+            "description": "Полное покрытие тестами всех компонентов",
+            "estimatedHours": 2,
+            "files": [
+              "tests/integration/test_api_endpoints.py",
+              "tests/integration/test_health_checks.py",
+              "tests/unit/test_config.py",
+              "tests/conftest.py"
+            ],
+            "details": "Тесты API, конфигурации, CORS, обработки ошибок"
+          },
+          {
+            "id": "1.8",
+            "title": "Мониторинг и метрики",
+            "description": "Prometheus метрики и health checks",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/metrics.py",
+              "app/middleware/monitoring.py",
+              "scripts/health_check.py"
+            ],
+            "details": "Метрики времени ответа, количества запросов, ошибок"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Database Schema Design and Setup",
+        "description": "Design and implement PostgreSQL database schema for multi-tenant architecture",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "complexity": "high",
+        "estimatedHours": 19,
+        "details": "Create tables: hotels, guests, conversations, triggers, staff_notifications, sentiment_analysis. Implement multi-tenant isolation, setup Redis for caching, create database migrations with Alembic",
+        "testStrategy": "Database migrations run successfully, all tables created with proper constraints, multi-tenant isolation verified",
+        "modules": [
+          "database",
+          "schema"
+        ],
+        "phase": "foundation",
+        "subtasks": [
+          {
+            "id": "2.1",
+            "title": "Настройка SQLAlchemy и Alembic",
+            "description": "Конфигурация ORM и системы миграций",
+            "estimatedHours": 2,
+            "files": [
+              "app/database.py",
+              "alembic.ini",
+              "alembic/env.py"
+            ],
+            "details": "Async SQLAlchemy, connection pooling, миграции"
+          },
+          {
+            "id": "2.2",
+            "title": "Модель Hotels",
+            "description": "Создание модели отелей с multi-tenant поддержкой",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/hotel.py",
+              "alembic/versions/001_create_hotels.py"
+            ],
+            "details": "Поля: id, name, whatsapp_number, settings (JSON), created_at, updated_at"
+          },
+          {
+            "id": "2.3",
+            "title": "Модель Guests",
+            "description": "Модель гостей с привязкой к отелям",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/guest.py",
+              "alembic/versions/002_create_guests.py"
+            ],
+            "details": "Поля: id, hotel_id, phone, name, preferences (JSON), conversation_history"
+          },
+          {
+            "id": "2.4",
+            "title": "Модель Triggers",
+            "description": "Система триггеров с условиями и шаблонами",
+            "estimatedHours": 3,
+            "files": [
+              "app/models/trigger.py",
+              "alembic/versions/003_create_triggers.py"
+            ],
+            "details": "Поля: id, hotel_id, trigger_type, conditions (JSON), message_template, is_active"
+          },
+          {
+            "id": "2.5",
+            "title": "Модель Messages и Conversations",
+            "description": "История сообщений и разговоров",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/message.py",
+              "alembic/versions/004_create_messages.py"
+            ],
+            "details": "Поля: id, conversation_id, guest_id, content, sentiment_score, message_type"
+          },
+          {
+            "id": "2.6",
+            "title": "Модель Staff Notifications",
+            "description": "Уведомления персонала при негативных отзывах",
+            "estimatedHours": 1,
+            "files": [
+              "app/models/notification.py",
+              "alembic/versions/005_create_notifications.py"
+            ],
+            "details": "Поля: id, hotel_id, guest_id, message_id, notification_type, status, sent_at"
+          },
+          {
+            "id": "2.7",
+            "title": "Детальные тесты моделей",
+            "description": "Полное покрытие тестами всех моделей БД",
+            "estimatedHours": 3,
+            "files": [
+              "tests/unit/test_models_hotel.py",
+              "tests/unit/test_models_guest.py",
+              "tests/unit/test_models_trigger.py",
+              "tests/integration/test_database_operations.py"
+            ],
+            "details": "Тесты CRUD операций, валидации, связей, RLS политик"
+          },
+          {
+            "id": "2.8",
+            "title": "Логирование операций БД",
+            "description": "Детальное логирование всех операций с БД",
+            "estimatedHours": 2,
+            "files": [
+              "app/core/database_logging.py",
+              "app/utils/db_monitor.py",
+              "app/middleware/db_middleware.py"
+            ],
+            "details": "Логирование SQL запросов, мониторинг производительности"
+          },
+          {
+            "id": "2.9",
+            "title": "Тесты производительности БД",
+            "description": "Бенчмарки и тесты нагрузки на БД",
+            "estimatedHours": 2,
+            "files": [
+              "tests/performance/test_db_performance.py",
+              "tests/load/test_concurrent_operations.py",
+              "scripts/db_benchmark.py"
+            ],
+            "details": "Тесты производительности запросов, конкурентности, индексов"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Green API WhatsApp Integration",
+        "description": "Implement core WhatsApp messaging functionality using Green API",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "complexity": "high",
+        "estimatedHours": 19,
+        "details": "Setup Green API client, implement webhook handlers for incoming messages, create message sending functionality, handle media messages, implement message status tracking",
+        "testStrategy": "Send/receive messages successfully, webhooks process correctly, message status updates work",
+        "modules": [
+          "whatsapp",
+          "messaging"
+        ],
+        "phase": "core",
+        "subtasks": [
+          {
+            "id": "3.1",
+            "title": "Green API Client",
+            "description": "Базовый клиент для работы с Green API",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/green_api_client.py",
+              "app/config/green_api.py"
+            ],
+            "details": "HTTP клиент с retry логикой, обработка rate limits, аутентификация"
+          },
+          {
+            "id": "3.2",
+            "title": "Webhook Handler",
+            "description": "Обработчик входящих сообщений от Green API",
+            "estimatedHours": 4,
+            "files": [
+              "app/api/webhooks.py",
+              "app/services/message_handler.py"
+            ],
+            "details": "Валидация webhook'ов, парсинг сообщений, роутинг по отелям"
+          },
+          {
+            "id": "3.3",
+            "title": "Message Sender Service",
+            "description": "Сервис для отправки сообщений через Green API",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/message_sender.py",
+              "app/utils/message_formatter.py"
+            ],
+            "details": "Форматирование сообщений, обработка медиа, статусы доставки"
+          },
+          {
+            "id": "3.4",
+            "title": "Media Handler",
+            "description": "Обработка изображений и файлов в сообщениях",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/media_handler.py",
+              "app/utils/file_storage.py"
+            ],
+            "details": "Загрузка/скачивание медиа, валидация файлов, хранение"
+          },
+          {
+            "id": "3.5",
+            "title": "Error Handling и Retry Logic",
+            "description": "Обработка ошибок API и повторные попытки",
+            "estimatedHours": 2,
+            "files": [
+              "app/utils/retry_logic.py",
+              "app/exceptions/green_api_exceptions.py"
+            ],
+            "details": "Exponential backoff, circuit breaker, логирование ошибок"
+          },
+          {
+            "id": "3.6",
+            "title": "Детальные тесты Green API",
+            "description": "Полное покрытие тестами Green API интеграции",
+            "estimatedHours": 2,
+            "files": [
+              "tests/unit/test_green_api_client.py",
+              "tests/unit/test_webhook_processor.py",
+              "tests/integration/test_green_api_integration.py",
+              "tests/mocks/green_api_mock.py"
+            ],
+            "details": "Мокирование API, тесты сценариев, обработки ошибок"
+          },
+          {
+            "id": "3.7",
+            "title": "Логирование Green API операций",
+            "description": "Детальное логирование всех операций с Green API",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/green_api_logging.py",
+              "app/middleware/green_api_middleware.py"
+            ],
+            "details": "Логирование запросов, webhook'ов, rate limits, алерты"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "DeepSeek AI Integration",
+        "description": "Integrate DeepSeek API for sentiment analysis and response generation",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "complexity": "medium",
+        "estimatedHours": 14,
+        "details": "Setup DeepSeek API client, implement sentiment analysis functions, create response generation with context awareness, handle API rate limits and errors",
+        "testStrategy": "Sentiment analysis returns accurate results, response generation works with context, error handling functions properly, comprehensive testing and logging",
+        "modules": [
+          "ai",
+          "sentiment"
+        ],
+        "phase": "core",
+        "subtasks": [
+          {
+            "id": "4.1",
+            "title": "Настройка DeepSeek API клиента",
+            "description": "HTTP клиент для взаимодействия с DeepSeek API",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/deepseek_client.py",
+              "app/schemas/deepseek.py",
+              "app/core/deepseek_config.py"
+            ],
+            "details": "Rate limiting, retry логика, валидация API ключей"
+          },
+          {
+            "id": "4.2",
+            "title": "Анализ настроений",
+            "description": "Сервис анализа настроений сообщений",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/sentiment_analyzer.py",
+              "app/models/sentiment.py",
+              "app/tasks/analyze_sentiment.py"
+            ],
+            "details": "Позитив/негатив анализ, уровень уверенности, автоуведомления"
+          },
+          {
+            "id": "4.3",
+            "title": "Генерация ответов",
+            "description": "Контекстно-зависимая генерация ответов",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/response_generator.py",
+              "app/utils/prompt_templates.py",
+              "app/tasks/generate_response.py"
+            ],
+            "details": "Шаблоны промптов, персонализация, мультиязычность"
+          },
+          {
+            "id": "4.4",
+            "title": "Детальные тесты DeepSeek",
+            "description": "Полное покрытие тестами DeepSeek интеграции",
+            "estimatedHours": 2,
+            "files": [
+              "tests/unit/test_deepseek_client.py",
+              "tests/unit/test_sentiment_analyzer.py",
+              "tests/integration/test_deepseek_integration.py",
+              "tests/mocks/deepseek_mock.py"
+            ],
+            "details": "Мокирование API, тесты сценариев, обработки ошибок"
+          },
+          {
+            "id": "4.5",
+            "title": "Логирование DeepSeek операций",
+            "description": "Детальное логирование всех операций с DeepSeek API",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/deepseek_logging.py",
+              "app/middleware/deepseek_middleware.py"
+            ],
+            "details": "Логирование запросов, мониторинг токенов, алерты"
+          },
+          {
+            "id": "4.6",
+            "title": "Кэширование и оптимизация",
+            "description": "Redis кэш и оптимизация использования токенов",
+            "estimatedHours": 1,
+            "files": [
+              "app/utils/deepseek_cache.py",
+              "app/services/token_optimizer.py"
+            ],
+            "details": "Кэширование результатов, batch обработка, rate limiting"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Hotel Management System",
+        "description": "Create hotel registration, configuration and management functionality",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Hotel CRUD operations, staff management, WhatsApp number configuration, hotel-specific settings, multi-tenant data isolation",
+        "testStrategy": "Hotels can be created/updated/deleted, staff assignments work, settings persist correctly",
+        "modules": [
+          "hotel",
+          "management"
+        ],
+        "phase": "business"
+      },
+      {
+        "id": 6,
+        "title": "Trigger Management System",
+        "description": "Implement configurable trigger system for automated messaging",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          2,
+          5
+        ],
+        "complexity": "high",
+        "estimatedHours": 18,
+        "details": "Time-based triggers (X hours after check-in), condition-based triggers (booking status, room type), trigger configuration UI, trigger execution engine with Celery",
+        "testStrategy": "Triggers fire at correct times, conditions evaluate properly, messages sent automatically, comprehensive testing and logging",
+        "modules": [
+          "triggers",
+          "automation"
+        ],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "6.1",
+            "title": "Модели триггеров",
+            "description": "SQLAlchemy модели и схемы для триггеров",
+            "estimatedHours": 3,
+            "files": [
+              "app/models/trigger.py",
+              "app/schemas/trigger.py",
+              "app/services/trigger_service.py"
+            ],
+            "details": "CRUD операции, типы триггеров, валидация правил"
+          },
+          {
+            "id": "6.2",
+            "title": "Движок выполнения триггеров",
+            "description": "Основной движок для выполнения триггеров",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/trigger_engine.py",
+              "app/tasks/execute_triggers.py",
+              "app/utils/trigger_evaluator.py"
+            ],
+            "details": "Планировщик триггеров, условная логика, выполнение действий"
+          },
+          {
+            "id": "6.3",
+            "title": "API управления триггерами",
+            "description": "REST API для управления триггерами",
+            "estimatedHours": 3,
+            "files": [
+              "app/api/v1/endpoints/triggers.py",
+              "app/schemas/trigger_config.py"
+            ],
+            "details": "CRUD API, тестирование триггеров, предварительный просмотр"
+          },
+          {
+            "id": "6.4",
+            "title": "Планировщик задач",
+            "description": "Cron-подобное планирование триггеров",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/scheduler.py",
+              "app/tasks/scheduled_triggers.py",
+              "app/utils/cron_parser.py"
+            ],
+            "details": "Отложенные задачи, повторяющиеся триггеры"
+          },
+          {
+            "id": "6.5",
+            "title": "Детальные тесты триггеров",
+            "description": "Полное покрытие тестами системы триггеров",
+            "estimatedHours": 3,
+            "files": [
+              "tests/unit/test_trigger_engine.py",
+              "tests/unit/test_trigger_service.py",
+              "tests/integration/test_trigger_execution.py"
+            ],
+            "details": "Тесты логики триггеров, планировщика, выполнения"
+          },
+          {
+            "id": "6.6",
+            "title": "Логирование и мониторинг",
+            "description": "Логирование выполнения триггеров и метрики",
+            "estimatedHours": 2,
+            "files": [
+              "app/core/trigger_logging.py",
+              "app/utils/trigger_metrics.py"
+            ],
+            "details": "Метрики производительности, алерты"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Guest Conversation Handler",
+        "description": "Core conversation management and message processing",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4
+        ],
+        "complexity": "high",
+        "estimatedHours": 20,
+        "details": "Conversation state management, message routing by hotel, context preservation, conversation history storage, guest identification",
+        "testStrategy": "Conversations maintain context, messages route to correct hotel, history persists correctly, comprehensive testing and logging",
+        "modules": [
+          "conversation",
+          "routing"
+        ],
+        "phase": "core",
+        "subtasks": [
+          {
+            "id": "7.1",
+            "title": "Модели разговоров",
+            "description": "SQLAlchemy модели и схемы для разговоров",
+            "estimatedHours": 3,
+            "files": [
+              "app/models/conversation.py",
+              "app/schemas/conversation.py",
+              "app/services/conversation_service.py"
+            ],
+            "details": "Состояния диалогов, история сообщений, контекст разговора"
+          },
+          {
+            "id": "7.2",
+            "title": "Машина состояний",
+            "description": "FSM для управления состояниями диалогов",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/conversation_state_machine.py",
+              "app/utils/state_transitions.py",
+              "app/schemas/state_machine.py"
+            ],
+            "details": "Переходы между состояниями, обработка событий"
+          },
+          {
+            "id": "7.3",
+            "title": "Обработчик сообщений",
+            "description": "Парсинг и маршрутизация входящих сообщений",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/message_handler.py",
+              "app/utils/message_parser.py",
+              "app/tasks/process_message.py",
+              "app/utils/intent_classifier.py"
+            ],
+            "details": "Определение намерений, маршрутизация"
+          },
+          {
+            "id": "7.4",
+            "title": "Контекстная память",
+            "description": "Управление контекстом и памятью разговоров",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/conversation_memory.py",
+              "app/utils/context_manager.py",
+              "app/models/conversation_context.py"
+            ],
+            "details": "Сохранение контекста, персонализация"
+          },
+          {
+            "id": "7.5",
+            "title": "API разговоров",
+            "description": "REST API для управления разговорами",
+            "estimatedHours": 2,
+            "files": [
+              "app/api/v1/endpoints/conversations.py",
+              "app/schemas/conversation_api.py"
+            ],
+            "details": "Просмотр разговоров, управление состояниями"
+          },
+          {
+            "id": "7.6",
+            "title": "Детальные тесты разговоров",
+            "description": "Полное покрытие тестами системы разговоров",
+            "estimatedHours": 2,
+            "files": [
+              "tests/unit/test_conversation_handler.py",
+              "tests/unit/test_state_machine.py",
+              "tests/integration/test_conversation_flow.py"
+            ],
+            "details": "Тесты машины состояний, обработки сообщений"
+          },
+          {
+            "id": "7.7",
+            "title": "Логирование разговоров",
+            "description": "Логирование и аналитика разговоров",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/conversation_logging.py",
+              "app/utils/conversation_analytics.py"
+            ],
+            "details": "Детальное логирование диалогов"
+          },
+          {
+            "id": "7.8",
+            "title": "Эскалация к персоналу",
+            "description": "Автоматическая эскалация к персоналу",
+            "estimatedHours": 1,
+            "files": [
+              "app/services/escalation_service.py",
+              "app/utils/escalation_rules.py"
+            ],
+            "details": "Правила эскалации, уведомления персонала"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Sentiment Analysis and Monitoring",
+        "description": "Real-time sentiment analysis with staff notifications",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          7
+        ],
+        "complexity": "medium",
+        "estimatedHours": 14,
+        "details": "Real-time sentiment scoring, negative sentiment detection, staff notification system (email/Telegram), escalation rules",
+        "testStrategy": "Sentiment scores are accurate, notifications sent for negative feedback, escalation works, comprehensive testing and logging",
+        "modules": [
+          "sentiment",
+          "monitoring"
+        ],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "8.1",
+            "title": "Анализ настроений в реальном времени",
+            "description": "Автоматический анализ входящих сообщений",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/realtime_sentiment.py",
+              "app/tasks/analyze_message_sentiment.py",
+              "app/utils/sentiment_processor.py"
+            ],
+            "details": "Классификация настроений, обработка результатов"
+          },
+          {
+            "id": "8.2",
+            "title": "Система уведомлений персонала",
+            "description": "Уведомления при негативных отзывах",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/staff_notification.py",
+              "app/models/staff_alert.py",
+              "app/tasks/send_staff_alert.py",
+              "app/utils/notification_channels.py"
+            ],
+            "details": "Email, SMS, webhook уведомления"
+          },
+          {
+            "id": "8.3",
+            "title": "Дашборд аналитики настроений",
+            "description": "API для аналитики и статистики",
+            "estimatedHours": 3,
+            "files": [
+              "app/api/v1/endpoints/sentiment_analytics.py",
+              "app/services/sentiment_analytics.py",
+              "app/utils/sentiment_aggregator.py"
+            ],
+            "details": "Тренды, метрики, отчеты"
+          },
+          {
+            "id": "8.4",
+            "title": "Правила и пороги",
+            "description": "Настраиваемые пороги для уведомлений",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/sentiment_rules.py",
+              "app/utils/threshold_manager.py",
+              "app/models/sentiment_config.py"
+            ],
+            "details": "Правила эскалации, пороги алертов"
+          },
+          {
+            "id": "8.5",
+            "title": "Детальные тесты анализа",
+            "description": "Полное покрытие тестами анализа настроений",
+            "estimatedHours": 2,
+            "files": [
+              "tests/unit/test_sentiment_analysis.py",
+              "tests/unit/test_staff_notification.py",
+              "tests/integration/test_notification_system.py"
+            ],
+            "details": "Тесты анализа, уведомлений, аналитики"
+          },
+          {
+            "id": "8.6",
+            "title": "Логирование и метрики",
+            "description": "Логирование анализа и метрики производительности",
+            "estimatedHours": 1,
+            "files": [
+              "app/core/sentiment_logging.py",
+              "app/utils/sentiment_metrics.py"
+            ],
+            "details": "Prometheus метрики, детальное логирование"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Message Templates and Responses",
+        "description": "Predefined message templates and smart response system",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          6
+        ],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Template management system, variable substitution, context-aware responses, multilingual support preparation",
+        "testStrategy": "Templates render correctly, variables substitute properly, responses are contextual, comprehensive testing and logging",
+        "modules": [
+          "templates",
+          "responses"
+        ],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "9.1",
+            "title": "Модели шаблонов",
+            "description": "SQLAlchemy модели и схемы для шаблонов",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/message_template.py",
+              "app/schemas/template.py",
+              "app/services/template_service.py"
+            ],
+            "details": "CRUD для шаблонов, категории, переменные"
+          },
+          {
+            "id": "9.2",
+            "title": "Движок шаблонов",
+            "description": "Рендеринг шаблонов с Jinja2",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/template_engine.py",
+              "app/utils/template_renderer.py",
+              "app/utils/variable_resolver.py"
+            ],
+            "details": "Подстановка переменных, условная логика"
+          },
+          {
+            "id": "9.3",
+            "title": "API управления шаблонами",
+            "description": "REST API для управления шаблонами",
+            "estimatedHours": 2,
+            "files": [
+              "app/api/v1/endpoints/templates.py",
+              "app/schemas/template_api.py"
+            ],
+            "details": "CRUD API, предварительный просмотр"
+          },
+          {
+            "id": "9.4",
+            "title": "Автоматические ответы",
+            "description": "Система автоматических ответов",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/auto_responder.py",
+              "app/utils/response_matcher.py",
+              "app/models/auto_response_rule.py"
+            ],
+            "details": "Сопоставление сообщений с шаблонами"
+          },
+          {
+            "id": "9.5",
+            "title": "Мультиязычность",
+            "description": "Поддержка множественных языков",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/i18n_service.py",
+              "app/utils/language_detector.py"
+            ],
+            "details": "Автоопределение языка, локализация"
+          },
+          {
+            "id": "9.6",
+            "title": "Детальные тесты шаблонов",
+            "description": "Полное покрытие тестами системы шаблонов",
+            "estimatedHours": 1,
+            "files": [
+              "tests/unit/test_template_engine.py",
+              "tests/unit/test_auto_responder.py",
+              "tests/integration/test_template_api.py"
+            ],
+            "details": "Тесты рендеринга, автоответов, мультиязычности"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Celery Task Queue Setup",
+        "description": "Asynchronous task processing for triggers and notifications",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "complexity": "medium",
+        "estimatedHours": 6,
+        "details": "Celery configuration with Redis broker, task definitions for triggers, periodic tasks setup, error handling and retries",
+        "testStrategy": "Tasks execute asynchronously, periodic tasks run on schedule, error handling works",
+        "modules": [
+          "queue",
+          "async"
+        ],
+        "phase": "foundation"
+      },
+      {
+        "id": 11,
+        "title": "Admin Dashboard API",
+        "description": "REST API endpoints for hotel administration and monitoring",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          8
+        ],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Hotel management endpoints, trigger configuration API, conversation monitoring, sentiment analytics API, staff notification management",
+        "testStrategy": "All endpoints return correct data, authentication works, data filtering by hotel works",
+        "modules": [
+          "api",
+          "admin"
+        ],
+        "phase": "business"
+      },
+      {
+        "id": 12,
+        "title": "Authentication and Authorization",
+        "description": "Multi-tenant authentication system for hotel staff",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "complexity": "medium",
+        "estimatedHours": 8,
+        "details": "JWT-based authentication, role-based access control (admin, staff), hotel-specific data isolation, API key management for external integrations",
+        "testStrategy": "Users can login/logout, roles restrict access properly, data isolation verified",
+        "modules": [
+          "auth",
+          "security"
+        ],
+        "phase": "business"
+      },
+      {
+        "id": 13,
+        "title": "Error Handling and Logging",
+        "description": "Comprehensive error handling and logging system",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "complexity": "low",
+        "estimatedHours": 6,
+        "details": "Structured logging with correlation IDs, error tracking, health checks, monitoring endpoints, graceful error handling for external APIs",
+        "testStrategy": "Errors are logged properly, health checks respond correctly, external API failures handled gracefully",
+        "modules": [
+          "logging",
+          "monitoring"
+        ],
+        "phase": "foundation"
+      },
+      {
+        "id": 14,
+        "title": "Testing Suite",
+        "description": "Comprehensive test coverage for all components",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4,
+          7,
+          8
+        ],
+        "complexity": "medium",
+        "estimatedHours": 16,
+        "details": "Unit tests for all modules, integration tests for API endpoints, mock external services (Green API, DeepSeek), test data fixtures",
+        "testStrategy": "All tests pass, coverage >80%, integration tests verify end-to-end functionality",
+        "modules": [
+          "testing",
+          "quality"
+        ],
+        "phase": "advanced"
+      },
+      {
+        "id": 15,
+        "title": "Deployment and DevOps",
+        "description": "Production deployment setup and monitoring",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          14
+        ],
+        "complexity": "medium",
+        "estimatedHours": 10,
+        "details": "Docker containerization, docker-compose for local development, production deployment scripts, environment configuration, monitoring setup with Prometheus/Grafana",
+        "testStrategy": "Application deploys successfully, monitoring works, environment variables configured correctly",
+        "modules": [
+          "deployment",
+          "devops"
+        ],
+        "phase": "advanced"
+      },
+      {
+        "id": 16,
+        "title": "System Reliability & Resilience",
+        "description": "Critical system reliability improvements and resilience patterns",
+        "status": "completed",
+        "priority": "high",
+        "dependencies": [
+          1,
+          10,
+          13
+        ],
+        "complexity": "high",
+        "estimatedHours": 15,
+        "details": "Circuit breaker implementation, retry logic with exponential backoff, health checks, graceful degradation, dead letter queue handling",
+        "testStrategy": "System handles external API failures gracefully, retry mechanisms work correctly, health checks provide accurate status, comprehensive testing and logging",
+        "modules": [
+          "reliability",
+          "resilience"
+        ],
+        "phase": "foundation",
+        "subtasks": [
+          {
+            "id": "16.1",
+            "title": "Circuit Breaker Implementation",
+            "description": "Implement circuit breaker pattern for external APIs",
+            "estimatedHours": 4,
+            "files": [
+              "app/utils/circuit_breaker.py",
+              "app/middleware/circuit_breaker_middleware.py",
+              "app/core/circuit_breaker_config.py"
+            ],
+            "details": "Circuit breaker for Green API, DeepSeek API, database connections"
+          },
+          {
+            "id": "16.2",
+            "title": "Retry Logic with Exponential Backoff",
+            "description": "Advanced retry mechanisms for all external calls",
+            "estimatedHours": 4,
+            "files": [
+              "app/utils/retry_handler.py",
+              "app/decorators/retry_decorator.py",
+              "app/core/retry_config.py"
+            ],
+            "details": "Exponential backoff, jitter, max retry limits"
+          },
+          {
+            "id": "16.3",
+            "title": "Health Checks & Readiness Probes",
+            "description": "Comprehensive health monitoring system",
+            "estimatedHours": 3,
+            "files": [
+              "app/api/v1/endpoints/health.py",
+              "app/services/health_checker.py",
+              "app/utils/dependency_checker.py"
+            ],
+            "details": "Liveness, readiness, dependency health checks"
+          },
+          {
+            "id": "16.4",
+            "title": "Graceful Degradation Mechanisms",
+            "description": "Fallback mechanisms when services are unavailable",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/fallback_service.py",
+              "app/utils/degradation_handler.py"
+            ],
+            "details": "AI fallback, WhatsApp fallback, database read-only mode"
+          },
+          {
+            "id": "16.5",
+            "title": "Dead Letter Queue Handling",
+            "description": "Handle failed message processing",
+            "estimatedHours": 2,
+            "files": [
+              "app/tasks/dead_letter_handler.py",
+              "app/services/failed_message_processor.py"
+            ],
+            "details": "Failed message retry, manual intervention queue"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Security Hardening",
+        "description": "Critical security improvements and vulnerability fixes",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          3,
+          12
+        ],
+        "complexity": "high",
+        "estimatedHours": 12,
+        "details": "Webhook signature validation, API rate limiting, input sanitization, SQL injection prevention, secrets management",
+        "testStrategy": "Security vulnerabilities are patched, webhook signatures validated, rate limiting works, input properly sanitized, comprehensive testing and logging",
+        "modules": [
+          "security",
+          "validation"
+        ],
+        "phase": "foundation",
+        "subtasks": [
+          {
+            "id": "17.1",
+            "title": "Webhook Signature Validation",
+            "description": "Validate Green API webhook signatures",
+            "estimatedHours": 3,
+            "files": [
+              "app/middleware/webhook_security.py",
+              "app/utils/signature_validator.py",
+              "app/core/webhook_config.py"
+            ],
+            "details": "HMAC signature validation, timestamp verification",
+            "status": "done"
+          },
+          {
+            "id": "17.2",
+            "title": "API Rate Limiting",
+            "description": "Implement comprehensive rate limiting",
+            "estimatedHours": 3,
+            "files": [
+              "app/middleware/rate_limiter.py",
+              "app/utils/rate_limit_storage.py",
+              "app/core/rate_limit_config.py"
+            ],
+            "details": "Per-user, per-hotel, per-endpoint rate limiting",
+            "status": "done"
+          },
+          {
+            "id": "17.3",
+            "title": "Input Sanitization",
+            "description": "Comprehensive input validation and sanitization",
+            "estimatedHours": 2,
+            "files": [
+              "app/utils/input_sanitizer.py",
+              "app/validators/security_validators.py"
+            ],
+            "details": "XSS prevention, SQL injection prevention, data validation",
+            "status": "done"
+          },
+          {
+            "id": "17.4",
+            "title": "SQL Injection Prevention",
+            "description": "Secure database query practices",
+            "estimatedHours": 2,
+            "files": [
+              "app/utils/query_builder.py",
+              "app/core/database_security.py"
+            ],
+            "details": "Parameterized queries, ORM security, dynamic query validation",
+            "status": "done"
+          },
+          {
+            "id": "17.5",
+            "title": "Secrets Management",
+            "description": "Secure handling of API keys and secrets",
+            "estimatedHours": 2,
+            "files": [
+              "app/core/secrets_manager.py",
+              "app/utils/encryption.py",
+              "app/core/vault_integration.py"
+            ],
+            "details": "Environment-based secrets, encryption at rest, key rotation",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Performance Optimization",
+        "description": "Critical performance improvements for scalability",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          10
+        ],
+        "complexity": "medium",
+        "estimatedHours": 10,
+        "details": "Database connection pooling, query optimization, caching strategy, async processing optimization, memory usage optimization",
+        "testStrategy": "Performance benchmarks meet targets, database connections optimized, caching effective, memory usage within limits, comprehensive testing and logging",
+        "modules": [
+          "performance",
+          "optimization"
+        ],
+        "phase": "advanced",
+        "subtasks": [
+          {
+            "id": "18.1",
+            "title": "Database Connection Pooling",
+            "description": "Optimize database connection management",
+            "estimatedHours": 2,
+            "files": [
+              "app/core/database_pool.py",
+              "app/utils/connection_manager.py"
+            ],
+            "details": "Connection pooling, connection lifecycle management",
+            "status": "done"
+          },
+          {
+            "id": "18.2",
+            "title": "Query Optimization",
+            "description": "Optimize database queries and indexes",
+            "estimatedHours": 3,
+            "files": [
+              "app/utils/query_optimizer.py",
+              "alembic/versions/add_performance_indexes.py"
+            ],
+            "details": "Query analysis, index optimization, N+1 query prevention",
+            "status": "done"
+          },
+          {
+            "id": "18.3",
+            "title": "Caching Strategy",
+            "description": "Implement comprehensive caching",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/cache_service.py",
+              "app/utils/cache_decorators.py",
+              "app/core/cache_config.py"
+            ],
+            "details": "Redis caching, cache invalidation, cache warming",
+            "status": "done"
+          },
+          {
+            "id": "18.4",
+            "title": "Async Processing Optimization",
+            "description": "Optimize asynchronous processing",
+            "estimatedHours": 1,
+            "files": [
+              "app/utils/async_optimizer.py",
+              "app/core/async_config.py"
+            ],
+            "details": "Async/await optimization, concurrent processing",
+            "status": "done"
+          },
+          {
+            "id": "18.5",
+            "title": "Memory Usage Optimization",
+            "description": "Optimize memory usage and garbage collection",
+            "estimatedHours": 1,
+            "files": [
+              "app/utils/memory_optimizer.py",
+              "app/core/memory_config.py"
+            ],
+            "details": "Memory profiling, garbage collection optimization",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Hotel-Specific Green API Instance Management",
+        "description": "Implement individual Green API instance management for each hotel with configuration UI",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [3, 5, 11],
+        "complexity": "medium",
+        "estimatedHours": 14,
+        "details": "Extend Hotel model for Green API settings, create hotel-specific Green API clients, implement admin UI for configuration, add testing and validation",
+        "testStrategy": "Each hotel can have separate Green API credentials, clients work independently, admin UI allows configuration, comprehensive testing",
+        "modules": ["hotel", "green_api", "admin"],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "19.1",
+            "title": "Расширение Hotel модели для Green API настроек",
+            "description": "Добавить методы для работы с Green API настройками в модель Hotel",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/hotel.py",
+              "app/schemas/hotel.py"
+            ],
+            "details": "Методы get_green_api_settings(), update_green_api_settings(), валидация настроек",
+            "status": "done"
+          },
+          {
+            "id": "19.2",
+            "title": "Расширение Hotel схем для Green API",
+            "description": "Добавить Pydantic схемы для Green API конфигурации",
+            "estimatedHours": 1,
+            "files": [
+              "app/schemas/hotel.py"
+            ],
+            "details": "GreenAPISettings схема, валидация полей, интеграция с HotelCreate/Update",
+            "status": "done"
+          },
+          {
+            "id": "19.3",
+            "title": "Модификация Green API Client для multi-instance",
+            "description": "Адаптировать Green API клиент для работы с hotel-specific настройками",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/green_api_client.py"
+            ],
+            "details": "Factory methods для hotel-specific клиентов, управление множественными инстансами",
+            "status": "done"
+          },
+          {
+            "id": "19.4",
+            "title": "Расширение Hotel Service для Green API управления",
+            "description": "Добавить методы управления Green API настройками в HotelService",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/hotel_service.py"
+            ],
+            "details": "Методы update_green_api_settings(), test_green_api_connection(), валидация",
+            "status": "done"
+          },
+          {
+            "id": "19.5",
+            "title": "Расширение Hotels API endpoints",
+            "description": "Добавить API endpoints для управления Green API настройками",
+            "estimatedHours": 2,
+            "files": [
+              "app/api/v1/endpoints/hotels.py"
+            ],
+            "details": "PUT /hotels/{id}/green-api, POST /hotels/{id}/test-green-api endpoints",
+            "status": "done"
+          },
+          {
+            "id": "19.6",
+            "title": "Создание тестового отеля с настройками",
+            "description": "Скрипт для добавления тестового отеля с полной конфигурацией",
+            "estimatedHours": 2,
+            "files": [
+              "scripts/add_test_hotel.py"
+            ],
+            "details": "Создание отеля с Green API и DeepSeek настройками, валидация конфигурации",
+            "status": "done"
+          },
+          {
+            "id": "19.7",
+            "title": "Исправление импортов и relationships",
+            "description": "Решение проблем с circular imports и SQLAlchemy relationships",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/__init__.py",
+              "app/models/base.py",
+              "app/database.py"
+            ],
+            "details": "Добавление недостающих импортов, исправление ForeignKey в TenantBaseModel, синхронные сессии",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Hotel-Specific DeepSeek AI Configuration",
+        "description": "Implement individual DeepSeek API settings for each hotel with admin interface",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [4, 5, 19],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Extend hotel settings for DeepSeek configuration, create hotel-specific DeepSeek clients, implement custom prompts and memory per hotel",
+        "testStrategy": "Each hotel can have separate DeepSeek settings, custom prompts work, memory isolation verified, comprehensive testing",
+        "modules": ["hotel", "deepseek", "admin"],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "20.1",
+            "title": "Расширение Hotel settings для DeepSeek",
+            "description": "Добавить DeepSeek конфигурацию в default settings отеля",
+            "estimatedHours": 2,
+            "files": [
+              "app/models/hotel.py"
+            ],
+            "details": "Методы get_deepseek_settings(), update_deepseek_settings(), set_deepseek_api_key()",
+            "status": "done"
+          },
+          {
+            "id": "20.2",
+            "title": "Создание Hotel-specific DeepSeek Config",
+            "description": "Функции для создания hotel-specific DeepSeek конфигурации",
+            "estimatedHours": 3,
+            "files": [
+              "app/core/deepseek_config.py"
+            ],
+            "details": "create_hotel_deepseek_config(), create_hotel_sentiment_config(), create_hotel_response_config()",
+            "status": "done"
+          },
+          {
+            "id": "20.3",
+            "title": "Модификация DeepSeek Client для hotel-specific настроек",
+            "description": "Адаптировать DeepSeek клиент для работы с hotel-specific настройками",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/deepseek_client.py"
+            ],
+            "details": "get_hotel_deepseek_client(), управление hotel-specific клиентами, метрики",
+            "status": "done"
+          },
+          {
+            "id": "20.4",
+            "title": "Расширение Hotel Service для DeepSeek управления",
+            "description": "Добавить методы управления DeepSeek настройками в HotelService",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/hotel_service.py"
+            ],
+            "details": "update_deepseek_settings(), test_deepseek_connection(), get_hotel_configuration()",
+            "status": "done"
+          },
+          {
+            "id": "20.5",
+            "title": "API endpoints для DeepSeek настроек",
+            "description": "Добавить API endpoints для управления DeepSeek конфигурацией",
+            "estimatedHours": 2,
+            "files": [
+              "app/api/v1/endpoints/hotels.py"
+            ],
+            "details": "PUT /hotels/{id}/deepseek, POST /hotels/{id}/test-deepseek, GET /hotels/{id}/configuration",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "Advanced Trigger System with Dynamic Settings",
+        "description": "Implement comprehensive trigger system with dynamic time settings, minutes-based timing, and Bangkok timezone",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [20],
+        "complexity": "medium",
+        "estimatedHours": 12,
+        "details": "Change global timezone to Asia/Bangkok, implement Minutes After First Message trigger type, create dynamic trigger settings based on trigger type, add comprehensive trigger testing with seconds-based demo",
+        "testStrategy": "All trigger types work correctly, dynamic settings update properly, timezone changes applied globally, comprehensive testing with real-time demos",
+        "modules": ["triggers", "admin", "timezone"],
+        "phase": "advanced",
+        "subtasks": [
+          {
+            "id": "21.1",
+            "title": "Global Timezone Update to Bangkok",
+            "description": "Change default timezone from UTC to Asia/Bangkok",
+            "estimatedHours": 1,
+            "files": [
+              "app/schemas/hotel_config.py",
+              "app/schemas/trigger.py"
+            ],
+            "details": "Update default timezone in hotel configuration and trigger schemas",
+            "status": "done"
+          },
+          {
+            "id": "21.2",
+            "title": "Minutes After First Message Trigger",
+            "description": "Change Hours After First Message to Minutes for faster testing",
+            "estimatedHours": 2,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Update trigger type from hours to minutes, adjust validation and UI",
+            "status": "done"
+          },
+          {
+            "id": "21.3",
+            "title": "Dynamic Trigger Settings Interface",
+            "description": "Create dynamic form fields based on trigger type selection",
+            "estimatedHours": 6,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Implement updateTriggerSettings(), buildTriggerConditions(), dynamic form generation",
+            "status": "done"
+          },
+          {
+            "id": "21.4",
+            "title": "Comprehensive Trigger Testing",
+            "description": "Add seconds-based trigger testing for quick demonstrations",
+            "estimatedHours": 3,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Real-time trigger testing, countdown timers, visual feedback system",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "DeepSeek Settings Management Interface",
+        "description": "Create comprehensive admin interface for managing DeepSeek AI configuration and settings",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [21],
+        "complexity": "medium",
+        "estimatedHours": 8,
+        "details": "Add DeepSeek Settings section to admin dashboard, implement API key and parameter configuration, add rate limiting and timeout settings, include travel memory database configuration",
+        "testStrategy": "Settings interface works correctly, configuration saves properly, connection testing functional, status monitoring accurate",
+        "modules": ["deepseek", "admin", "settings"],
+        "phase": "advanced",
+        "subtasks": [
+          {
+            "id": "22.1",
+            "title": "DeepSeek Settings UI Section",
+            "description": "Add comprehensive DeepSeek settings interface to admin dashboard",
+            "estimatedHours": 4,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "API settings, rate limiting, travel memory, language detection, caching configuration",
+            "status": "done"
+          },
+          {
+            "id": "22.2",
+            "title": "Settings Management Functions",
+            "description": "Implement JavaScript functions for settings management",
+            "estimatedHours": 3,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "loadDeepSeekSettings(), saveDeepSeekSettings(), testDeepSeekConnection()",
+            "status": "done"
+          },
+          {
+            "id": "22.3",
+            "title": "Status Monitoring Interface",
+            "description": "Add real-time status monitoring and usage statistics",
+            "estimatedHours": 1,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "API status, current model, memory size, usage statistics display",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "title": "Travel Advisory System with DeepSeek Memory",
+        "description": "Implement personalized travel advisory system with conversation flow and DeepSeek memory integration",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [22],
+        "complexity": "high",
+        "estimatedHours": 16,
+        "details": "Create structured conversation flow for travel consultation, implement guest profiling, build travel recommendations database for Phuket, integrate DeepSeek for personalized recommendations, add negative sentiment detection with staff notification",
+        "testStrategy": "Conversation flow works correctly, guest profiling accurate, recommendations personalized, sentiment detection triggers staff notifications, comprehensive testing",
+        "modules": ["travel_advisor", "deepseek", "conversation", "memory"],
+        "phase": "business",
+        "subtasks": [
+          {
+            "id": "23.1",
+            "title": "Travel Advisor Service",
+            "description": "Create comprehensive travel advisory service with conversation flow",
+            "estimatedHours": 8,
+            "files": [
+              "app/services/deepseek_travel_advisor.py"
+            ],
+            "details": "Conversation flow management, guest profiling, recommendation generation, sentiment handling",
+            "status": "done"
+          },
+          {
+            "id": "23.2",
+            "title": "Travel Recommendations Database",
+            "description": "Build comprehensive travel recommendations for different guest types",
+            "estimatedHours": 4,
+            "files": [
+              "app/services/deepseek_travel_advisor.py"
+            ],
+            "details": "Phuket recommendations by experience level and companion type, personalization logic",
+            "status": "done"
+          },
+          {
+            "id": "23.3",
+            "title": "Negative Sentiment Handling",
+            "description": "Implement automatic negative sentiment detection and staff notification",
+            "estimatedHours": 3,
+            "files": [
+              "app/services/deepseek_travel_advisor.py"
+            ],
+            "details": "Sentiment analysis, staff notification system, guest contact information handling",
+            "status": "done"
+          },
+          {
+            "id": "23.4",
+            "title": "DeepSeek Memory Integration",
+            "description": "Integrate conversation memory with DeepSeek for personalized responses",
+            "estimatedHours": 1,
+            "files": [
+              "app/services/deepseek_travel_advisor.py"
+            ],
+            "details": "Memory storage, context retrieval, personalization based on guest history",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "title": "Automatic Language Detection System",
+        "description": "Implement automatic language detection based on phone numbers and message content using Green API integration",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [23],
+        "complexity": "medium",
+        "estimatedHours": 10,
+        "details": "Detect language from phone number country codes, analyze message content for language patterns, support major languages, integrate with Green API for additional user information, provide confidence scores",
+        "testStrategy": "Language detection accurate for phone numbers, content analysis works correctly, confidence scores reliable, Green API integration functional",
+        "modules": ["language_detection", "green_api", "internationalization"],
+        "phase": "advanced",
+        "subtasks": [
+          {
+            "id": "24.1",
+            "title": "Language Detector Service",
+            "description": "Create comprehensive language detection service",
+            "estimatedHours": 6,
+            "files": [
+              "app/services/language_detector.py"
+            ],
+            "details": "Phone number analysis, content pattern matching, confidence scoring, multi-language support",
+            "status": "done"
+          },
+          {
+            "id": "24.2",
+            "title": "Phone Number Country Code Mapping",
+            "description": "Implement comprehensive country code to language mapping",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/language_detector.py"
+            ],
+            "details": "Global country code database, language priorities, regional variations",
+            "status": "done"
+          },
+          {
+            "id": "24.3",
+            "title": "Content Pattern Analysis",
+            "description": "Implement message content language pattern recognition",
+            "estimatedHours": 2,
+            "files": [
+              "app/services/language_detector.py"
+            ],
+            "details": "Language-specific patterns, character set detection, keyword analysis",
+            "status": "done"
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "Enhanced DeepSeek Testing with Trigger Demonstrations",
+        "description": "Expand DeepSeek testing interface with comprehensive trigger demonstrations and travel advisory testing",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [24],
+        "complexity": "medium",
+        "estimatedHours": 6,
+        "details": "Add Triggers Demo tab with real-time testing, implement seconds-based trigger timing for quick demos, create Travel Advisor demo with conversation flow, add language detection testing interface",
+        "testStrategy": "All demo interfaces functional, trigger testing works in real-time, travel advisor demo complete, language detection testing accurate",
+        "modules": ["testing", "demo", "admin"],
+        "phase": "advanced",
+        "subtasks": [
+          {
+            "id": "25.1",
+            "title": "Triggers Demo Interface",
+            "description": "Create interactive triggers demonstration with real-time testing",
+            "estimatedHours": 3,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Trigger test functions, countdown timers, visual feedback, active trigger tracking",
+            "status": "done"
+          },
+          {
+            "id": "25.2",
+            "title": "Travel Advisor Demo Interface",
+            "description": "Create interactive travel advisor demonstration",
+            "estimatedHours": 2,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Conversation flow demo, language detection display, message interface",
+            "status": "done"
+          },
+          {
+            "id": "25.3",
+            "title": "Demo Tab Navigation",
+            "description": "Add new tabs to DeepSeek testing section",
+            "estimatedHours": 1,
+            "files": [
+              "app/templates/admin_dashboard.html"
+            ],
+            "details": "Triggers Demo tab, Travel Advisor tab, navigation integration",
+            "status": "done"
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-11T03:59:00Z",
+      "lastUpdated": "2025-07-11T04:15:00Z",
+      "version": "1.0.0",
+      "totalTasks": 25,
+      "projectName": "WhatsApp Hotel Bot MVP",
+      "phases": [
+        "foundation",
+        "core",
+        "business",
+        "advanced"
+      ],
+      "description": "Tasks for master context",
+      "updated": "2025-07-12T12:33:47.650Z",
+      "tasksCompleted": "2025-07-12T12:00:00.000Z",
+      "completedTasks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    }
+  }
+}

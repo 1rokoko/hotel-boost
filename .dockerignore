@@ -1,0 +1,125 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker (allow production files)
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+!docker-compose.prod.yml
+!Dockerfile.prod
+.dockerignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.pytest_cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+.taskmaster/
+node_modules/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests
+tests/
+test_*
+*_test.py
+
+# Development files
+.env.local
+.env.development
+.env.test
+scripts/dev/
+scripts/test/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Kubernetes and deployment
+k8s/
+kubernetes/
+*.yaml
+*.yml
+!docker-compose.prod.yml
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Security and secrets
+secrets/
+certs/
+*.pem
+*.key
+*.crt
+
+# Monitoring configs (exclude from image)
+monitoring/
+grafana/
+prometheus/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3

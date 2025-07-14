@@ -1,0 +1,348 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatsapp-hotel-bot-api
+  namespace: hotel-bot
+  labels:
+    app: whatsapp-hotel-bot
+    component: api
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: whatsapp-hotel-bot
+      component: api
+  template:
+    metadata:
+      labels:
+        app: whatsapp-hotel-bot
+        component: api
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: whatsapp-hotel-bot
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: api
+        image: whatsapp-hotel-bot:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DEBUG
+          value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: redis-url
+        - name: GREEN_API_INSTANCE_ID
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: green-api-instance-id
+        - name: GREEN_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: green-api-token
+        - name: DEEPSEEK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: deepseek-api-key
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: secret-key
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: whatsapp-hotel-bot-config
+              key: log-level
+        - name: PROMETHEUS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: whatsapp-hotel-bot-config
+              key: prometheus-enabled
+        - name: GRAFANA_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: whatsapp-hotel-bot-config
+              key: grafana-enabled
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+        - name: app-tmp
+          mountPath: /app/tmp
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: app-tmp
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatsapp-hotel-bot-celery-worker
+  namespace: hotel-bot
+  labels:
+    app: whatsapp-hotel-bot
+    component: celery-worker
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: whatsapp-hotel-bot
+      component: celery-worker
+  template:
+    metadata:
+      labels:
+        app: whatsapp-hotel-bot
+        component: celery-worker
+        version: v1
+    spec:
+      serviceAccountName: whatsapp-hotel-bot
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: celery-worker
+        image: whatsapp-hotel-bot:latest
+        imagePullPolicy: Always
+        command: ["celery", "-A", "app.core.celery", "worker", "--loglevel=info", "--concurrency=4"]
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DEBUG
+          value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: redis-url
+        - name: CELERY_BROKER_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: celery-broker-url
+        - name: CELERY_RESULT_BACKEND
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: celery-result-backend
+        - name: GREEN_API_INSTANCE_ID
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: green-api-instance-id
+        - name: GREEN_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: green-api-token
+        - name: DEEPSEEK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: deepseek-api-key
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: secret-key
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: whatsapp-hotel-bot-config
+              key: log-level
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+        - name: app-tmp
+          mountPath: /app/tmp
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: app-tmp
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/os: linux
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatsapp-hotel-bot-celery-beat
+  namespace: hotel-bot
+  labels:
+    app: whatsapp-hotel-bot
+    component: celery-beat
+    version: v1
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: whatsapp-hotel-bot
+      component: celery-beat
+  template:
+    metadata:
+      labels:
+        app: whatsapp-hotel-bot
+        component: celery-beat
+        version: v1
+    spec:
+      serviceAccountName: whatsapp-hotel-bot
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: celery-beat
+        image: whatsapp-hotel-bot:latest
+        imagePullPolicy: Always
+        command: ["celery", "-A", "app.core.celery", "beat", "--loglevel=info"]
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DEBUG
+          value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: redis-url
+        - name: CELERY_BROKER_URL
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: celery-broker-url
+        - name: CELERY_RESULT_BACKEND
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: celery-result-backend
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: whatsapp-hotel-bot-secrets
+              key: secret-key
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: whatsapp-hotel-bot-config
+              key: log-level
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+        - name: celery-beat-schedule
+          mountPath: /app/celerybeat-schedule
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: celery-beat-schedule
+        persistentVolumeClaim:
+          claimName: celery-beat-pvc
+      nodeSelector:
+        kubernetes.io/os: linux

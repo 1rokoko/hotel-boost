@@ -1,0 +1,303 @@
+groups:
+  # Application Health Alerts
+  - name: whatsapp-hotel-bot.health
+    rules:
+      - alert: APIDown
+        expr: up{job="whatsapp-hotel-bot-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: whatsapp-hotel-bot
+          component: api
+        annotations:
+          summary: "WhatsApp Hotel Bot API is down"
+          description: "The WhatsApp Hotel Bot API has been down for more than 1 minute."
+          runbook_url: "https://docs.hotel-bot.example.com/runbooks/api-down"
+
+      - alert: APIHighErrorRate
+        expr: rate(http_requests_total{job="whatsapp-hotel-bot-api",status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: api
+        annotations:
+          summary: "High error rate in WhatsApp Hotel Bot API"
+          description: "The API error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+      - alert: APIHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="whatsapp-hotel-bot-api"}[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: api
+        annotations:
+          summary: "High latency in WhatsApp Hotel Bot API"
+          description: "95th percentile latency is {{ $value }}s over the last 5 minutes."
+
+      - alert: CeleryWorkerDown
+        expr: up{job="whatsapp-hotel-bot-api",component="celery-worker"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: whatsapp-hotel-bot
+          component: celery
+        annotations:
+          summary: "Celery worker is down"
+          description: "Celery worker has been down for more than 2 minutes."
+
+      - alert: CeleryQueueBacklog
+        expr: celery_queue_length > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: celery
+        annotations:
+          summary: "Celery queue backlog is high"
+          description: "Celery queue has {{ $value }} pending tasks."
+
+  # Database Alerts
+  - name: whatsapp-hotel-bot.database
+    rules:
+      - alert: DatabaseDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: whatsapp-hotel-bot
+          component: database
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "PostgreSQL database has been down for more than 1 minute."
+
+      - alert: DatabaseHighConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: database
+        annotations:
+          summary: "High number of database connections"
+          description: "Database connection usage is {{ $value | humanizePercentage }}."
+
+      - alert: DatabaseSlowQueries
+        expr: rate(pg_stat_database_tup_returned[5m]) / rate(pg_stat_database_tup_fetched[5m]) < 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: database
+        annotations:
+          summary: "Database queries are slow"
+          description: "Database query efficiency is low: {{ $value | humanizePercentage }}."
+
+      - alert: DatabaseDiskSpaceHigh
+        expr: (pg_database_size_bytes / (1024^3)) > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: database
+        annotations:
+          summary: "Database disk usage is high"
+          description: "Database size is {{ $value }}GB."
+
+  # Redis Alerts
+  - name: whatsapp-hotel-bot.redis
+    rules:
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: whatsapp-hotel-bot
+          component: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis has been down for more than 1 minute."
+
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: redis
+        annotations:
+          summary: "Redis memory usage is high"
+          description: "Redis memory usage is {{ $value | humanizePercentage }}."
+
+      - alert: RedisHighConnections
+        expr: redis_connected_clients > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: redis
+        annotations:
+          summary: "High number of Redis connections"
+          description: "Redis has {{ $value }} connected clients."
+
+  # External API Alerts
+  - name: whatsapp-hotel-bot.external-apis
+    rules:
+      - alert: GreenAPIHighErrorRate
+        expr: rate(green_api_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: green-api
+        annotations:
+          summary: "High error rate for Green API"
+          description: "Green API error rate is {{ $value | humanizePercentage }}."
+
+      - alert: GreenAPIRateLimitHit
+        expr: rate(green_api_rate_limit_hits_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: green-api
+        annotations:
+          summary: "Green API rate limit hit"
+          description: "Green API rate limit has been hit {{ $value }} times per second."
+
+      - alert: DeepSeekAPIHighErrorRate
+        expr: rate(deepseek_api_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: deepseek-api
+        annotations:
+          summary: "High error rate for DeepSeek API"
+          description: "DeepSeek API error rate is {{ $value | humanizePercentage }}."
+
+      - alert: DeepSeekAPIHighLatency
+        expr: histogram_quantile(0.95, rate(deepseek_api_duration_seconds_bucket[5m])) > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: deepseek-api
+        annotations:
+          summary: "High latency for DeepSeek API"
+          description: "DeepSeek API 95th percentile latency is {{ $value }}s."
+
+  # Business Logic Alerts
+  - name: whatsapp-hotel-bot.business
+    rules:
+      - alert: HighNegativeSentimentRate
+        expr: rate(sentiment_analysis_negative_total[1h]) / rate(sentiment_analysis_total[1h]) > 0.3
+        for: 10m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: sentiment-analysis
+        annotations:
+          summary: "High negative sentiment rate"
+          description: "Negative sentiment rate is {{ $value | humanizePercentage }} over the last hour."
+
+      - alert: MessageProcessingBacklog
+        expr: message_processing_queue_size > 50
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: message-processing
+        annotations:
+          summary: "Message processing backlog"
+          description: "{{ $value }} messages are waiting to be processed."
+
+      - alert: TriggerExecutionFailures
+        expr: rate(trigger_execution_failures_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: triggers
+        annotations:
+          summary: "High trigger execution failure rate"
+          description: "Trigger execution failure rate is {{ $value }} per second."
+
+  # Infrastructure Alerts
+  - name: whatsapp-hotel-bot.infrastructure
+    rules:
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+        annotations:
+          summary: "Pod is crash looping"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping."
+
+      - alert: PodNotReady
+        expr: kube_pod_status_ready{condition="false"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+        annotations:
+          summary: "Pod is not ready"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not ready."
+
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{pod=~"whatsapp-hotel-bot.*"}[5m]) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+        annotations:
+          summary: "High CPU usage"
+          description: "Pod {{ $labels.pod }} CPU usage is {{ $value | humanizePercentage }}."
+
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes{pod=~"whatsapp-hotel-bot.*"} / container_spec_memory_limit_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+        annotations:
+          summary: "High memory usage"
+          description: "Pod {{ $labels.pod }} memory usage is {{ $value | humanizePercentage }}."
+
+      - alert: DiskSpaceHigh
+        expr: (node_filesystem_size_bytes - node_filesystem_free_bytes) / node_filesystem_size_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+        annotations:
+          summary: "High disk usage"
+          description: "Disk usage on {{ $labels.instance }} is {{ $value | humanizePercentage }}."
+
+  # Security Alerts
+  - name: whatsapp-hotel-bot.security
+    rules:
+      - alert: UnauthorizedAPIAccess
+        expr: rate(http_requests_total{status="401"}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: security
+        annotations:
+          summary: "High rate of unauthorized API access attempts"
+          description: "{{ $value }} unauthorized access attempts per second."
+
+      - alert: SuspiciousTrafficPattern
+        expr: rate(http_requests_total[1m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          service: whatsapp-hotel-bot
+          component: security
+        annotations:
+          summary: "Suspicious traffic pattern detected"
+          description: "Request rate is {{ $value }} per second, which may indicate an attack."

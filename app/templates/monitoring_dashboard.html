@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green API Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .status-good { color: #28a745; }
+        .status-warning { color: #ffc107; }
+        .status-error { color: #dc3545; }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .alerts-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .alert-item {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .alert-high { border-left-color: #dc3545; background-color: #f8d7da; }
+        .alert-medium { border-left-color: #ffc107; background-color: #fff3cd; }
+        .alert-low { border-left-color: #17a2b8; background-color: #d1ecf1; }
+        
+        .refresh-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .refresh-btn:hover {
+            background: #0056b3;
+        }
+        
+        .auto-refresh {
+            margin-left: 20px;
+        }
+        
+        .instances-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .instance-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+        
+        .instance-healthy { border-left-color: #28a745; }
+        .instance-degraded { border-left-color: #ffc107; }
+        .instance-unhealthy { border-left-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Green API Monitoring Dashboard</h1>
+            <p>Real-time monitoring of WhatsApp Green API integration</p>
+            <button class="refresh-btn" onclick="refreshData()">Refresh</button>
+            <label class="auto-refresh">
+                <input type="checkbox" id="autoRefresh" checked> Auto-refresh (30s)
+            </label>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="totalRequests">-</div>
+                <div class="metric-label">Total Requests</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="errorRate">-</div>
+                <div class="metric-label">Error Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="avgResponseTime">-</div>
+                <div class="metric-label">Avg Response Time (ms)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeInstances">-</div>
+                <div class="metric-label">Active Instances</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="messagesSent">-</div>
+                <div class="metric-label">Messages Sent</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="webhooksReceived">-</div>
+                <div class="metric-label">Webhooks Received</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Response Time Trend</h3>
+                <canvas id="responseTimeChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Request Volume</h3>
+                <canvas id="requestVolumeChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Error Distribution</h3>
+                <canvas id="errorChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Webhook Types</h3>
+                <canvas id="webhookChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Active Alerts -->
+        <div class="alerts-section">
+            <h3>Active Alerts</h3>
+            <div id="alertsList">
+                <p>No active alerts</p>
+            </div>
+        </div>
+
+        <!-- Instance Health -->
+        <div class="alerts-section">
+            <h3>Instance Health</h3>
+            <div class="instances-grid" id="instancesGrid">
+                <p>Loading instances...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+        let autoRefreshInterval;
+
+        // Initialize charts
+        function initCharts() {
+            // Response Time Chart
+            const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+            charts.responseTime = new Chart(responseTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Average Response Time (ms)',
+                        data: [],
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Request Volume Chart
+            const requestVolumeCtx = document.getElementById('requestVolumeChart').getContext('2d');
+            charts.requestVolume = new Chart(requestVolumeCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Requests',
+                        data: [],
+                        backgroundColor: '#28a745'
+                    }, {
+                        label: 'Errors',
+                        data: [],
+                        backgroundColor: '#dc3545'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Error Distribution Chart
+            const errorCtx = document.getElementById('errorChart').getContext('2d');
+            charts.error = new Chart(errorCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#dc3545',
+                            '#ffc107',
+                            '#17a2b8',
+                            '#6c757d'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // Webhook Types Chart
+            const webhookCtx = document.getElementById('webhookChart').getContext('2d');
+            charts.webhook = new Chart(webhookCtx, {
+                type: 'pie',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#007bff',
+                            '#28a745',
+                            '#ffc107',
+                            '#dc3545',
+                            '#6f42c1'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+
+        // Fetch and update data
+        async function refreshData() {
+            try {
+                // Fetch metrics
+                const metricsResponse = await fetch('/api/v1/monitoring/metrics');
+                const metricsData = await metricsResponse.json();
+                
+                if (metricsData.status === 'success') {
+                    updateMetrics(metricsData.data);
+                }
+
+                // Fetch health
+                const healthResponse = await fetch('/api/v1/monitoring/health');
+                const healthData = await healthResponse.json();
+                
+                if (healthData.status === 'success') {
+                    updateInstanceHealth(healthData.data);
+                }
+
+                // Fetch alerts
+                const alertsResponse = await fetch('/api/v1/monitoring/alerts?active_only=true');
+                const alertsData = await alertsResponse.json();
+                
+                if (alertsData.status === 'success') {
+                    updateAlerts(alertsData.data.active_alerts);
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Update metrics display
+        function updateMetrics(metrics) {
+            document.getElementById('totalRequests').textContent = metrics.requests.total.toLocaleString();
+            
+            const errorRate = (metrics.requests.error_rate * 100).toFixed(2);
+            const errorRateElement = document.getElementById('errorRate');
+            errorRateElement.textContent = errorRate + '%';
+            errorRateElement.className = 'metric-value ' + 
+                (errorRate > 10 ? 'status-error' : errorRate > 5 ? 'status-warning' : 'status-good');
+            
+            document.getElementById('avgResponseTime').textContent = Math.round(metrics.response_times.average);
+            document.getElementById('activeInstances').textContent = Object.keys(metrics.instances).length;
+            document.getElementById('messagesSent').textContent = metrics.messages.sent.toLocaleString();
+            document.getElementById('webhooksReceived').textContent = metrics.webhooks.total.toLocaleString();
+
+            // Update charts
+            updateCharts(metrics);
+        }
+
+        // Update charts with new data
+        function updateCharts(metrics) {
+            // Update error distribution chart
+            if (Object.keys(metrics.errors.by_type).length > 0) {
+                charts.error.data.labels = Object.keys(metrics.errors.by_type);
+                charts.error.data.datasets[0].data = Object.values(metrics.errors.by_type);
+                charts.error.update();
+            }
+
+            // Update webhook types chart
+            if (Object.keys(metrics.webhooks.by_type).length > 0) {
+                charts.webhook.data.labels = Object.keys(metrics.webhooks.by_type);
+                charts.webhook.data.datasets[0].data = Object.values(metrics.webhooks.by_type);
+                charts.webhook.update();
+            }
+        }
+
+        // Update instance health
+        function updateInstanceHealth(healthData) {
+            const instancesGrid = document.getElementById('instancesGrid');
+            
+            if (Object.keys(healthData.instances).length === 0) {
+                instancesGrid.innerHTML = '<p>No instances found</p>';
+                return;
+            }
+
+            let html = '';
+            for (const [instanceId, health] of Object.entries(healthData.instances)) {
+                const statusClass = `instance-${health.status}`;
+                html += `
+                    <div class="instance-card ${statusClass}">
+                        <h4>${instanceId}</h4>
+                        <p><strong>Status:</strong> ${health.status}</p>
+                        <p><strong>Requests:</strong> ${health.total_requests || 0}</p>
+                        <p><strong>Error Rate:</strong> ${((health.error_rate || 0) * 100).toFixed(2)}%</p>
+                        <p><strong>Avg Response:</strong> ${Math.round(health.avg_response_time || 0)}ms</p>
+                        <p><strong>Last Request:</strong> ${health.last_request ? new Date(health.last_request).toLocaleString() : 'Never'}</p>
+                    </div>
+                `;
+            }
+            instancesGrid.innerHTML = html;
+        }
+
+        // Update alerts
+        function updateAlerts(alerts) {
+            const alertsList = document.getElementById('alertsList');
+            
+            if (alerts.length === 0) {
+                alertsList.innerHTML = '<p>No active alerts</p>';
+                return;
+            }
+
+            let html = '';
+            alerts.forEach(alert => {
+                const severityClass = `alert-${alert.severity || 'medium'}`;
+                html += `
+                    <div class="alert-item ${severityClass}">
+                        <strong>${alert.rule_name}</strong>
+                        <p>Triggered: ${new Date(alert.triggered_at).toLocaleString()}</p>
+                        <p>Duration: ${Math.round(alert.duration / 60)} minutes</p>
+                    </div>
+                `;
+            });
+            alertsList.innerHTML = html;
+        }
+
+        // Setup auto-refresh
+        function setupAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+            
+            function toggleAutoRefresh() {
+                if (checkbox.checked) {
+                    autoRefreshInterval = setInterval(refreshData, 30000);
+                } else {
+                    clearInterval(autoRefreshInterval);
+                }
+            }
+            
+            checkbox.addEventListener('change', toggleAutoRefresh);
+            toggleAutoRefresh(); // Start if checked
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            refreshData();
+            setupAutoRefresh();
+        });
+    </script>
+</body>
+</html>

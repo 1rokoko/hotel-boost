@@ -1,0 +1,137 @@
+[run]
+# Coverage configuration for WhatsApp Hotel Bot
+
+# Source code to measure
+source = app
+
+# Include patterns
+include = 
+    app/*
+    app/**/*
+
+# Exclude patterns
+omit = 
+    app/__init__.py
+    app/main.py
+    app/database.py
+    app/core/config.py
+    app/migrations/*
+    app/alembic/*
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */venv/*
+    */env/*
+    .venv/*
+    .env/*
+
+# Branch coverage
+branch = True
+
+# Parallel processing
+parallel = True
+
+# Data file
+data_file = .coverage
+
+[report]
+# Reporting options
+
+# Minimum coverage percentage
+fail_under = 85
+
+# Show missing lines
+show_missing = True
+
+# Skip covered files
+skip_covered = False
+
+# Skip empty files
+skip_empty = True
+
+# Precision for percentages
+precision = 2
+
+# Sort by coverage percentage
+sort = Cover
+
+# Exclude lines from coverage
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+    
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+    
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+    
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    
+    # Don't complain about abstract methods
+    @(abc\.)?abstractmethod
+    
+    # Don't complain about protocol methods
+    \.\.\.
+    
+    # Don't complain about pass statements
+    pass
+    
+    # Don't complain about logging statements
+    logger\.debug
+    logger\.info
+    
+    # Don't complain about import errors in optional dependencies
+    except ImportError
+    except ModuleNotFoundError
+
+# Partial branches to exclude
+partial_branches =
+    # Have to re-enable the standard pragma
+    pragma: no branch
+    
+    # Don't complain about non-runnable code:
+    if 0:
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+
+[html]
+# HTML report options
+
+# Output directory
+directory = htmlcov
+
+# Title for HTML report
+title = WhatsApp Hotel Bot - Test Coverage Report
+
+# Show contexts
+show_contexts = True
+
+# Skip covered files in HTML
+skip_covered = False
+
+# Skip empty files in HTML
+skip_empty = True
+
+[xml]
+# XML report options
+
+# Output file
+output = coverage.xml
+
+[json]
+# JSON report options
+
+# Output file
+output = coverage.json
+
+# Show contexts
+show_contexts = True
+
+# Pretty print
+pretty_print = True

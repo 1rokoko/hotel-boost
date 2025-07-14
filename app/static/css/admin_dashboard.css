@@ -1,0 +1,511 @@
+/* Admin Dashboard Styles - High Specificity */
+body {
+    background-color: #f8f9fa !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+}
+
+nav.sidebar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh !important;
+    color: white !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 250px !important;
+    z-index: 1000 !important;
+    overflow-y: auto !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+nav.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    margin: 4px 12px !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+}
+
+nav.sidebar .nav-link:hover,
+nav.sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    transform: translateX(5px) !important;
+}
+
+div.main-content {
+    margin-left: 250px !important;
+    padding: 20px !important;
+    min-height: 100vh !important;
+    width: calc(100% - 250px) !important;
+    box-sizing: border-box !important;
+}
+
+div.card {
+    border: none !important;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease !important;
+    margin-bottom: 20px !important;
+}
+
+div.card:hover {
+    transform: translateY(-2px) !important;
+}
+
+.metric-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-online {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-offline {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Modal improvements */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Form improvements */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Button improvements */
+.btn {
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Table improvements */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Tab improvements */
+.nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 8px 8px 0 0;
+    color: #6c757d;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.nav-tabs .nav-link:hover {
+    border: none;
+    background-color: #f8f9fa;
+}
+
+/* Alert improvements */
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 15px 20px;
+}
+
+/* Badge improvements */
+.badge {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobile menu toggle button */
+button.mobile-menu-toggle {
+    display: none !important;
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    z-index: 1001 !important;
+    background: #667eea !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    button.mobile-menu-toggle {
+        display: block !important;
+    }
+
+    nav.sidebar {
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    nav.sidebar.show {
+        transform: translateX(0) !important;
+    }
+
+    div.main-content {
+        margin-left: 0 !important;
+        padding: 15px !important;
+        padding-top: 70px !important; /* Account for mobile menu button */
+        width: 100% !important;
+    }
+
+    .metric-card {
+        margin-bottom: 15px;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    /* Stack cards vertically on mobile */
+    .row > .col-md-4,
+    .row > .col-md-6,
+    .row > .col-md-8 {
+        margin-bottom: 20px;
+    }
+
+    /* Adjust modal for mobile */
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    /* Adjust table for mobile */
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 10px;
+        padding-top: 70px;
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        font-size: 0.875rem;
+        padding: 6px 12px;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+    }
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Fix for form field visibility */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.form-row > .col,
+.form-row > [class*="col-"] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+/* Ensure all form elements are visible */
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Fix for tab content visibility */
+.tab-content {
+    min-height: 400px;
+}
+
+.tab-pane {
+    padding: 20px 0;
+}
+
+/* DeepSeek Settings specific styles */
+.deepseek-settings-form {
+    max-width: 100%;
+}
+
+.deepseek-settings-form .row {
+    margin-bottom: 1rem;
+}
+
+.deepseek-status-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+/* Travel advisor styles */
+.travel-conversation {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+.travel-message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.travel-message.bot {
+    background: #e3f2fd;
+    margin-right: 20%;
+}
+
+.travel-message.user {
+    background: #f3e5f5;
+    margin-left: 20%;
+    text-align: right;
+}
+
+/* Trigger demo styles */
+.trigger-test-button {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.active-trigger-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.trigger-countdown {
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Content sections - replace inline display:none styles */
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Create hotel card - replace inline display:none */
+#create-hotel-card {
+    display: none;
+}
+
+#create-hotel-card.show {
+    display: block;
+}
+
+/* Conversation messages container */
+#conversation-messages {
+    height: 400px;
+    overflow-y: auto;
+}
+
+/* Travel conversation demo */
+#travel-conversation-demo {
+    display: none;
+}
+
+#travel-conversation-demo.show {
+    display: block;
+}
+
+/* Travel messages container */
+#travel-messages {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Progress bars */
+.progress {
+    height: 8px;
+}
+
+.progress.small {
+    height: 6px;
+}
+
+/* Template variables helper */
+.template-variables-helper {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+}
+
+/* Message content with pre-line formatting */
+.message-content {
+    white-space: pre-line;
+}
+
+/* Navbar improvements */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header improvements */
+.main-content .navbar {
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+/* Card header improvements */
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.card-header h5 {
+    margin-bottom: 0;
+    color: #495057;
+}

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Navigation Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+
+        nav.sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            min-height: 100vh !important;
+            max-height: 100vh !important;
+            color: white !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 250px !important;
+            z-index: 1000 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        nav.sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            padding: 12px 20px !important;
+            border-radius: 8px !important;
+            margin: 4px 12px !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+            display: block !important;
+        }
+
+        nav.sidebar .nav-link:hover,
+        nav.sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            transform: translateX(5px) !important;
+        }
+
+        div.main-content {
+            margin-left: 250px !important;
+            padding: 20px !important;
+            min-height: 100vh !important;
+            width: calc(100% - 250px) !important;
+            box-sizing: border-box !important;
+        }
+
+        .content-section {
+            display: none;
+            padding: 20px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .content-section.active {
+            display: block !important;
+        }
+
+        .sidebar-title {
+            color: white !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 1rem !important;
+            padding: 0 20px !important;
+        }
+
+        .sidebar .nav {
+            padding: 0 !important;
+            max-height: calc(100vh - 100px) !important;
+            overflow-y: auto !important;
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 2px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .sidebar .p-4 {
+            padding: 1rem !important;
+            flex-shrink: 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="p-4">
+            <h4 class="sidebar-title">
+                <i class="fas fa-hotel me-2"></i>
+                Hotel Bot Admin
+            </h4>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#hotels" data-section="hotels">
+                        <i class="fas fa-building me-2"></i>
+                        Hotels
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#conversations" data-section="conversations">
+                        <i class="fas fa-comments me-2"></i>
+                        Conversations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#triggers" data-section="triggers">
+                        <i class="fas fa-bolt me-2"></i>
+                        Triggers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#templates" data-section="templates">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Templates
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sentiment-analytics" data-section="sentiment-analytics">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Sentiment Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#analytics" data-section="analytics">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#monitoring" data-section="monitoring">
+                        <i class="fas fa-eye me-2"></i>
+                        Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#security" data-section="security">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Security
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#deepseek-testing" data-section="deepseek-testing">
+                        <i class="fas fa-brain me-2"></i>
+                        DeepSeek Testing
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#deepseek-settings" data-section="deepseek-settings">
+                        <i class="fas fa-cog me-2"></i>
+                        DeepSeek Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section active">
+            <h2>Dashboard</h2>
+            <p>This is the dashboard section.</p>
+        </div>
+
+        <!-- DeepSeek Settings Section -->
+        <div id="deepseek-settings-section" class="content-section">
+            <h2>DeepSeek Settings</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cog me-2"></i>DeepSeek AI Configuration</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="deepseek-api-key" class="form-label">API Key</label>
+                                    <input type="password" class="form-control" id="deepseek-api-key" placeholder="Enter your DeepSeek API key">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deepseek-model" class="form-label">Model</label>
+                                    <select class="form-select" id="deepseek-model">
+                                        <option value="deepseek-chat">deepseek-chat</option>
+                                        <option value="deepseek-coder">deepseek-coder</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deepseek-travel-memory" class="form-label">Travel Memory</label>
+                                    <textarea class="form-control" id="deepseek-travel-memory" rows="8" placeholder="Enter travel memory context..."></textarea>
+                                </div>
+                                <button type="button" class="btn btn-primary">Save Settings</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>API Status: <span class="badge bg-success">Connected</span></p>
+                            <p>Model: deepseek-chat</p>
+                            <p>Usage: 0 KB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections -->
+        <div id="hotels-section" class="content-section">
+            <h2>Hotels</h2>
+            <p>Hotels management section.</p>
+        </div>
+
+        <div id="conversations-section" class="content-section">
+            <h2>Conversations</h2>
+            <p>Conversations management section.</p>
+        </div>
+
+        <div id="triggers-section" class="content-section">
+            <h2>Triggers</h2>
+            <p>Triggers management section.</p>
+        </div>
+
+        <div id="templates-section" class="content-section">
+            <h2>Templates</h2>
+            <p>Templates management section.</p>
+        </div>
+
+        <div id="sentiment-analytics-section" class="content-section">
+            <h2>Sentiment Analytics</h2>
+            <p>Sentiment analytics section.</p>
+        </div>
+
+        <div id="analytics-section" class="content-section">
+            <h2>Analytics</h2>
+            <p>Analytics section.</p>
+        </div>
+
+        <div id="monitoring-section" class="content-section">
+            <h2>Monitoring</h2>
+            <p>Monitoring section.</p>
+        </div>
+
+        <div id="security-section" class="content-section">
+            <h2>Security</h2>
+            <p>Security section.</p>
+        </div>
+
+        <div id="deepseek-testing-section" class="content-section">
+            <h2>DeepSeek Testing</h2>
+            <p>DeepSeek testing section.</p>
+        </div>
+    </div>
+
+    <script>
+        // Navigation handling
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav item
+                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const section = this.getAttribute('data-section');
+                document.querySelectorAll('.content-section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                const targetSection = document.getElementById(section + '-section');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                
+                console.log('Switched to section:', section);
+            });
+        });
+
+        // Test function
+        function testNavigation() {
+            console.log('Testing navigation...');
+            
+            const links = document.querySelectorAll('.sidebar .nav-link');
+            links.forEach((link, index) => {
+                const rect = link.getBoundingClientRect();
+                const section = link.getAttribute('data-section');
+                const inViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                
+                console.log(`${index + 1}. ${section}: ${inViewport ? 'VISIBLE' : 'NOT VISIBLE'} (top: ${rect.top}, bottom: ${rect.bottom})`);
+            });
+        }
+
+        // Run test on load
+        window.addEventListener('load', function() {
+            setTimeout(testNavigation, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: whatsapp-hotel-bot-config
+  namespace: hotel-bot
+  labels:
+    app: whatsapp-hotel-bot
+data:
+  # Application configuration
+  log-level: "INFO"
+  environment: "production"
+  debug: "false"
+  
+  # Monitoring configuration
+  prometheus-enabled: "true"
+  grafana-enabled: "true"
+  
+  # API configuration
+  api-v1-str: "/api/v1"
+  project-name: "WhatsApp Hotel Bot"
+  version: "1.0.0"
+  
+  # CORS configuration
+  allowed-hosts: '["*"]'
+  
+  # External API URLs
+  green-api-url: "https://api.green-api.com"
+  deepseek-api-url: "https://api.deepseek.com"
+  
+  # DeepSeek AI configuration
+  deepseek-max-tokens: "4096"
+  deepseek-temperature: "0.7"
+  deepseek-timeout: "60"
+  deepseek-max-requests-per-minute: "50"
+  deepseek-max-tokens-per-minute: "100000"
+  deepseek-max-retries: "3"
+  deepseek-retry-delay: "1.0"
+  deepseek-cache-enabled: "true"
+  deepseek-cache-ttl: "3600"
+  
+  # Sentiment Analysis configuration
+  sentiment-positive-threshold: "0.3"
+  sentiment-negative-threshold: "-0.3"
+  sentiment-attention-threshold: "-0.7"
+  sentiment-min-confidence: "0.6"
+  sentiment-notify-on-negative: "true"
+  sentiment-notify-on-attention: "true"
+  sentiment-default-language: "en"
+  
+  # Response Generation configuration
+  response-max-tokens: "500"
+  response-temperature: "0.8"
+  response-max-context-messages: "10"
+  response-include-guest-history: "true"
+  response-min-length: "10"
+  response-max-length: "1000"
+  response-use-guest-preferences: "true"
+  response-use-hotel-branding: "true"
+  
+  # Security configuration
+  access-token-expire-minutes: "30"
+  
+  # Celery configuration
+  celery-worker-concurrency: "4"
+  celery-beat-schedule-filename: "celerybeat-schedule"
+  
+  # Health check configuration
+  health-check-timeout: "10"
+  health-check-interval: "30"
+  
+  # Rate limiting configuration
+  rate-limit-per-minute: "100"
+  rate-limit-burst: "200"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: hotel-bot
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: "hotel_bot"
+  POSTGRES_USER: "postgres"
+  POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: hotel-bot
+  labels:
+    app: redis
+data:
+  redis.conf: |
+    # Redis configuration for production
+    
+    # Network
+    bind 0.0.0.0
+    port 6379
+    tcp-backlog 511
+    timeout 0
+    tcp-keepalive 300
+    
+    # General
+    daemonize no
+    supervised no
+    pidfile /var/run/redis_6379.pid
+    loglevel notice
+    logfile ""
+    databases 16
+    
+    # Snapshotting
+    save 900 1
+    save 300 10
+    save 60 10000
+    stop-writes-on-bgsave-error yes
+    rdbcompression yes
+    rdbchecksum yes
+    dbfilename dump.rdb
+    dir ./
+    
+    # Replication
+    replica-serve-stale-data yes
+    replica-read-only yes
+    repl-diskless-sync no
+    repl-diskless-sync-delay 5
+    repl-ping-replica-period 10
+    repl-timeout 60
+    repl-disable-tcp-nodelay no
+    repl-backlog-size 1mb
+    repl-backlog-ttl 3600
+    
+    # Security
+    requirepass REDIS_PASSWORD_PLACEHOLDER
+    
+    # Memory management
+    maxmemory 256mb
+    maxmemory-policy allkeys-lru
+    
+    # Append only file
+    appendonly yes
+    appendfilename "appendonly.aof"
+    appendfsync everysec
+    no-appendfsync-on-rewrite no
+    auto-aof-rewrite-percentage 100
+    auto-aof-rewrite-min-size 64mb
+    aof-load-truncated yes
+    
+    # Lua scripting
+    lua-time-limit 5000
+    
+    # Slow log
+    slowlog-log-slower-than 10000
+    slowlog-max-len 128
+    
+    # Event notification
+    notify-keyspace-events ""
+    
+    # Advanced config
+    hash-max-ziplist-entries 512
+    hash-max-ziplist-value 64
+    list-max-ziplist-size -2
+    list-compress-depth 0
+    set-max-intset-entries 512
+    zset-max-ziplist-entries 128
+    zset-max-ziplist-value 64
+    hll-sparse-max-bytes 3000
+    stream-node-max-bytes 4096
+    stream-node-max-entries 100
+    activerehashing yes
+    client-output-buffer-limit normal 0 0 0
+    client-output-buffer-limit replica 256mb 64mb 60
+    client-output-buffer-limit pubsub 32mb 8mb 60
+    hz 10
+    dynamic-hz yes
+    aof-rewrite-incremental-fsync yes
+    rdb-save-incremental-fsync yes
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: hotel-bot
+  labels:
+    app: nginx
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log warn;
+    pid /var/run/nginx.pid;
+    
+    events {
+        worker_connections 1024;
+        use epoll;
+        multi_accept on;
+    }
+    
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        # Logging
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+        
+        access_log /var/log/nginx/access.log main;
+        
+        # Performance
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+        
+        # Security
+        server_tokens off;
+        add_header X-Frame-Options SAMEORIGIN;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        
+        # Gzip
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 10240;
+        gzip_proxied expired no-cache no-store private must-revalidate auth;
+        gzip_types
+            text/plain
+            text/css
+            text/xml
+            text/javascript
+            application/x-javascript
+            application/xml+rss
+            application/json;
+        
+        # Rate limiting
+        limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+        limit_req_zone $binary_remote_addr zone=webhook:10m rate=100r/s;
+        
+        # Upstream
+        upstream api_backend {
+            least_conn;
+            server whatsapp-hotel-bot-api:8000 max_fails=3 fail_timeout=30s;
+        }
+        
+        server {
+            listen 80;
+            server_name _;
+            
+            # Health check
+            location /health {
+                access_log off;
+                return 200 "healthy\n";
+                add_header Content-Type text/plain;
+            }
+            
+            # API endpoints
+            location /api/ {
+                limit_req zone=api burst=20 nodelay;
+                proxy_pass http://api_backend;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_connect_timeout 60s;
+                proxy_send_timeout 60s;
+                proxy_read_timeout 60s;
+            }
+            
+            # Webhook endpoints (higher rate limit)
+            location /api/v1/webhooks/ {
+                limit_req zone=webhook burst=200 nodelay;
+                proxy_pass http://api_backend;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_connect_timeout 30s;
+                proxy_send_timeout 30s;
+                proxy_read_timeout 30s;
+            }
+            
+            # Documentation
+            location ~ ^/(docs|redoc) {
+                proxy_pass http://api_backend;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+        }
+    }

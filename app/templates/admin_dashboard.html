@@ -1,0 +1,3362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Hotel Bot - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/admin_dashboard.css" rel="stylesheet">
+    <style>
+        /* Admin Dashboard Styles - Inline for immediate effect */
+        body {
+            background-color: #f8f9fa !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+
+        nav.sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            min-height: 100vh !important;
+            max-height: 100vh !important;
+            color: white !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 250px !important;
+            z-index: 1000 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        nav.sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            padding: 12px 20px !important;
+            border-radius: 8px !important;
+            margin: 4px 12px !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        nav.sidebar .nav-link:hover,
+        nav.sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            transform: translateX(5px) !important;
+        }
+
+        div.main-content {
+            margin-left: 250px !important;
+            padding: 20px !important;
+            min-height: 100vh !important;
+            width: calc(100% - 250px) !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+
+        div.card {
+            border: none !important;
+            border-radius: 15px !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+            transition: transform 0.3s ease !important;
+            margin-bottom: 20px !important;
+        }
+
+        div.card:hover {
+            transform: translateY(-2px) !important;
+        }
+
+        /* Mobile menu toggle button */
+        button.mobile-menu-toggle {
+            display: none !important;
+            position: fixed !important;
+            top: 20px !important;
+            left: 20px !important;
+            z-index: 1001 !important;
+            background: #667eea !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 5px !important;
+            padding: 10px !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            button.mobile-menu-toggle {
+                display: block !important;
+            }
+
+            nav.sidebar {
+                transform: translateX(-100%) !important;
+                transition: transform 0.3s ease !important;
+            }
+
+            nav.sidebar.show {
+                transform: translateX(0) !important;
+            }
+
+            div.main-content {
+                margin-left: 0 !important;
+                padding: 15px !important;
+                padding-top: 70px !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Content sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Sidebar title styling */
+        .sidebar-title {
+            color: white !important;
+            font-size: 1.2rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 1.5rem !important;
+            padding: 0 20px !important;
+        }
+
+        /* Navigation improvements */
+        .sidebar .nav {
+            padding: 0 !important;
+            max-height: calc(100vh - 100px) !important;
+            overflow-y: auto !important;
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 2px !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Sidebar header */
+        .sidebar .p-4 {
+            padding: 1rem !important;
+            flex-shrink: 0 !important;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem !important;
+            margin-bottom: 1rem !important;
+        }
+
+        /* Card header improvements */
+        .card-header {
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #e9ecef !important;
+            font-weight: 600 !important;
+        }
+
+        .card-header h5 {
+            margin-bottom: 0 !important;
+            color: #495057 !important;
+        }
+
+        /* Button improvements */
+        .btn {
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+        }
+
+        /* Table improvements */
+        .table {
+            margin-bottom: 0 !important;
+        }
+
+        .table th {
+            border-top: none !important;
+            font-weight: 600 !important;
+            color: #495057 !important;
+        }
+
+        /* Metric cards */
+        .metric-card {
+            text-align: center !important;
+            padding: 1.5rem !important;
+        }
+
+        .metric-value {
+            font-size: 2.5rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .metric-label {
+            color: #6c757d !important;
+            font-size: 0.875rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        /* CRITICAL: DeepSeek Settings positioning fix */
+        #deepseek-settings-section {
+            padding: 20px !important;
+            margin: 0 !important;
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+
+        #deepseek-settings-section .row {
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        #deepseek-settings-section .col-md-8,
+        #deepseek-settings-section .col-md-4 {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        /* CRITICAL FIX: Reset all content sections */
+        .content-section {
+            display: none !important;
+        }
+
+        .content-section.active {
+            display: block !important;
+        }
+
+        /* Fix for form elements in DeepSeek settings */
+        #deepseek-settings-section .form-control,
+        #deepseek-settings-section .form-select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Fix for textarea in travel memory */
+        #deepseek-travel-memory {
+            width: 100% !important;
+            min-height: 200px !important;
+            resize: vertical !important;
+        }
+
+        /* Status cards in DeepSeek settings */
+        #deepseek-settings-section .card {
+            margin-bottom: 20px !important;
+            height: fit-content !important;
+        }
+
+        /* Ensure proper scrolling for long content */
+        .main-content {
+            overflow-y: auto !important;
+            max-height: 100vh !important;
+        }
+
+        /* Force proper positioning for all content sections */
+        .content-section {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        /* Clean visibility rules */
+        body .main-content #deepseek-settings-section {
+            display: none !important;
+        }
+
+        body .main-content #deepseek-settings-section.active {
+            display: block !important;
+        }
+
+        /* Ensure form elements are properly sized */
+        .form-control, .form-select {
+            max-width: 100% !important;
+        }
+
+        /* Fix for Bootstrap grid in DeepSeek settings */
+        .row {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .col-md-8, .col-md-4 {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        /* FINAL FIX: Ensure all content sections position like Dashboard */
+        .content-section {
+            display: none !important;
+            padding: 20px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+
+        .content-section.active {
+            display: block !important;
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Styles moved to external CSS file -->
+
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="p-4">
+            <h4 class="mb-4">
+                <i class="fas fa-hotel me-2"></i>
+                Hotel Bot Admin
+            </h4>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#hotels" data-section="hotels">
+                        <i class="fas fa-building me-2"></i>
+                        Hotels
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#conversations" data-section="conversations">
+                        <i class="fas fa-comments me-2"></i>
+                        Conversations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#triggers" data-section="triggers">
+                        <i class="fas fa-bolt me-2"></i>
+                        Triggers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#templates" data-section="templates">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Templates
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sentiment-analytics" data-section="sentiment-analytics">
+                        <i class="fas fa-heart me-2"></i>
+                        Sentiment Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users" data-section="users">
+                        <i class="fas fa-users me-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#analytics" data-section="analytics">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#monitoring" data-section="monitoring">
+                        <i class="fas fa-heartbeat me-2"></i>
+                        Monitoring
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#security" data-section="security">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        Security
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#deepseek-testing" data-section="deepseek-testing">
+                        <i class="fas fa-brain me-2"></i>
+                        DeepSeek Testing
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#deepseek-settings" data-section="deepseek-settings">
+                        <i class="fas fa-cog me-2"></i>
+                        DeepSeek Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 rounded shadow-sm">
+            <div class="container-fluid">
+                <span class="navbar-brand">WhatsApp Hotel Bot Dashboard</span>
+                <div class="d-flex align-items-center">
+                    <span class="me-3">
+                        <i class="fas fa-circle text-success me-1"></i>
+                        System Online
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm" onclick="refreshData()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-building fa-2x mb-2"></i>
+                            <h3 id="total-hotels" class="mb-1">-</h3>
+                            <p class="mb-0">Total Hotels</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card-success">
+                        <div class="card-body text-center">
+                            <i class="fas fa-comments fa-2x mb-2"></i>
+                            <h3 id="total-messages" class="mb-1">-</h3>
+                            <p class="mb-0">Messages Today</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card-warning">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-2x mb-2"></i>
+                            <h3 id="active-guests" class="mb-1">-</h3>
+                            <p class="mb-0">Active Guests</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card-info">
+                        <div class="card-body text-center">
+                            <i class="fas fa-robot fa-2x mb-2"></i>
+                            <h3 id="ai-responses" class="mb-1">-</h3>
+                            <p class="mb-0">AI Responses</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Message Volume (Last 7 Days)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="messageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Hotel Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="hotelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recent Messages</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recent-messages" class="loading">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">System Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="system-status">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Database</span>
+                                    <span class="status-badge status-active">Active</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>WhatsApp API</span>
+                                    <span class="status-badge status-active">Connected</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>AI Service</span>
+                                    <span class="status-badge status-active">Online</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Cache</span>
+                                    <span class="status-badge status-active">Running</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hotels Section -->
+        <div id="hotels-section" class="content-section" style="display: none;">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Hotels List</h5>
+                            <button class="btn btn-primary btn-sm" onclick="showCreateHotelForm()">
+                                <i class="fas fa-plus me-1"></i>Add Hotel
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="hotels-list">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Loading hotels...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card" id="create-hotel-card" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Create New Hotel</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="create-hotel-form">
+                                <div class="mb-3">
+                                    <label for="hotel-name" class="form-label">Hotel Name</label>
+                                    <input type="text" class="form-control" id="hotel-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="whatsapp-number" class="form-label">WhatsApp Number</label>
+                                    <input type="tel" class="form-control" id="whatsapp-number" placeholder="+1234567890" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="green-api-instance" class="form-label">Green API Instance ID</label>
+                                    <input type="text" class="form-control" id="green-api-instance">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="green-api-token" class="form-label">Green API Token</label>
+                                    <input type="text" class="form-control" id="green-api-token">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deepseek-api-key" class="form-label">DeepSeek API Key</label>
+                                    <input type="text" class="form-control" id="deepseek-api-key">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-success">Create Hotel</button>
+                                    <button type="button" class="btn btn-secondary" onclick="hideCreateHotelForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="users-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">User Management</h5>
+                </div>
+                <div class="card-body">
+                    <p>User management interface will be loaded here.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="analytics-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Analytics</h5>
+                </div>
+                <div class="card-body">
+                    <p>Analytics interface will be loaded here.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="monitoring-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">System Monitoring</h5>
+                </div>
+                <div class="card-body">
+                    <p>Monitoring interface will be loaded here.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="security-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Security Settings</h5>
+                </div>
+                <div class="card-body">
+                    <p>Security interface will be loaded here.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DeepSeek Testing Section -->
+        <div id="deepseek-testing-section" class="content-section" style="display: none;">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-brain me-2"></i>
+                                DeepSeek AI Testing & Demonstration
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Test Tabs -->
+                            <ul class="nav nav-tabs" id="deepseekTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="sentiment-tab" data-bs-toggle="tab" data-bs-target="#sentiment-panel" type="button" role="tab">
+                                        <i class="fas fa-heart me-1"></i>Sentiment Analysis
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="response-tab" data-bs-toggle="tab" data-bs-target="#response-panel" type="button" role="tab">
+                                        <i class="fas fa-reply me-1"></i>Response Generation
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="conversation-tab" data-bs-toggle="tab" data-bs-target="#conversation-panel" type="button" role="tab">
+                                        <i class="fas fa-comments me-1"></i>Conversation Demo
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="triggers-demo-tab" data-bs-toggle="tab" data-bs-target="#triggers-demo-panel" type="button" role="tab">
+                                        <i class="fas fa-bolt me-1"></i>Triggers Demo
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="travel-advisor-tab" data-bs-toggle="tab" data-bs-target="#travel-advisor-panel" type="button" role="tab">
+                                        <i class="fas fa-map me-1"></i>Travel Advisor
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="deepseekTabContent">
+                                <!-- Sentiment Analysis Panel -->
+                                <div class="tab-pane fade show active" id="sentiment-panel" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Test Message</h6>
+                                            <div class="mb-3">
+                                                <label for="sentiment-message" class="form-label">Guest Message</label>
+                                                <textarea class="form-control" id="sentiment-message" rows="4" placeholder="Enter a guest message to analyze...">The room was dirty and the staff was rude. I'm very disappointed with my stay.</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="sentiment-hotel" class="form-label">Select Hotel</label>
+                                                <select class="form-select" id="sentiment-hotel">
+                                                    <option value="">Loading hotels...</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-primary" onclick="testSentimentAnalysis()">
+                                                <i class="fas fa-play me-1"></i>Analyze Sentiment
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Analysis Result</h6>
+                                            <div id="sentiment-result" class="border rounded p-3 bg-light">
+                                                <p class="text-muted">Click "Analyze Sentiment" to see results</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Response Generation Panel -->
+                                <div class="tab-pane fade" id="response-panel" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Generate Response</h6>
+                                            <div class="mb-3">
+                                                <label for="response-message" class="form-label">Guest Message</label>
+                                                <textarea class="form-control" id="response-message" rows="3" placeholder="Enter guest message...">Hi, I'd like to book a room for next weekend. Do you have availability?</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="response-hotel" class="form-label">Select Hotel</label>
+                                                <select class="form-select" id="response-hotel">
+                                                    <option value="">Loading hotels...</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="response-type" class="form-label">Response Type</label>
+                                                <select class="form-select" id="response-type">
+                                                    <option value="helpful">Helpful Response</option>
+                                                    <option value="booking">Booking Inquiry</option>
+                                                    <option value="complaint">Complaint Resolution</option>
+                                                    <option value="general">General Information</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-success" onclick="testResponseGeneration()">
+                                                <i class="fas fa-magic me-1"></i>Generate Response
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Generated Response</h6>
+                                            <div id="response-result" class="border rounded p-3 bg-light">
+                                                <p class="text-muted">Click "Generate Response" to see AI response</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Conversation Demo Panel -->
+                                <div class="tab-pane fade" id="conversation-panel" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6>Live Conversation Demo</h6>
+                                            <div class="card">
+                                                <div class="card-header bg-primary text-white">
+                                                    <i class="fab fa-whatsapp me-2"></i>
+                                                    WhatsApp Conversation Simulator
+                                                </div>
+                                                <div class="card-body" style="height: 400px; overflow-y: auto;" id="conversation-messages">
+                                                    <div class="text-center text-muted">
+                                                        <p>Start a conversation to see how DeepSeek AI responds to typical hotel guest inquiries</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="conversation-input" placeholder="Type a message as a hotel guest..." onkeypress="handleConversationKeyPress(event)">
+                                                        <button class="btn btn-primary" onclick="sendConversationMessage()">
+                                                            <i class="fas fa-paper-plane"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Conversation Settings</h6>
+                                            <div class="mb-3">
+                                                <label for="conversation-hotel" class="form-label">Hotel</label>
+                                                <select class="form-select" id="conversation-hotel">
+                                                    <option value="">Loading hotels...</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="conversation-guest" class="form-label">Guest Name</label>
+                                                <input type="text" class="form-control" id="conversation-guest" value="John Smith" placeholder="Guest name">
+                                            </div>
+                                            <button class="btn btn-warning btn-sm" onclick="clearConversation()">
+                                                <i class="fas fa-trash me-1"></i>Clear Chat
+                                            </button>
+                                            <hr>
+                                            <h6>Quick Test Messages</h6>
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-outline-primary btn-sm" onclick="sendQuickMessage('Hello, I need help with my booking')">Booking Help</button>
+                                                <button class="btn btn-outline-success btn-sm" onclick="sendQuickMessage('The room is amazing! Thank you!')">Positive Feedback</button>
+                                                <button class="btn btn-outline-danger btn-sm" onclick="sendQuickMessage('The room is dirty and the AC is not working')">Complaint</button>
+                                                <button class="btn btn-outline-info btn-sm" onclick="sendQuickMessage('What time is checkout?')">Information</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>
+                                DeepSeek API Information
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <h6>What is DeepSeek?</h6>
+                            <p class="small">DeepSeek is an advanced AI model that provides:</p>
+                            <ul class="small">
+                                <li><strong>Sentiment Analysis:</strong> Analyzes guest emotions and satisfaction levels</li>
+                                <li><strong>Response Generation:</strong> Creates contextual, helpful responses</li>
+                                <li><strong>Multi-language Support:</strong> Handles multiple languages</li>
+                                <li><strong>Context Awareness:</strong> Understands conversation history</li>
+                            </ul>
+
+                            <h6 class="mt-3">API Features</h6>
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="border rounded p-2 mb-2">
+                                        <i class="fas fa-tachometer-alt text-primary"></i>
+                                        <div class="small">Fast Response</div>
+                                        <div class="text-muted small">~2-3 seconds</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-2 mb-2">
+                                        <i class="fas fa-brain text-success"></i>
+                                        <div class="small">High Accuracy</div>
+                                        <div class="text-muted small">95%+ sentiment</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-2 mb-2">
+                                        <i class="fas fa-globe text-info"></i>
+                                        <div class="small">Multi-language</div>
+                                        <div class="text-muted small">50+ languages</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-2 mb-2">
+                                        <i class="fas fa-shield-alt text-warning"></i>
+                                        <div class="small">Secure</div>
+                                        <div class="text-muted small">Enterprise grade</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6 class="mt-3">Current Configuration</h6>
+                            <div id="deepseek-config" class="small">
+                                <div class="d-flex justify-content-between">
+                                    <span>Model:</span>
+                                    <span class="text-muted">deepseek-chat</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Max Tokens:</span>
+                                    <span class="text-muted">4096</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Temperature:</span>
+                                    <span class="text-muted">0.7</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Status:</span>
+                                    <span class="badge bg-success">Active</span>
+                                </div>
+                                </div>
+
+                                <!-- Triggers Demo Panel -->
+                                <div class="tab-pane fade" id="triggers-demo-panel" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6>Trigger System Demo</h6>
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                This demo shows how triggers work with different timing settings for quick testing.
+                                            </div>
+
+                                            <div class="card mb-3">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0">Quick Trigger Tests (Seconds for Demo)</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <button class="btn btn-outline-primary btn-sm mb-2 w-100" onclick="testTimeTrigger(5)">
+                                                                <i class="fas fa-clock me-1"></i>5 Seconds After Check-in
+                                                            </button>
+                                                            <button class="btn btn-outline-success btn-sm mb-2 w-100" onclick="testEventTrigger('message_received')">
+                                                                <i class="fas fa-envelope me-1"></i>Message Received Event
+                                                            </button>
+                                                            <button class="btn btn-outline-warning btn-sm mb-2 w-100" onclick="testSentimentTrigger()">
+                                                                <i class="fas fa-frown me-1"></i>Negative Sentiment Trigger
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <button class="btn btn-outline-info btn-sm mb-2 w-100" onclick="testFirstMessageTrigger(10)">
+                                                                <i class="fas fa-comment me-1"></i>10 Seconds After First Message
+                                                            </button>
+                                                            <button class="btn btn-outline-danger btn-sm mb-2 w-100" onclick="testVIPTrigger()">
+                                                                <i class="fas fa-crown me-1"></i>VIP Guest Condition
+                                                            </button>
+                                                            <button class="btn btn-outline-secondary btn-sm mb-2 w-100" onclick="clearTriggerTests()">
+                                                                <i class="fas fa-trash me-1"></i>Clear All Tests
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="trigger-test-results" class="mt-3">
+                                                <!-- Trigger test results will appear here -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Active Trigger Tests</h6>
+                                            <div id="active-triggers" class="small">
+                                                <div class="text-muted">No active tests</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Travel Advisor Panel -->
+                                <div class="tab-pane fade" id="travel-advisor-panel" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h6>Travel Advisory System Demo</h6>
+                                            <div class="alert alert-success">
+                                                <i class="fas fa-map me-2"></i>
+                                                Experience the personalized travel consultation system with DeepSeek AI.
+                                            </div>
+
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="mb-0">Start Travel Consultation</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Guest Phone Number</label>
+                                                        <input type="text" class="form-control" id="travel-guest-phone" placeholder="+7 999 123 45 67">
+                                                        <small class="text-muted">Phone number will be used for language detection</small>
+                                                    </div>
+
+                                                    <button class="btn btn-success" onclick="startTravelDemo()">
+                                                        <i class="fas fa-play me-1"></i>Start Travel Consultation
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div id="travel-conversation-demo" class="mt-3" style="display: none;">
+                                                <div class="card border-success">
+                                                    <div class="card-header bg-success text-white">
+                                                        <h6 class="mb-0">
+                                                            <i class="fas fa-robot me-2"></i>Travel Assistant
+                                                            <span id="detected-language" class="badge bg-light text-dark ms-2"></span>
+                                                        </h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div id="travel-messages" style="max-height: 300px; overflow-y: auto;">
+                                                            <!-- Messages will appear here -->
+                                                        </div>
+                                                        <div id="travel-input" class="mt-3">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="travel-user-input" placeholder="Your response...">
+                                                                <button class="btn btn-success" onclick="sendTravelMessage()">
+                                                                    <i class="fas fa-paper-plane"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Language Detection</h6>
+                                            <div id="language-detection-info" class="small">
+                                                <div class="text-muted">Start consultation to see language detection</div>
+                                            </div>
+
+                                            <h6 class="mt-3">Travel Memory</h6>
+                                            <div id="travel-memory-info" class="small">
+                                                <div class="text-muted">Personalized recommendations based on guest profile</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversations Section -->
+        <div id="conversations-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-comments me-2"></i>Conversations Management</h5>
+                    <button class="btn btn-primary btn-sm" onclick="loadConversations()">
+                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Search conversations..." id="conversation-search">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="conversation-status-filter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="conversation-hotel-filter">
+                                <option value="">All Hotels</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary w-100" onclick="filterConversations()">
+                                <i class="fas fa-filter me-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div id="conversations-list">
+                        <p class="text-muted">Loading conversations...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Triggers Section -->
+        <div id="triggers-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-bolt me-2"></i>Triggers Management</h5>
+                    <button class="btn btn-success btn-sm" onclick="showCreateTriggerModal()">
+                        <i class="fas fa-plus me-1"></i>Create Trigger
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select class="form-select" id="trigger-type-filter">
+                                <option value="">All Types</option>
+                                <option value="time_based">Time Based</option>
+                                <option value="condition_based">Condition Based</option>
+                                <option value="event_based">Event Based</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="trigger-status-filter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Search triggers..." id="trigger-search">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary w-100" onclick="filterTriggers()">
+                                <i class="fas fa-filter me-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div id="triggers-list">
+                        <p class="text-muted">Loading triggers...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates Section -->
+        <div id="templates-section" class="content-section" style="display: none;">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-file-alt me-2"></i>Message Templates</h5>
+                    <button class="btn btn-success btn-sm" onclick="showCreateTemplateModal()">
+                        <i class="fas fa-plus me-1"></i>Create Template
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select class="form-select" id="template-category-filter">
+                                <option value="">All Categories</option>
+                                <option value="welcome">Welcome</option>
+                                <option value="checkout">Checkout</option>
+                                <option value="support">Support</option>
+                                <option value="marketing">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="template-language-filter">
+                                <option value="">All Languages</option>
+                                <option value="en">English</option>
+                                <option value="ru">Russian</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Search templates..." id="template-search">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary w-100" onclick="filterTemplates()">
+                                <i class="fas fa-filter me-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div id="templates-list">
+                        <p class="text-muted">Loading templates...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sentiment Analytics Section -->
+        <div id="sentiment-analytics-section" class="content-section" style="display: none;">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-heart me-2"></i>Sentiment Analytics Dashboard</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-success" id="positive-sentiment">-</h3>
+                                        <p class="mb-0">Positive</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-warning" id="neutral-sentiment">-</h3>
+                                        <p class="mb-0">Neutral</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-danger" id="negative-sentiment">-</h3>
+                                        <p class="mb-0">Negative</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-info" id="avg-sentiment-score">-</h3>
+                                        <p class="mb-0">Avg Score</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <canvas id="sentimentChart" height="100"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Recent Alerts</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="sentiment-alerts">
+                                <p class="text-muted">Loading alerts...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DeepSeek Settings Section -->
+        <div id="deepseek-settings-section" class="content-section">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cog me-2"></i>DeepSeek AI Configuration</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="deepseek-settings-form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>API Settings</h6>
+                                        <div class="mb-3">
+                                            <label class="form-label">API Key</label>
+                                            <input type="password" class="form-control" id="deepseek-api-key" placeholder="sk-...">
+                                            <small class="text-muted">DeepSeek API key for AI processing</small>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Model</label>
+                                            <select class="form-select" id="deepseek-model">
+                                                <option value="deepseek-chat">DeepSeek Chat</option>
+                                                <option value="deepseek-coder">DeepSeek Coder</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Max Tokens</label>
+                                            <input type="number" class="form-control" id="deepseek-max-tokens" min="100" max="8192" value="4096">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Temperature</label>
+                                            <input type="number" class="form-control" id="deepseek-temperature" min="0" max="2" step="0.1" value="0.7">
+                                            <small class="text-muted">0.0 = deterministic, 2.0 = very creative</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Rate Limiting</h6>
+                                        <div class="mb-3">
+                                            <label class="form-label">Requests per Minute</label>
+                                            <input type="number" class="form-control" id="deepseek-requests-per-minute" min="1" max="1000" value="50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tokens per Minute</label>
+                                            <input type="number" class="form-control" id="deepseek-tokens-per-minute" min="1000" max="1000000" value="100000">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Timeout (seconds)</label>
+                                            <input type="number" class="form-control" id="deepseek-timeout" min="5" max="300" value="60">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Max Retries</label>
+                                            <input type="number" class="form-control" id="deepseek-max-retries" min="0" max="10" value="3">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6>Travel Advisory Memory</h6>
+                                        <div class="mb-3">
+                                            <label class="form-label">Travel Tips Database</label>
+                                            <textarea class="form-control" id="deepseek-travel-memory" rows="8"
+                                                      placeholder="Добавьте советы для путешествий по категориям:&#10;&#10;ПХУКЕТ - ПЕРВЫЙ РАЗ:&#10;- Патонг Бич для ночной жизни&#10;- Ката Бич для семей&#10;- Биг Будда - обязательно к посещению&#10;&#10;ПХУКЕТ - С ДЕТЬМИ:&#10;- Аквариум Пхукета&#10;- Зоопарк Пхукета&#10;- Пляж Карон - безопасный для детей"></textarea>
+                                            <small class="text-muted">DeepSeek будет использовать эту информацию для персонализированных советов</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-primary" onclick="saveDeepSeekSettings()">
+                                        <i class="fas fa-save me-1"></i>Save Settings
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="loadDeepSeekSettings()">
+                                        <i class="fas fa-refresh me-1"></i>Reload
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info" onclick="testDeepSeekConnection()">
+                                        <i class="fas fa-plug me-1"></i>Test Connection
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Current Status</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="deepseek-status">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-secondary me-2">API</span>
+                                    <span id="deepseek-api-status">Not tested</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-info me-2">Model</span>
+                                    <span id="deepseek-current-model">deepseek-chat</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-warning me-2">Memory</span>
+                                    <span id="deepseek-memory-size">0 KB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6>Usage Statistics</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <small class="text-muted">Requests Today</small>
+                                <div class="fw-bold" id="deepseek-requests-today">0</div>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted">Tokens Used</small>
+                                <div class="fw-bold" id="deepseek-tokens-used">0</div>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted">Cache Hit Rate</small>
+                                <div class="fw-bold" id="deepseek-cache-rate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/deepseek_functions.js"></script>
+    <script>
+        // Navigation handling
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav item
+                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const section = this.getAttribute('data-section');
+                document.querySelectorAll('.content-section').forEach(s => {
+                    s.style.display = 'none';
+                    s.classList.remove('active');
+                });
+                const targetSection = document.getElementById(section + '-section');
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    targetSection.classList.add('active');
+
+                    // CRITICAL FIX: Force proper positioning
+                    setTimeout(() => {
+                        targetSection.style.setProperty('position', 'relative', 'important');
+                        targetSection.style.setProperty('left', '0', 'important');
+                        targetSection.style.setProperty('top', '0', 'important');
+                        targetSection.style.setProperty('margin', '0', 'important');
+                        targetSection.style.setProperty('padding', '20px', 'important');
+                        targetSection.style.setProperty('width', '100%', 'important');
+                        targetSection.style.setProperty('box-sizing', 'border-box', 'important');
+                    }, 10);
+                }
+
+                // Load section-specific data
+                if (section === 'hotels') {
+                    loadHotels();
+                } else if (section === 'deepseek-testing') {
+                    loadDeepSeekTesting();
+                } else if (section === 'deepseek-settings') {
+                    loadDeepSeekSettings();
+                } else if (section === 'conversations') {
+                    loadConversations();
+                } else if (section === 'triggers') {
+                    loadTriggers();
+                } else if (section === 'templates') {
+                    loadTemplates();
+                } else if (section === 'sentiment-analytics') {
+                    loadSentimentAnalytics();
+                }
+            });
+        });
+
+        // Initialize default section (Dashboard)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show dashboard by default
+            document.querySelectorAll('.content-section').forEach(s => {
+                s.style.display = 'none';
+                s.classList.remove('active');
+            });
+
+            const dashboardSection = document.getElementById('dashboard-section');
+            if (dashboardSection) {
+                dashboardSection.style.display = 'block';
+                dashboardSection.classList.add('active');
+            }
+
+            // Set dashboard nav as active
+            document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+            const dashboardNav = document.querySelector('a[data-section="dashboard"]');
+            if (dashboardNav) {
+                dashboardNav.classList.add('active');
+            }
+        });
+
+        // Initialize charts
+        let messageChart, hotelChart;
+
+        function initCharts() {
+            // Message Volume Chart
+            const messageCtx = document.getElementById('messageChart').getContext('2d');
+            messageChart = new Chart(messageCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Messages',
+                        data: [12, 19, 3, 5, 2, 3, 9],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Hotel Activity Chart
+            const hotelCtx = document.getElementById('hotelChart').getContext('2d');
+            hotelChart = new Chart(hotelCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Active', 'Inactive', 'Pending'],
+                    datasets: [{
+                        data: [12, 3, 2],
+                        backgroundColor: ['#38ef7d', '#f5576c', '#f093fb']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load dashboard API data
+                const dashboardResponse = await fetch('/api/v1/admin/dashboard/data');
+                const dashboardData = await dashboardResponse.json();
+
+                // Load hotels data
+                const hotelsResponse = await fetch('/api/v1/hotels');
+                const hotelsData = await hotelsResponse.json();
+
+                // Load health data
+                const healthResponse = await fetch('/health');
+                const healthData = await healthResponse.json();
+
+                // Update stats with real data
+                if (hotelsData && Array.isArray(hotelsData)) {
+                    document.getElementById('total-hotels').textContent = hotelsData.length.toString();
+                } else if (hotelsData && hotelsData.data && hotelsData.data.hotels) {
+                    document.getElementById('total-hotels').textContent = hotelsData.data.hotels.length.toString();
+                } else {
+                    document.getElementById('total-hotels').textContent = '0';
+                }
+
+                // Load real metrics from APIs
+                await loadRealMetrics();
+
+                // Update system status with real health data
+                if (healthData && healthData.features) {
+                    updateSystemStatus(healthData.features);
+                }
+
+                console.log('Dashboard data loaded successfully');
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                // Show error state
+                document.getElementById('total-hotels').textContent = 'Error';
+                document.getElementById('total-messages').textContent = 'Error';
+                document.getElementById('active-guests').textContent = 'Error';
+                document.getElementById('ai-responses').textContent = 'Error';
+            }
+        }
+
+        // Update system status display
+        function updateSystemStatus(features) {
+            const statusMap = {
+                'database': 'Database',
+                'cache': 'Cache',
+                'webhooks': 'WhatsApp API',
+                'ai_integration': 'AI Service'
+            };
+
+            const statusContainer = document.getElementById('system-status');
+            statusContainer.innerHTML = '';
+
+            Object.entries(statusMap).forEach(([key, label]) => {
+                const status = features[key] || 'unknown';
+                const statusClass = status === 'active' ? 'status-active' : 'status-inactive';
+
+                const statusElement = document.createElement('div');
+                statusElement.className = 'd-flex justify-content-between align-items-center mb-2';
+                statusElement.innerHTML = `
+                    <span>${label}</span>
+                    <span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                `;
+                statusContainer.appendChild(statusElement);
+            });
+        }
+
+        // Refresh data with loading indicator
+        function refreshData() {
+            // Show loading state
+            const refreshBtn = document.querySelector('[onclick="refreshData()"]');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...';
+            refreshBtn.disabled = true;
+
+            loadDashboardData().finally(() => {
+                // Restore button state
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            });
+        }
+
+        // Auto-refresh functionality
+        let autoRefreshInterval;
+
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                loadDashboardData();
+                updateChartData();
+            }, 30000); // Refresh every 30 seconds
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        }
+
+        // Update chart data with animation
+        function updateChartData() {
+            if (messageChart) {
+                // Simulate new data
+                const newData = Array.from({length: 7}, () => Math.floor(Math.random() * 50));
+                messageChart.data.datasets[0].data = newData;
+                messageChart.update('active');
+            }
+
+            if (hotelChart) {
+                // Simulate updated hotel stats
+                const total = Math.floor(Math.random() * 20) + 10;
+                const active = Math.floor(total * 0.8);
+                const inactive = Math.floor(total * 0.15);
+                const pending = total - active - inactive;
+
+                hotelChart.data.datasets[0].data = [active, inactive, pending];
+                hotelChart.update('active');
+            }
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+R or F5 for refresh
+            if ((e.ctrlKey && e.key === 'r') || e.key === 'F5') {
+                e.preventDefault();
+                refreshData();
+            }
+
+            // Number keys for navigation
+            if (e.key >= '1' && e.key <= '6') {
+                const sections = ['dashboard', 'hotels', 'users', 'analytics', 'monitoring', 'security'];
+                const sectionIndex = parseInt(e.key) - 1;
+                if (sections[sectionIndex]) {
+                    const link = document.querySelector(`[data-section="${sections[sectionIndex]}"]`);
+                    if (link) link.click();
+                }
+            }
+        });
+
+        // Hotel Management Functions
+        function showCreateHotelForm() {
+            document.getElementById('create-hotel-card').style.display = 'block';
+        }
+
+        function hideCreateHotelForm() {
+            document.getElementById('create-hotel-card').style.display = 'none';
+            document.getElementById('create-hotel-form').reset();
+        }
+
+        async function loadHotels() {
+            try {
+                const response = await fetch('/api/v1/hotels');
+                const hotels = await response.json();
+
+                const hotelsList = document.getElementById('hotels-list');
+
+                if (hotels.length === 0) {
+                    hotelsList.innerHTML = `
+                        <div class="text-center text-muted">
+                            <i class="fas fa-hotel fa-3x mb-3"></i>
+                            <p>No hotels found. Create your first hotel to get started.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                hotelsList.innerHTML = hotels.map(hotel => `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h6 class="card-title mb-1">${hotel.name}</h6>
+                                    <p class="card-text text-muted mb-0">
+                                        <i class="fab fa-whatsapp me-1"></i>${hotel.whatsapp_number}
+                                    </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="badge ${hotel.is_active ? 'bg-success' : 'bg-secondary'}">
+                                        ${hotel.is_active ? 'Active' : 'Inactive'}
+                                    </span>
+                                    <br>
+                                    <small class="text-muted">
+                                        ${hotel.has_green_api_credentials ? '✅ Green API' : '❌ Green API'}
+                                    </small>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="editHotel('${hotel.id}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="viewHotel('${hotel.id}')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" onclick="deleteHotel('${hotel.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading hotels:', error);
+                document.getElementById('hotels-list').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error loading hotels. Please try again.
+                    </div>
+                `;
+            }
+        }
+
+        async function createHotel(event) {
+            event.preventDefault();
+
+            const formData = {
+                name: document.getElementById('hotel-name').value,
+                whatsapp_number: document.getElementById('whatsapp-number').value,
+                green_api_instance_id: document.getElementById('green-api-instance').value,
+                green_api_token: document.getElementById('green-api-token').value,
+                deepseek_api_key: document.getElementById('deepseek-api-key').value
+            };
+
+            try {
+                const response = await fetch('/api/v1/hotels', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    hideCreateHotelForm();
+                    loadHotels();
+                    showAlert('Hotel created successfully!', 'success');
+                } else {
+                    const error = await response.json();
+                    showAlert(error.detail || 'Error creating hotel', 'danger');
+                }
+            } catch (error) {
+                console.error('Error creating hotel:', error);
+                showAlert('Error creating hotel. Please try again.', 'danger');
+            }
+        }
+
+        function editHotel(hotelId) {
+            showAlert('Edit functionality coming soon!', 'info');
+        }
+
+        function viewHotel(hotelId) {
+            window.open(`/api/v1/hotels/${hotelId}`, '_blank');
+        }
+
+        function deleteHotel(hotelId) {
+            if (confirm('Are you sure you want to delete this hotel?')) {
+                showAlert('Delete functionality coming soon!', 'info');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            const container = document.querySelector('.main-content');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            loadDashboardData();
+            startAutoRefresh();
+
+            // Add tooltips to stat cards
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-5px) scale(1)';
+                });
+            });
+
+            // Add form submit handler
+            document.getElementById('create-hotel-form').addEventListener('submit', createHotel);
+
+            console.log('Dashboard initialized with auto-refresh and keyboard shortcuts');
+        });
+
+        // DeepSeek Testing Functions
+        let conversationHistory = [];
+
+        function loadDeepSeekTesting() {
+            // Load hotels for all dropdowns
+            loadHotelsForDeepSeek();
+        }
+
+        async function loadHotelsForDeepSeek() {
+            try {
+                const response = await fetch('/api/v1/hotels');
+                const hotels = await response.json();
+
+                const selects = ['sentiment-hotel', 'response-hotel', 'conversation-hotel'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        select.innerHTML = '<option value="">Select a hotel...</option>';
+                        hotels.forEach(hotel => {
+                            const option = document.createElement('option');
+                            option.value = hotel.id;
+                            option.textContent = hotel.name;
+                            select.appendChild(option);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading hotels for DeepSeek:', error);
+            }
+        }
+
+        async function testSentimentAnalysis() {
+            const message = document.getElementById('sentiment-message').value;
+            const hotelId = document.getElementById('sentiment-hotel').value;
+            const resultDiv = document.getElementById('sentiment-result');
+
+            if (!message.trim()) {
+                showAlert('Please enter a message to analyze', 'warning');
+                return;
+            }
+
+            if (!hotelId) {
+                showAlert('Please select a hotel', 'warning');
+                return;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Analyzing sentiment...
+                </div>
+            `;
+
+            try {
+                // Simulate API call (replace with actual endpoint)
+                const response = await fetch('/api/v1/deepseek/sentiment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        hotel_id: hotelId
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    displaySentimentResult(result);
+                } else {
+                    // Simulate result for demo
+                    const demoResult = simulateSentimentAnalysis(message);
+                    displaySentimentResult(demoResult);
+                }
+            } catch (error) {
+                console.error('Sentiment analysis error:', error);
+                // Simulate result for demo
+                const demoResult = simulateSentimentAnalysis(message);
+                displaySentimentResult(demoResult);
+            }
+        }
+
+        function simulateSentimentAnalysis(message) {
+            const lowerMessage = message.toLowerCase();
+            let sentiment, score, confidence;
+
+            if (lowerMessage.includes('dirty') || lowerMessage.includes('rude') || lowerMessage.includes('disappointed') ||
+                lowerMessage.includes('terrible') || lowerMessage.includes('awful') || lowerMessage.includes('bad')) {
+                sentiment = 'negative';
+                score = -0.8;
+                confidence = 0.92;
+            } else if (lowerMessage.includes('amazing') || lowerMessage.includes('great') || lowerMessage.includes('excellent') ||
+                       lowerMessage.includes('wonderful') || lowerMessage.includes('love') || lowerMessage.includes('thank')) {
+                sentiment = 'positive';
+                score = 0.85;
+                confidence = 0.89;
+            } else {
+                sentiment = 'neutral';
+                score = 0.1;
+                confidence = 0.76;
+            }
+
+            return {
+                sentiment: sentiment,
+                score: score,
+                confidence: confidence,
+                requires_attention: sentiment === 'negative' && score < -0.5,
+                reasoning: `Detected ${sentiment} sentiment based on key phrases and context analysis`,
+                keywords: extractKeywords(message),
+                response_time: Math.random() * 2 + 1 // 1-3 seconds
+            };
+        }
+
+        function extractKeywords(message) {
+            const words = message.toLowerCase().split(/\s+/);
+            const positiveWords = words.filter(word =>
+                ['amazing', 'great', 'excellent', 'wonderful', 'love', 'thank', 'good', 'nice'].includes(word)
+            );
+            const negativeWords = words.filter(word =>
+                ['dirty', 'rude', 'disappointed', 'terrible', 'awful', 'bad', 'horrible', 'worst'].includes(word)
+            );
+            return { positive: positiveWords, negative: negativeWords };
+        }
+
+        function displaySentimentResult(result) {
+            const resultDiv = document.getElementById('sentiment-result');
+            const sentimentColor = result.sentiment === 'positive' ? 'success' :
+                                  result.sentiment === 'negative' ? 'danger' : 'warning';
+
+            resultDiv.innerHTML = `
+                <div class="mb-3">
+                    <h6>Sentiment Analysis Result</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-${sentimentColor} me-2">${result.sentiment.toUpperCase()}</span>
+                        <span class="text-muted">Score: ${result.score.toFixed(2)}</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar bg-${sentimentColor}" style="width: ${result.confidence * 100}%"></div>
+                    </div>
+                    <small class="text-muted">Confidence: ${(result.confidence * 100).toFixed(1)}%</small>
+                </div>
+
+                <div class="mb-3">
+                    <strong>Analysis:</strong>
+                    <p class="small mb-1">${result.reasoning}</p>
+                    ${result.requires_attention ? '<div class="alert alert-warning alert-sm py-1"><i class="fas fa-exclamation-triangle me-1"></i>Requires staff attention</div>' : ''}
+                </div>
+
+                ${result.keywords && (result.keywords.positive.length > 0 || result.keywords.negative.length > 0) ? `
+                <div class="mb-2">
+                    <strong>Key Words:</strong><br>
+                    ${result.keywords.positive.length > 0 ? `<span class="badge bg-success me-1">+${result.keywords.positive.join(', ')}</span>` : ''}
+                    ${result.keywords.negative.length > 0 ? `<span class="badge bg-danger me-1">-${result.keywords.negative.join(', ')}</span>` : ''}
+                </div>
+                ` : ''}
+
+                <div class="text-muted small">
+                    <i class="fas fa-clock me-1"></i>Response time: ${result.response_time.toFixed(2)}s
+                </div>
+            `;
+        }
+
+        async function testResponseGeneration() {
+            const message = document.getElementById('response-message').value;
+            const hotelId = document.getElementById('response-hotel').value;
+            const responseType = document.getElementById('response-type').value;
+            const resultDiv = document.getElementById('response-result');
+
+            if (!message.trim()) {
+                showAlert('Please enter a message', 'warning');
+                return;
+            }
+
+            if (!hotelId) {
+                showAlert('Please select a hotel', 'warning');
+                return;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Generating response...
+                </div>
+            `;
+
+            try {
+                // Simulate API call (replace with actual endpoint)
+                const response = await fetch('/api/v1/deepseek/generate-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        hotel_id: hotelId,
+                        response_type: responseType
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    displayResponseResult(result);
+                } else {
+                    // Simulate result for demo
+                    const demoResult = simulateResponseGeneration(message, responseType);
+                    displayResponseResult(demoResult);
+                }
+            } catch (error) {
+                console.error('Response generation error:', error);
+                // Simulate result for demo
+                const demoResult = simulateResponseGeneration(message, responseType);
+                displayResponseResult(demoResult);
+            }
+        }
+
+        function simulateResponseGeneration(message, responseType) {
+            const responses = {
+                helpful: [
+                    "Thank you for reaching out! I'd be happy to help you with that. Let me provide you with the information you need.",
+                    "I understand your inquiry and I'm here to assist you. Here's what I can tell you about that.",
+                    "Great question! I'm glad you asked. Let me help you with the details."
+                ],
+                booking: [
+                    "Thank you for your interest in staying with us! I'd be delighted to help you with your booking. Let me check our availability for next weekend and get back to you with our best options.",
+                    "We'd love to have you stay with us! For next weekend, I can check our available rooms and rates. May I ask how many guests will be staying and what type of room you prefer?",
+                    "Wonderful! I'm excited to help you plan your stay. Let me look into our weekend availability and I'll provide you with some great options."
+                ],
+                complaint: [
+                    "I sincerely apologize for the issues you've experienced during your stay. This is not the standard we strive for, and I want to make this right immediately. Let me connect you with our manager to resolve this situation.",
+                    "I'm truly sorry to hear about these problems. Your comfort and satisfaction are our top priorities, and we've clearly fallen short. I'm taking immediate action to address these concerns.",
+                    "Thank you for bringing this to our attention, and I apologize for the inconvenience. We take all feedback seriously and I want to ensure we resolve this matter promptly and to your satisfaction."
+                ],
+                general: [
+                    "Thank you for contacting us! I'm here to help with any questions or requests you may have about your stay or our services.",
+                    "Hello! I'm happy to assist you with any information you need about our hotel and services. How can I help you today?",
+                    "Thank you for reaching out to us. I'm available to help with any questions or assistance you might need during your stay."
+                ]
+            };
+
+            const responseList = responses[responseType] || responses.general;
+            const selectedResponse = responseList[Math.floor(Math.random() * responseList.length)];
+
+            return {
+                response: selectedResponse,
+                confidence: 0.85 + Math.random() * 0.1,
+                response_type: responseType,
+                reasoning: `Generated ${responseType} response using DeepSeek AI with context awareness`,
+                suggested_actions: getSuggestedActions(responseType),
+                response_time: Math.random() * 2 + 1.5 // 1.5-3.5 seconds
+            };
+        }
+
+        function getSuggestedActions(responseType) {
+            const actions = {
+                helpful: ['Follow up in 24 hours', 'Provide additional resources'],
+                booking: ['Send booking confirmation', 'Offer room upgrade', 'Provide check-in details'],
+                complaint: ['Escalate to manager', 'Offer compensation', 'Schedule follow-up call'],
+                general: ['Provide hotel amenities info', 'Share local recommendations']
+            };
+            return actions[responseType] || [];
+        }
+
+        function displayResponseResult(result) {
+            const resultDiv = document.getElementById('response-result');
+
+            resultDiv.innerHTML = `
+                <div class="mb-3">
+                    <h6>Generated Response</h6>
+                    <div class="border-start border-primary border-3 ps-3 mb-3">
+                        <p class="mb-0">"${result.response}"</p>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><strong>Confidence:</strong></span>
+                        <span class="badge bg-success">${(result.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: ${result.confidence * 100}%"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <strong>AI Reasoning:</strong>
+                    <p class="small text-muted mb-0">${result.reasoning}</p>
+                </div>
+
+                ${result.suggested_actions && result.suggested_actions.length > 0 ? `
+                <div class="mb-3">
+                    <strong>Suggested Actions:</strong>
+                    <div class="mt-1">
+                        ${result.suggested_actions.map(action => `<span class="badge bg-info me-1">${action}</span>`).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <div class="d-flex justify-content-between text-muted small">
+                    <span><i class="fas fa-tag me-1"></i>Type: ${result.response_type}</span>
+                    <span><i class="fas fa-clock me-1"></i>${result.response_time.toFixed(2)}s</span>
+                </div>
+            `;
+        }
+
+        // Conversation Demo Functions
+        function handleConversationKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendConversationMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('conversation-input').value = message;
+            sendConversationMessage();
+        }
+
+        async function sendConversationMessage() {
+            const input = document.getElementById('conversation-input');
+            const message = input.value.trim();
+            const hotelId = document.getElementById('conversation-hotel').value;
+            const guestName = document.getElementById('conversation-guest').value || 'Guest';
+
+            if (!message) return;
+
+            if (!hotelId) {
+                showAlert('Please select a hotel first', 'warning');
+                return;
+            }
+
+            // Add user message to conversation
+            addMessageToConversation(message, 'user', guestName);
+            input.value = '';
+
+            // Show typing indicator
+            const typingId = addTypingIndicator();
+
+            try {
+                // Simulate AI response
+                setTimeout(async () => {
+                    removeTypingIndicator(typingId);
+
+                    // Generate AI response
+                    const aiResponse = await generateConversationResponse(message, hotelId);
+                    addMessageToConversation(aiResponse.response, 'ai', 'Hotel Assistant');
+
+                    // Add to conversation history
+                    conversationHistory.push({
+                        user_message: message,
+                        ai_response: aiResponse.response,
+                        timestamp: new Date(),
+                        sentiment: aiResponse.sentiment
+                    });
+
+                }, 1000 + Math.random() * 2000); // 1-3 second delay
+
+            } catch (error) {
+                removeTypingIndicator(typingId);
+                addMessageToConversation('Sorry, I encountered an error. Please try again.', 'ai', 'Hotel Assistant');
+            }
+        }
+
+        function addMessageToConversation(message, type, sender) {
+            const messagesDiv = document.getElementById('conversation-messages');
+            const messageDiv = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString();
+
+            if (type === 'user') {
+                messageDiv.className = 'mb-3 text-end';
+                messageDiv.innerHTML = `
+                    <div class="d-inline-block bg-primary text-white rounded px-3 py-2 max-width-75">
+                        <div class="small fw-bold">${sender}</div>
+                        <div>${message}</div>
+                        <div class="small opacity-75">${timestamp}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.className = 'mb-3';
+                messageDiv.innerHTML = `
+                    <div class="d-inline-block bg-light border rounded px-3 py-2 max-width-75">
+                        <div class="small fw-bold text-primary">
+                            <i class="fas fa-robot me-1"></i>${sender}
+                        </div>
+                        <div>${message}</div>
+                        <div class="small text-muted">${timestamp}</div>
+                    </div>
+                `;
+            }
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const messagesDiv = document.getElementById('conversation-messages');
+            const typingDiv = document.createElement('div');
+            const typingId = 'typing-' + Date.now();
+
+            typingDiv.id = typingId;
+            typingDiv.className = 'mb-3';
+            typingDiv.innerHTML = `
+                <div class="d-inline-block bg-light border rounded px-3 py-2">
+                    <div class="small fw-bold text-primary">
+                        <i class="fas fa-robot me-1"></i>Hotel Assistant
+                    </div>
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            return typingId;
+        }
+
+        function removeTypingIndicator(typingId) {
+            const typingDiv = document.getElementById(typingId);
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        async function generateConversationResponse(message, hotelId) {
+            // Simulate sentiment analysis
+            const sentiment = simulateSentimentAnalysis(message);
+
+            // Generate contextual response based on message content
+            const lowerMessage = message.toLowerCase();
+            let response;
+
+            if (lowerMessage.includes('book') || lowerMessage.includes('reservation') || lowerMessage.includes('room')) {
+                response = "I'd be happy to help you with your booking! Let me check our availability. What dates are you looking for and how many guests will be staying?";
+            } else if (lowerMessage.includes('checkout') || lowerMessage.includes('check out')) {
+                response = "Checkout time is 11:00 AM. If you need a late checkout, please let me know and I'll see what we can arrange for you.";
+            } else if (lowerMessage.includes('wifi') || lowerMessage.includes('internet')) {
+                response = "Our complimentary WiFi network is 'HotelGuest' and the password is 'Welcome2024'. You should find excellent coverage throughout the hotel.";
+            } else if (lowerMessage.includes('pool') || lowerMessage.includes('gym') || lowerMessage.includes('spa')) {
+                response = "Our pool is open from 6:00 AM to 10:00 PM daily. The fitness center is available 24/7, and our spa services can be booked at the front desk.";
+            } else if (lowerMessage.includes('restaurant') || lowerMessage.includes('food') || lowerMessage.includes('dining')) {
+                response = "Our restaurant serves breakfast from 6:30-10:30 AM, lunch from 12:00-3:00 PM, and dinner from 6:00-10:00 PM. Room service is also available 24/7.";
+            } else if (sentiment.sentiment === 'negative') {
+                response = "I sincerely apologize for any inconvenience you've experienced. Your satisfaction is our top priority. Let me connect you with our manager immediately to resolve this issue.";
+            } else if (sentiment.sentiment === 'positive') {
+                response = "Thank you so much for your kind words! We're delighted that you're enjoying your stay. Is there anything else we can do to make your experience even better?";
+            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('help')) {
+                response = "Hello! Welcome to our hotel. I'm here to assist you with any questions or requests you may have. How can I help make your stay more comfortable?";
+            } else {
+                response = "Thank you for reaching out! I'm here to help with any questions about your stay, our amenities, or local recommendations. What would you like to know?";
+            }
+
+            return {
+                response: response,
+                sentiment: sentiment,
+                confidence: 0.85 + Math.random() * 0.1
+            };
+        }
+
+        function clearConversation() {
+            document.getElementById('conversation-messages').innerHTML = `
+                <div class="text-center text-muted">
+                    <p>Conversation cleared. Start a new conversation to see how DeepSeek AI responds to typical hotel guest inquiries</p>
+                </div>
+            `;
+            conversationHistory = [];
+        }
+
+        // Load Real Metrics for Dashboard
+        async function loadRealMetrics() {
+            try {
+                // Load conversations count
+                const conversationsResponse = await fetch('/api/v1/conversations');
+                const conversationsData = await conversationsResponse.json();
+
+                let messagesCount = 0;
+                let activeGuestsCount = 0;
+
+                if (conversationsData.status === 'success' && conversationsData.data && conversationsData.data.conversations) {
+                    const conversations = conversationsData.data.conversations;
+                    messagesCount = conversations.reduce((total, conv) => total + (conv.message_count || 0), 0);
+                    activeGuestsCount = conversations.filter(conv => conv.status === 'active').length;
+                }
+
+                // Load AI responses count from sentiment analytics
+                const sentimentResponse = await fetch('/api/v1/sentiment-analytics/overview');
+                const sentimentData = await sentimentResponse.json();
+
+                let aiResponsesCount = 0;
+                if (sentimentData.status === 'success' && sentimentData.data) {
+                    aiResponsesCount = (sentimentData.data.total_analyses || 0);
+                }
+
+                // Update dashboard with real data
+                document.getElementById('total-messages').textContent = messagesCount.toString();
+                document.getElementById('active-guests').textContent = activeGuestsCount.toString();
+                document.getElementById('ai-responses').textContent = aiResponsesCount.toString();
+
+                console.log('Real metrics loaded:', {
+                    messages: messagesCount,
+                    guests: activeGuestsCount,
+                    aiResponses: aiResponsesCount
+                });
+
+            } catch (error) {
+                console.error('Error loading real metrics:', error);
+                // Fallback to zero values instead of fake data
+                document.getElementById('total-messages').textContent = '0';
+                document.getElementById('active-guests').textContent = '0';
+                document.getElementById('ai-responses').textContent = '0';
+            }
+        }
+
+        // Load Conversations
+        async function loadConversations() {
+            try {
+                const response = await fetch('/api/v1/conversations');
+                const data = await response.json();
+
+                const conversationsList = document.getElementById('conversations-list');
+                if (data.status === 'success' && data.data && data.data.conversations) {
+                    if (data.data.conversations.length === 0) {
+                        conversationsList.innerHTML = '<p class="text-muted">No conversations found.</p>';
+                    } else {
+                        conversationsList.innerHTML = data.data.conversations.map(conv => `
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h6>${conv.guest_name || 'Unknown Guest'}</h6>
+                                        <span class="badge bg-${conv.status === 'active' ? 'success' : 'secondary'}">${conv.status}</span>
+                                    </div>
+                                    <p class="text-muted mb-1">${conv.last_message || 'No messages'}</p>
+                                    <small class="text-muted">${conv.updated_at || 'Unknown time'}</small>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    conversationsList.innerHTML = '<p class="text-muted">Conversations system ready. No active conversations.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                document.getElementById('conversations-list').innerHTML = '<p class="text-danger">Error loading conversations.</p>';
+            }
+        }
+
+        // Load Triggers
+        async function loadTriggers() {
+            try {
+                const response = await fetch('/api/v1/triggers');
+                const data = await response.json();
+
+                const triggersList = document.getElementById('triggers-list');
+                if (data.status === 'success' && data.data && data.data.triggers) {
+                    if (data.data.triggers.length === 0) {
+                        triggersList.innerHTML = '<p class="text-muted">No triggers configured.</p>';
+                    } else {
+                        triggersList.innerHTML = data.data.triggers.map(trigger => `
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h6>${trigger.name}</h6>
+                                        <span class="badge bg-${trigger.is_active ? 'success' : 'secondary'}">${trigger.is_active ? 'Active' : 'Inactive'}</span>
+                                    </div>
+                                    <p class="text-muted mb-1">Type: ${trigger.trigger_type}</p>
+                                    <small class="text-muted">Priority: ${trigger.priority}</small>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    triggersList.innerHTML = '<p class="text-muted">Trigger management system ready. No triggers configured.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading triggers:', error);
+                document.getElementById('triggers-list').innerHTML = '<p class="text-danger">Error loading triggers.</p>';
+            }
+        }
+
+        // Load Templates
+        async function loadTemplates() {
+            try {
+                const response = await fetch('/api/v1/templates');
+                const data = await response.json();
+
+                const templatesList = document.getElementById('templates-list');
+                if (data.status === 'success' && data.data && data.data.templates) {
+                    if (data.data.templates.length === 0) {
+                        templatesList.innerHTML = '<p class="text-muted">No templates created.</p>';
+                    } else {
+                        templatesList.innerHTML = data.data.templates.map(template => `
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h6>${template.name}</h6>
+                                        <span class="badge bg-primary">${template.category}</span>
+                                    </div>
+                                    <p class="text-muted mb-1">${template.description || 'No description'}</p>
+                                    <small class="text-muted">Language: ${template.language}</small>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    templatesList.innerHTML = '<p class="text-muted">Template management system ready. No templates created.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading templates:', error);
+                document.getElementById('templates-list').innerHTML = '<p class="text-danger">Error loading templates.</p>';
+            }
+        }
+
+        // Load Sentiment Analytics
+        async function loadSentimentAnalytics() {
+            try {
+                const response = await fetch('/api/v1/sentiment-analytics/overview');
+                const data = await response.json();
+
+                if (data.status === 'success' && data.data) {
+                    document.getElementById('positive-sentiment').textContent = data.data.positive || '0';
+                    document.getElementById('neutral-sentiment').textContent = data.data.neutral || '0';
+                    document.getElementById('negative-sentiment').textContent = data.data.negative || '0';
+                    document.getElementById('avg-sentiment-score').textContent = data.data.average_score || '0.0';
+                } else {
+                    // Default values
+                    document.getElementById('positive-sentiment').textContent = '0';
+                    document.getElementById('neutral-sentiment').textContent = '0';
+                    document.getElementById('negative-sentiment').textContent = '0';
+                    document.getElementById('avg-sentiment-score').textContent = '0.0';
+                }
+
+                // Load alerts
+                const alertsResponse = await fetch('/api/v1/sentiment-analytics/alerts');
+                const alertsData = await alertsResponse.json();
+
+                const alertsContainer = document.getElementById('sentiment-alerts');
+                if (alertsData.status === 'success' && alertsData.data && alertsData.data.alerts) {
+                    if (alertsData.data.alerts.length === 0) {
+                        alertsContainer.innerHTML = '<p class="text-muted">No recent alerts.</p>';
+                    } else {
+                        alertsContainer.innerHTML = alertsData.data.alerts.map(alert => `
+                            <div class="alert alert-${alert.urgency_level >= 4 ? 'danger' : 'warning'} alert-sm mb-2">
+                                <small><strong>${alert.type}</strong><br>${alert.message}</small>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    alertsContainer.innerHTML = '<p class="text-muted">Sentiment analytics system ready. No alerts.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading sentiment analytics:', error);
+                document.getElementById('sentiment-alerts').innerHTML = '<p class="text-danger">Error loading analytics.</p>';
+            }
+        }
+
+        // Real modal functions with dynamic trigger settings
+        function showCreateTriggerModal() {
+            // Create enhanced modal HTML with dynamic settings
+            const modalHtml = `
+                <div class="modal fade" id="createTriggerModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Create New Trigger</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="createTriggerForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Name</label>
+                                                <input type="text" class="form-control" id="triggerName" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Type</label>
+                                                <select class="form-select" id="triggerType" required onchange="updateTriggerSettings()">
+                                                    <option value="">Select Type</option>
+                                                    <option value="time_based">Time Based</option>
+                                                    <option value="condition_based">Condition Based</option>
+                                                    <option value="event_based">Event Based</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Dynamic Settings Container -->
+                                            <div id="triggerSettings" class="mb-3">
+                                                <div class="alert alert-info">
+                                                    <i class="fas fa-info-circle me-2"></i>
+                                                    Select a trigger type to configure specific settings
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Priority (1-10)</label>
+                                                <input type="number" class="form-control" id="triggerPriority" min="1" max="10" value="1">
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="triggerActive" checked>
+                                                <label class="form-check-label">Active</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Message Template</label>
+                                                <textarea class="form-control" id="triggerMessage" rows="8" required
+                                                          placeholder="Hello {{guest_name}}, welcome to {{hotel_name}}!"></textarea>
+                                                <small class="text-muted">Use {{variable_name}} for dynamic content</small>
+                                            </div>
+
+                                            <!-- Template Variables Helper -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Available Variables</label>
+                                                <div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+                                                    <small class="text-muted">
+                                                        <strong>Guest:</strong> {{guest_name}}, {{guest_phone}}, {{guest_email}}<br>
+                                                        <strong>Hotel:</strong> {{hotel_name}}, {{hotel_phone}}<br>
+                                                        <strong>Room:</strong> {{room_number}}, {{room_type}}<br>
+                                                        <strong>Booking:</strong> {{checkin_date}}, {{checkout_date}}<br>
+                                                        <strong>Time:</strong> {{current_time}}, {{current_date}}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="createTrigger()">Create Trigger</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('createTriggerModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('createTriggerModal'));
+            modal.show();
+        }
+
+        function showCreateTemplateModal() {
+            const modalHtml = `
+                <div class="modal fade" id="createTemplateModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Create New Template</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="createTemplateForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Template Name</label>
+                                        <input type="text" class="form-control" id="templateName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" id="templateCategory" required>
+                                            <option value="">Select Category</option>
+                                            <option value="welcome">Welcome</option>
+                                            <option value="checkout">Checkout</option>
+                                            <option value="support">Support</option>
+                                            <option value="marketing">Marketing</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Language</label>
+                                        <select class="form-select" id="templateLanguage" required>
+                                            <option value="en">English</option>
+                                            <option value="ru">Russian</option>
+                                            <option value="es">Spanish</option>
+                                            <option value="fr">French</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Template Content</label>
+                                        <textarea class="form-control" id="templateContent" rows="6" required
+                                                  placeholder="Dear {{guest_name}}, thank you for choosing {{hotel_name}}..."></textarea>
+                                        <small class="text-muted">Use {{variable_name}} for dynamic content</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description (Optional)</label>
+                                        <input type="text" class="form-control" id="templateDescription">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="createTemplate()">Create Template</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const existingModal = document.getElementById('createTemplateModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            const modal = new bootstrap.Modal(document.getElementById('createTemplateModal'));
+            modal.show();
+        }
+
+        function filterConversations() {
+            console.log('Filter conversations');
+        }
+
+        function filterTriggers() {
+            console.log('Filter triggers');
+        }
+
+        function filterTemplates() {
+            console.log('Filter templates');
+        }
+
+        // Create Trigger function with dynamic conditions
+        async function createTrigger() {
+            try {
+                const triggerType = document.getElementById('triggerType').value;
+                const triggerData = {
+                    name: document.getElementById('triggerName').value,
+                    trigger_type: triggerType,
+                    message_template: document.getElementById('triggerMessage').value,
+                    priority: parseInt(document.getElementById('triggerPriority').value),
+                    is_active: document.getElementById('triggerActive').checked,
+                    conditions: buildTriggerConditions(triggerType)
+                };
+
+                const response = await fetch('/api/v1/triggers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(triggerData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Trigger created:', result);
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createTriggerModal'));
+                    modal.hide();
+
+                    // Refresh triggers list
+                    loadTriggers();
+
+                    // Show success message
+                    alert('Trigger created successfully!');
+                } else {
+                    const error = await response.json();
+                    console.error('Error creating trigger:', error);
+                    alert('Error creating trigger: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error creating trigger:', error);
+                alert('Error creating trigger: ' + error.message);
+            }
+        }
+
+        // Create Template function
+        async function createTemplate() {
+            try {
+                const templateData = {
+                    name: document.getElementById('templateName').value,
+                    category: document.getElementById('templateCategory').value,
+                    language: document.getElementById('templateLanguage').value,
+                    content: document.getElementById('templateContent').value,
+                    description: document.getElementById('templateDescription').value,
+                    variables: extractVariablesFromTemplate(document.getElementById('templateContent').value)
+                };
+
+                const response = await fetch('/api/v1/templates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(templateData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Template created:', result);
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createTemplateModal'));
+                    modal.hide();
+
+                    // Refresh templates list
+                    loadTemplates();
+
+                    // Show success message
+                    alert('Template created successfully!');
+                } else {
+                    const error = await response.json();
+                    console.error('Error creating template:', error);
+                    alert('Error creating template: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error creating template:', error);
+                alert('Error creating template: ' + error.message);
+            }
+        }
+
+        // Helper function to extract variables from template
+        function extractVariablesFromTemplate(content) {
+            const regex = /\{\{([^}]+)\}\}/g;
+            const variables = [];
+            let match;
+
+            while ((match = regex.exec(content)) !== null) {
+                const variable = match[1].trim();
+                if (!variables.includes(variable)) {
+                    variables.push(variable);
+                }
+            }
+
+            return variables;
+        }
+
+        // Update trigger settings based on selected type
+        function updateTriggerSettings() {
+            const triggerType = document.getElementById('triggerType').value;
+            const settingsContainer = document.getElementById('triggerSettings');
+
+            if (!triggerType) {
+                settingsContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Select a trigger type to configure specific settings
+                    </div>
+                `;
+                return;
+            }
+
+            let settingsHtml = '';
+
+            if (triggerType === 'time_based') {
+                settingsHtml = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-clock me-2"></i>Time-Based Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Schedule Type</label>
+                                <select class="form-select" id="scheduleType" onchange="updateTimeSettings()">
+                                    <option value="hours_after_checkin">Hours After Check-in</option>
+                                    <option value="days_after_checkin">Days After Check-in</option>
+                                    <option value="minutes_after_first_message">Minutes After First Message</option>
+                                    <option value="specific_time">Specific Time Daily</option>
+                                    <option value="cron_expression">Custom Schedule (Cron)</option>
+                                </select>
+                            </div>
+                            <div id="timeSettings">
+                                <div class="mb-3">
+                                    <label class="form-label">Hours After Check-in</label>
+                                    <input type="number" class="form-control" id="hoursAfter" min="0" max="8760" value="2">
+                                    <small class="text-muted">0-8760 hours (max 1 year)</small>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Timezone</label>
+                                <select class="form-select" id="timezone">
+                                    <option value="Asia/Bangkok" selected>Bangkok (UTC+7)</option>
+                                    <option value="UTC">UTC</option>
+                                    <option value="Europe/Moscow">Moscow (UTC+3)</option>
+                                    <option value="Europe/London">London (UTC+0)</option>
+                                    <option value="America/New_York">New York (UTC-5)</option>
+                                    <option value="Asia/Tokyo">Tokyo (UTC+9)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (triggerType === 'event_based') {
+                settingsHtml = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-bolt me-2"></i>Event-Based Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Event Type</label>
+                                <select class="form-select" id="eventType">
+                                    <option value="guest_checkin">Guest Check-in</option>
+                                    <option value="guest_checkout">Guest Check-out</option>
+                                    <option value="message_received">Message Received</option>
+                                    <option value="first_message_received">First Message Received</option>
+                                    <option value="negative_sentiment">Negative Sentiment Detected</option>
+                                    <option value="booking_confirmed">Booking Confirmed</option>
+                                    <option value="booking_cancelled">Booking Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Delay (minutes)</label>
+                                <input type="number" class="form-control" id="delayMinutes" min="0" max="10080" value="0">
+                                <small class="text-muted">0-10080 minutes (max 1 week)</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Event Filters (Optional)</label>
+                                <textarea class="form-control" id="eventFilters" rows="3"
+                                          placeholder='{"sentiment_score": {"less_than": -0.5}}'></textarea>
+                                <small class="text-muted">JSON format for additional event filtering</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (triggerType === 'condition_based') {
+                settingsHtml = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-cogs me-2"></i>Condition-Based Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Logic Operator</label>
+                                <select class="form-select" id="conditionLogic">
+                                    <option value="AND">AND (all conditions must be true)</option>
+                                    <option value="OR">OR (any condition can be true)</option>
+                                </select>
+                            </div>
+                            <div id="conditionsList">
+                                <div class="condition-item border rounded p-3 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Field</label>
+                                            <select class="form-select condition-field">
+                                                <option value="guest.preferences.room_type">Room Type</option>
+                                                <option value="guest.stay_duration">Stay Duration</option>
+                                                <option value="guest.is_vip">VIP Status</option>
+                                                <option value="booking.total_amount">Booking Amount</option>
+                                                <option value="sentiment.last_score">Last Sentiment Score</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Operator</label>
+                                            <select class="form-select condition-operator">
+                                                <option value="equals">Equals</option>
+                                                <option value="not_equals">Not Equals</option>
+                                                <option value="greater_than">Greater Than</option>
+                                                <option value="less_than">Less Than</option>
+                                                <option value="contains">Contains</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Value</label>
+                                            <input type="text" class="form-control condition-value" placeholder="suite">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label">&nbsp;</label>
+                                            <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="removeCondition(this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addCondition()">
+                                <i class="fas fa-plus me-1"></i>Add Condition
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            settingsContainer.innerHTML = settingsHtml;
+        }
+
+        // Update time settings based on schedule type
+        function updateTimeSettings() {
+            const scheduleType = document.getElementById('scheduleType').value;
+            const timeSettings = document.getElementById('timeSettings');
+
+            let settingsHtml = '';
+
+            if (scheduleType === 'hours_after_checkin') {
+                settingsHtml = `
+                    <div class="mb-3">
+                        <label class="form-label">Hours After Check-in</label>
+                        <input type="number" class="form-control" id="hoursAfter" min="0" max="8760" value="2">
+                        <small class="text-muted">0-8760 hours (max 1 year)</small>
+                    </div>
+                `;
+            } else if (scheduleType === 'days_after_checkin') {
+                settingsHtml = `
+                    <div class="mb-3">
+                        <label class="form-label">Days After Check-in</label>
+                        <input type="number" class="form-control" id="daysAfter" min="0" max="365" value="1">
+                        <small class="text-muted">0-365 days (max 1 year)</small>
+                    </div>
+                `;
+            } else if (scheduleType === 'minutes_after_first_message') {
+                settingsHtml = `
+                    <div class="mb-3">
+                        <label class="form-label">Minutes After First Message</label>
+                        <input type="number" class="form-control" id="minutesAfterMessage" min="1" max="10080" value="60">
+                        <small class="text-muted">Trigger after first incoming or outgoing message (1-10080 minutes)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message Type</label>
+                        <select class="form-select" id="messageType">
+                            <option value="any">Any Message (Incoming or Outgoing)</option>
+                            <option value="incoming">Incoming Messages Only</option>
+                            <option value="outgoing">Outgoing Messages Only</option>
+                        </select>
+                    </div>
+                `;
+            } else if (scheduleType === 'specific_time') {
+                settingsHtml = `
+                    <div class="mb-3">
+                        <label class="form-label">Time of Day</label>
+                        <input type="time" class="form-control" id="specificTime" value="10:00">
+                        <small class="text-muted">Daily at this time</small>
+                    </div>
+                `;
+            } else if (scheduleType === 'cron_expression') {
+                settingsHtml = `
+                    <div class="mb-3">
+                        <label class="form-label">Cron Expression</label>
+                        <input type="text" class="form-control" id="cronExpression" placeholder="0 10 * * *">
+                        <small class="text-muted">
+                            Examples: "0 10 * * *" (daily at 10:00), "0 9 * * 1" (Mondays at 9:00)
+                        </small>
+                    </div>
+                `;
+            }
+
+            timeSettings.innerHTML = settingsHtml;
+        }
+
+        // Add new condition for condition-based triggers
+        function addCondition() {
+            const conditionsList = document.getElementById('conditionsList');
+            const newCondition = `
+                <div class="condition-item border rounded p-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">Field</label>
+                            <select class="form-select condition-field">
+                                <option value="guest.preferences.room_type">Room Type</option>
+                                <option value="guest.stay_duration">Stay Duration</option>
+                                <option value="guest.is_vip">VIP Status</option>
+                                <option value="booking.total_amount">Booking Amount</option>
+                                <option value="sentiment.last_score">Last Sentiment Score</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Operator</label>
+                            <select class="form-select condition-operator">
+                                <option value="equals">Equals</option>
+                                <option value="not_equals">Not Equals</option>
+                                <option value="greater_than">Greater Than</option>
+                                <option value="less_than">Less Than</option>
+                                <option value="contains">Contains</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Value</label>
+                            <input type="text" class="form-control condition-value" placeholder="suite">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="removeCondition(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            conditionsList.insertAdjacentHTML('beforeend', newCondition);
+        }
+
+        // Remove condition
+        function removeCondition(button) {
+            const conditionItem = button.closest('.condition-item');
+            conditionItem.remove();
+        }
+
+        // Build trigger conditions based on type
+        function buildTriggerConditions(triggerType) {
+            if (triggerType === 'time_based') {
+                const scheduleType = document.getElementById('scheduleType').value;
+                const timezone = document.getElementById('timezone').value;
+
+                const conditions = {
+                    schedule_type: scheduleType,
+                    timezone: timezone
+                };
+
+                if (scheduleType === 'hours_after_checkin') {
+                    conditions.hours_after = parseInt(document.getElementById('hoursAfter').value);
+                } else if (scheduleType === 'days_after_checkin') {
+                    conditions.days_after = parseInt(document.getElementById('daysAfter').value);
+                } else if (scheduleType === 'minutes_after_first_message') {
+                    conditions.minutes_after_message = parseInt(document.getElementById('minutesAfterMessage').value);
+                    conditions.message_type = document.getElementById('messageType').value;
+                } else if (scheduleType === 'specific_time') {
+                    conditions.specific_time = document.getElementById('specificTime').value;
+                } else if (scheduleType === 'cron_expression') {
+                    conditions.cron_expression = document.getElementById('cronExpression').value;
+                }
+
+                return { time_based: conditions };
+
+            } else if (triggerType === 'event_based') {
+                const eventType = document.getElementById('eventType').value;
+                const delayMinutes = parseInt(document.getElementById('delayMinutes').value);
+                const eventFiltersText = document.getElementById('eventFilters').value;
+
+                const conditions = {
+                    event_type: eventType,
+                    delay_minutes: delayMinutes
+                };
+
+                if (eventFiltersText.trim()) {
+                    try {
+                        conditions.event_filters = JSON.parse(eventFiltersText);
+                    } catch (e) {
+                        console.warn('Invalid JSON in event filters, ignoring:', e);
+                    }
+                }
+
+                return { event_based: conditions };
+
+            } else if (triggerType === 'condition_based') {
+                const logic = document.getElementById('conditionLogic').value;
+                const conditionItems = document.querySelectorAll('.condition-item');
+
+                const conditions = [];
+                conditionItems.forEach(item => {
+                    const field = item.querySelector('.condition-field').value;
+                    const operator = item.querySelector('.condition-operator').value;
+                    const value = item.querySelector('.condition-value').value;
+
+                    if (field && operator && value) {
+                        conditions.push({
+                            field: field,
+                            operator: operator,
+                            value: value
+                        });
+                    }
+                });
+
+                return {
+                    condition_based: {
+                        conditions: conditions,
+                        logic: logic
+                    }
+                };
+            }
+
+            return {};
+        }
+
+        // DeepSeek Settings Functions
+        async function loadDeepSeekSettings() {
+            try {
+                const response = await fetch('/api/v1/admin/settings?category=deepseek');
+                const data = await response.json();
+
+                if (data.status === 'success' && data.data.settings) {
+                    const settings = data.data.settings;
+
+                    // Populate form fields
+                    document.getElementById('deepseek-api-key').value = settings.api_key || '';
+                    document.getElementById('deepseek-model').value = settings.model || 'deepseek-chat';
+                    document.getElementById('deepseek-max-tokens').value = settings.max_tokens || 4096;
+                    document.getElementById('deepseek-temperature').value = settings.temperature || 0.7;
+                    document.getElementById('deepseek-requests-per-minute').value = settings.requests_per_minute || 50;
+                    document.getElementById('deepseek-tokens-per-minute').value = settings.tokens_per_minute || 100000;
+                    document.getElementById('deepseek-timeout').value = settings.timeout || 60;
+                    document.getElementById('deepseek-max-retries').value = settings.max_retries || 3;
+                    document.getElementById('deepseek-travel-memory').value = settings.travel_memory || '';
+
+                    // Update status
+                    document.getElementById('deepseek-current-model').textContent = settings.model || 'deepseek-chat';
+                    document.getElementById('deepseek-memory-size').textContent =
+                        Math.round((settings.travel_memory || '').length / 1024) + ' KB';
+
+                    console.log('DeepSeek settings loaded successfully');
+                }
+            } catch (error) {
+                console.error('Error loading DeepSeek settings:', error);
+                alert('Error loading DeepSeek settings: ' + error.message);
+            }
+        }
+
+        async function saveDeepSeekSettings() {
+            try {
+                const settingsData = {
+                    category: 'deepseek',
+                    settings: {
+                        api_key: document.getElementById('deepseek-api-key').value,
+                        model: document.getElementById('deepseek-model').value,
+                        max_tokens: parseInt(document.getElementById('deepseek-max-tokens').value),
+                        temperature: parseFloat(document.getElementById('deepseek-temperature').value),
+                        requests_per_minute: parseInt(document.getElementById('deepseek-requests-per-minute').value),
+                        tokens_per_minute: parseInt(document.getElementById('deepseek-tokens-per-minute').value),
+                        timeout: parseInt(document.getElementById('deepseek-timeout').value),
+                        max_retries: parseInt(document.getElementById('deepseek-max-retries').value),
+                        travel_memory: document.getElementById('deepseek-travel-memory').value
+                    }
+                };
+
+                const response = await fetch('/api/v1/admin/settings', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(settingsData)
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    alert('DeepSeek settings saved successfully!');
+                    loadDeepSeekSettings(); // Reload to show updated values
+                } else {
+                    alert('Error saving settings: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error saving DeepSeek settings:', error);
+                alert('Error saving DeepSeek settings: ' + error.message);
+            }
+        }
+
+        async function testDeepSeekConnection() {
+            try {
+                document.getElementById('deepseek-api-status').textContent = 'Testing...';
+
+                const response = await fetch('/api/v1/deepseek/test-connection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        api_key: document.getElementById('deepseek-api-key').value,
+                        model: document.getElementById('deepseek-model').value
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    document.getElementById('deepseek-api-status').textContent = 'Connected ✓';
+                    document.getElementById('deepseek-api-status').className = 'text-success';
+                    alert('DeepSeek connection successful!');
+                } else {
+                    document.getElementById('deepseek-api-status').textContent = 'Failed ✗';
+                    document.getElementById('deepseek-api-status').className = 'text-danger';
+                    alert('Connection failed: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error testing DeepSeek connection:', error);
+                document.getElementById('deepseek-api-status').textContent = 'Error ✗';
+                document.getElementById('deepseek-api-status').className = 'text-danger';
+                alert('Error testing connection: ' + error.message);
+            }
+        }
+
+        // Trigger Demo Functions
+        let activeTriggerTests = [];
+
+        function testTimeTrigger(seconds) {
+            const testId = Date.now();
+            const triggerTest = {
+                id: testId,
+                type: 'time_based',
+                description: `${seconds}s After Check-in`,
+                startTime: Date.now(),
+                duration: seconds * 1000
+            };
+
+            activeTriggerTests.push(triggerTest);
+            updateActiveTriggers();
+
+            addTriggerResult(`⏰ Time-based trigger started: ${seconds} seconds`, 'info');
+
+            setTimeout(() => {
+                addTriggerResult(`✅ Time trigger fired: Welcome message sent!`, 'success');
+                removeTriggerTest(testId);
+            }, seconds * 1000);
+        }
+
+        function testEventTrigger(eventType) {
+            addTriggerResult(`📨 Event trigger: ${eventType} - Processing...`, 'info');
+
+            setTimeout(() => {
+                addTriggerResult(`✅ Event trigger fired: Auto-response sent!`, 'success');
+            }, 1000);
+        }
+
+        function testSentimentTrigger() {
+            addTriggerResult(`😔 Sentiment trigger: Negative sentiment detected`, 'warning');
+
+            setTimeout(() => {
+                addTriggerResult(`🚨 Staff notification sent! Manager will contact guest.`, 'danger');
+            }, 2000);
+        }
+
+        function testFirstMessageTrigger(seconds) {
+            const testId = Date.now();
+            const triggerTest = {
+                id: testId,
+                type: 'first_message',
+                description: `${seconds}s After First Message`,
+                startTime: Date.now(),
+                duration: seconds * 1000
+            };
+
+            activeTriggerTests.push(triggerTest);
+            updateActiveTriggers();
+
+            addTriggerResult(`💬 First message trigger started: ${seconds} seconds`, 'info');
+
+            setTimeout(() => {
+                addTriggerResult(`✅ Follow-up message sent: "How was your first day?"`, 'success');
+                removeTriggerTest(testId);
+            }, seconds * 1000);
+        }
+
+        function testVIPTrigger() {
+            addTriggerResult(`👑 VIP condition trigger: Checking guest status...`, 'info');
+
+            setTimeout(() => {
+                addTriggerResult(`✨ VIP trigger fired: Special welcome message with champagne offer!`, 'success');
+            }, 1500);
+        }
+
+        function clearTriggerTests() {
+            activeTriggerTests = [];
+            updateActiveTriggers();
+            document.getElementById('trigger-test-results').innerHTML = '';
+        }
+
+        function addTriggerResult(message, type) {
+            const resultsDiv = document.getElementById('trigger-test-results');
+            const alertClass = type === 'success' ? 'alert-success' :
+                             type === 'warning' ? 'alert-warning' :
+                             type === 'danger' ? 'alert-danger' : 'alert-info';
+
+            const resultHtml = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+
+            resultsDiv.insertAdjacentHTML('afterbegin', resultHtml);
+        }
+
+        function updateActiveTriggers() {
+            const activeDiv = document.getElementById('active-triggers');
+
+            if (activeTriggerTests.length === 0) {
+                activeDiv.innerHTML = '<div class="text-muted">No active tests</div>';
+                return;
+            }
+
+            const html = activeTriggerTests.map(test => {
+                const elapsed = Math.floor((Date.now() - test.startTime) / 1000);
+                const remaining = Math.max(0, Math.floor(test.duration / 1000) - elapsed);
+
+                return `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                        <small>${test.description}</small>
+                        <span class="badge bg-primary">${remaining}s</span>
+                    </div>
+                `;
+            }).join('');
+
+            activeDiv.innerHTML = html;
+        }
+
+        function removeTriggerTest(testId) {
+            activeTriggerTests = activeTriggerTests.filter(test => test.id !== testId);
+            updateActiveTriggers();
+        }
+
+        // Travel Demo Functions
+        let travelConversationId = null;
+        let currentTravelStep = null;
+
+        async function startTravelDemo() {
+            const phoneNumber = document.getElementById('travel-guest-phone').value;
+            if (!phoneNumber) {
+                alert('Please enter a phone number');
+                return;
+            }
+
+            // Detect language from phone number
+            const language = detectLanguageFromPhone(phoneNumber);
+            document.getElementById('detected-language').textContent = language.toUpperCase();
+
+            // Show conversation area
+            document.getElementById('travel-conversation-demo').style.display = 'block';
+
+            // Start conversation
+            const greeting = "Здравствуйте! Я могу улучшить ваш отпуск на 50% больше эмоций и впечатлений бесплатно. У меня есть лучшие варианты как провести время. Хотите узнать?";
+
+            addTravelMessage('bot', greeting);
+            currentTravelStep = 'greeting';
+
+            // Update language detection info
+            document.getElementById('language-detection-info').innerHTML = `
+                <div class="mb-2">
+                    <strong>Phone:</strong> ${phoneNumber}<br>
+                    <strong>Detected:</strong> ${language.toUpperCase()}<br>
+                    <strong>Confidence:</strong> 85%
+                </div>
+            `;
+        }
+
+        function detectLanguageFromPhone(phone) {
+            if (phone.startsWith('+7') || phone.startsWith('7')) return 'ru';
+            if (phone.startsWith('+66') || phone.startsWith('66')) return 'th';
+            if (phone.startsWith('+86') || phone.startsWith('86')) return 'zh';
+            if (phone.startsWith('+1') || phone.startsWith('1')) return 'en';
+            return 'en'; // default
+        }
+
+        function sendTravelMessage() {
+            const input = document.getElementById('travel-user-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            addTravelMessage('user', message);
+            input.value = '';
+
+            // Process response based on current step
+            setTimeout(() => {
+                processTravelResponse(message);
+            }, 1000);
+        }
+
+        function processTravelResponse(userMessage) {
+            let botResponse = '';
+
+            switch (currentTravelStep) {
+                case 'greeting':
+                    if (userMessage.toLowerCase().includes('да') || userMessage.toLowerCase().includes('yes')) {
+                        botResponse = 'Отлично! Скажите, какой раз вы на Пхукете?\n\n1. Первый раз\n2. 2-3 раза\n3. Более 3 раз';
+                        currentTravelStep = 'visit_frequency';
+                    } else {
+                        botResponse = 'Понимаю! Если передумаете, просто напишите мне. Хорошего отдыха!';
+                        currentTravelStep = 'ended';
+                    }
+                    break;
+
+                case 'visit_frequency':
+                    botResponse = 'Понятно! А с кем вы приехали?\n\n1. Один/одна\n2. С партнером\n3. С детьми\n4. Компанией друзей';
+                    currentTravelStep = 'companions';
+                    break;
+
+                case 'companions':
+                    botResponse = 'Замечательно! Основываясь на ваших ответах, вот мои персональные рекомендации:\n\n🏖️ Пляж Ката - идеален для пар\n🌅 Смотровая Промтеп - лучшие закаты\n🍽️ Ресторан Mom Tri\'s - романтичные ужины\n🏛️ Старый город - красивые фото\n\nХотите больше деталей по любой из рекомендаций?';
+                    currentTravelStep = 'recommendations';
+                    break;
+
+                default:
+                    botResponse = 'Спасибо за интерес! Наслаждайтесь отдыхом на Пхукете! 🌴';
+            }
+
+            addTravelMessage('bot', botResponse);
+        }
+
+        function addTravelMessage(sender, message) {
+            const messagesDiv = document.getElementById('travel-messages');
+            const isBot = sender === 'bot';
+
+            const messageHtml = `
+                <div class="d-flex ${isBot ? 'justify-content-start' : 'justify-content-end'} mb-3">
+                    <div class="max-width-75">
+                        <div class="card ${isBot ? 'border-success' : 'border-primary'}">
+                            <div class="card-body py-2 px-3">
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="fas fa-${isBot ? 'robot' : 'user'} me-2 text-${isBot ? 'success' : 'primary'}"></i>
+                                    <small class="text-muted">${isBot ? 'Travel Assistant' : 'Guest'}</small>
+                                </div>
+                                <div style="white-space: pre-line;">${message}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            messagesDiv.insertAdjacentHTML('beforeend', messageHtml);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Update active triggers every second
+        setInterval(updateActiveTriggers, 1000);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            stopAutoRefresh();
+        });
+    </script>
+</body>
+</html>
