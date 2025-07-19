@@ -225,7 +225,7 @@ class ResponseTimeAnalyticsResponse(BaseModel):
 class AnalyticsExportRequest(BaseModel):
     """Request schema for analytics data export"""
     
-    export_type: str = Field(..., regex="^(csv|json|excel)$", description="Export format")
+    export_type: str = Field(..., pattern="^(csv|json|excel)$", description="Export format")
     time_range: AnalyticsTimeRange = Field(..., description="Time range for export")
     hotel_id: Optional[uuid.UUID] = Field(None, description="Hotel ID for hotel-specific export")
     include_raw_data: bool = Field(default=False, description="Include raw data in export")

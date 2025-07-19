@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek AI Testing - Hotel Bot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .nav-pills .nav-link {
+            border-radius: 25px;
+            padding: 12px 25px;
+            margin: 0 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+        }
+        
+        .nav-pills .nav-link:not(.active) {
+            background: #f8fafc;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .nav-pills .nav-link:not(.active):hover {
+            background: #e2e8f0;
+            color: #4f46e5;
+            transform: translateY(-1px);
+        }
+        
+        .test-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.1);
+        }
+        
+        .test-card h6 {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .btn-custom {
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-info-custom {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .chat-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            height: 350px;
+            overflow-y: auto;
+        }
+        
+        .message-user {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 18px 18px 5px 18px;
+            margin: 10px 0;
+            margin-left: 20%;
+            max-width: 80%;
+        }
+        
+        .message-ai {
+            background: white;
+            color: #1e293b;
+            padding: 12px 18px;
+            border-radius: 18px 18px 18px 5px;
+            margin: 10px 0;
+            margin-right: 20%;
+            max-width: 80%;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .api-features {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .result-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sentiment-positive {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .sentiment-negative {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <a href="/api/v1/admin/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header-card">
+            <h1 class="header-title">
+                <i class="fas fa-flask me-3"></i>
+                DeepSeek AI Testing
+            </h1>
+            <p class="header-subtitle">Test and demonstrate AI capabilities for hotel guest interactions</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-card">
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-pills nav-fill mb-4" id="testing-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="sentiment-tab" data-bs-toggle="pill" 
+                            data-bs-target="#sentiment-panel" type="button" role="tab">
+                        <i class="fas fa-heart me-2"></i>Sentiment Analysis
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="response-tab" data-bs-toggle="pill" 
+                            data-bs-target="#response-panel" type="button" role="tab">
+                        <i class="fas fa-comment-dots me-2"></i>Response Generation
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="chat-tab" data-bs-toggle="pill" 
+                            data-bs-target="#chat-panel" type="button" role="tab">
+                        <i class="fas fa-comments me-2"></i>Live Chat Demo
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="triggers-tab" data-bs-toggle="pill" 
+                            data-bs-target="#triggers-panel" type="button" role="tab">
+                        <i class="fas fa-bolt me-2"></i>Triggers Demo
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="testing-content">
+                <!-- Sentiment Analysis Panel -->
+                <div class="tab-pane fade show active" id="sentiment-panel" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="test-card">
+                                <h6><i class="fas fa-edit me-2 text-primary"></i>Input Message</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Guest Message</label>
+                                    <textarea class="form-control" id="sentiment-message" rows="4" 
+                                            placeholder="Enter a guest message to analyze...">The room was dirty and the staff was rude. I'm very disappointed with my stay.</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Select Hotel</label>
+                                    <select class="form-select" id="sentiment-hotel">
+                                        <option>Loading hotels...</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary-custom btn-custom w-100" onclick="analyzeSentiment()">
+                                    <i class="fas fa-search me-2"></i>Analyze Sentiment
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="test-card">
+                                <h6><i class="fas fa-chart-line me-2 text-success"></i>Analysis Results</h6>
+                                <div class="result-container" id="sentiment-results">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-chart-pie fa-3x mb-3"></i>
+                                        <p class="mb-0">Click "Analyze Sentiment" to see results</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Generation Panel -->
+                <div class="tab-pane fade" id="response-panel" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="test-card">
+                                <h6><i class="fas fa-edit me-2 text-warning"></i>Message Input</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Guest Message</label>
+                                    <textarea class="form-control" id="response-message" rows="3"
+                                            placeholder="Enter guest message...">Hello, I need help with my room booking.</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Context Type</label>
+                                    <select class="form-select" id="response-context">
+                                        <option value="booking">Booking Inquiry</option>
+                                        <option value="complaint">Complaint</option>
+                                        <option value="request">Service Request</option>
+                                        <option value="general">General Question</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-warning-custom btn-custom w-100" onclick="generateResponse()">
+                                    <i class="fas fa-magic me-2"></i>Generate AI Response
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="test-card">
+                                <h6><i class="fas fa-robot me-2 text-info"></i>AI Generated Response</h6>
+                                <div class="result-container" id="response-results">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-robot fa-3x mb-3"></i>
+                                        <p class="mb-0">Click "Generate Response" to see AI response</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Chat Demo Panel -->
+                <div class="tab-pane fade" id="chat-panel" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="test-card">
+                                <h6><i class="fas fa-comments me-2 text-secondary"></i>Live Chat Demo</h6>
+                                <div class="chat-container mb-3" id="chat-messages">
+                                    <div class="text-center text-muted py-5">
+                                        <i class="fas fa-comments fa-3x mb-3"></i>
+                                        <p>Start a conversation to see AI responses in real-time</p>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="chat-input"
+                                           placeholder="Type your message..." onkeypress="handleChatKeypress(event)">
+                                    <button class="btn btn-info-custom btn-custom" onclick="sendChatMessage()">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="test-card">
+                                <h6><i class="fas fa-cog me-2 text-info"></i>Chat Settings</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Guest Type</label>
+                                    <select class="form-select" id="guest-type">
+                                        <option value="regular">Regular Guest</option>
+                                        <option value="vip">VIP Guest</option>
+                                        <option value="business">Business Traveler</option>
+                                        <option value="family">Family with Kids</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Language</label>
+                                    <select class="form-select" id="chat-language">
+                                        <option value="en">English</option>
+                                        <option value="ru">Русский</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                    </select>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-secondary btn-custom" onclick="clearChat()">
+                                        <i class="fas fa-trash me-2"></i>Clear Chat
+                                    </button>
+                                    <button class="btn btn-outline-info btn-custom" onclick="exportChat()">
+                                        <i class="fas fa-download me-2"></i>Export Chat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Triggers Demo Panel -->
+                <div class="tab-pane fade" id="triggers-panel" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="test-card">
+                                <h6><i class="fas fa-bolt me-2 text-danger"></i>Trigger System Demo</h6>
+                                <p class="text-muted mb-4">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Test different trigger types with demo timing (seconds instead of hours/days)
+                                </p>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-danger btn-custom w-100 mb-2" onclick="testTrigger('checkin', 5)">
+                                            <i class="fas fa-clock me-2"></i>5s After Check-in
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-custom w-100 mb-2" onclick="testTrigger('message', 0)">
+                                            <i class="fas fa-envelope me-2"></i>Message Received
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-custom w-100 mb-2" onclick="testTrigger('sentiment', 0)">
+                                            <i class="fas fa-frown me-2"></i>Negative Sentiment
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-danger btn-custom w-100 mb-2" onclick="testTrigger('first_message', 10)">
+                                            <i class="fas fa-stopwatch me-2"></i>10s After First Message
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-custom w-100 mb-2" onclick="testTrigger('vip', 0)">
+                                            <i class="fas fa-star me-2"></i>VIP Guest Event
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-custom w-100 mb-2" onclick="clearTriggerTests()">
+                                            <i class="fas fa-times me-2"></i>Clear All Tests
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="test-card">
+                                <h6><i class="fas fa-list me-2 text-warning"></i>Active Trigger Tests</h6>
+                                <div id="active-triggers">
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-bolt fa-2x mb-2"></i>
+                                        <p class="mb-0">No active tests</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Features -->
+        <div class="api-features">
+            <h5 class="text-center mb-4">
+                <i class="fas fa-info-circle me-2"></i>DeepSeek API Features
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="feature-item">
+                        <i class="fas fa-tachometer-alt feature-icon text-primary"></i>
+                        <div class="fw-bold">Fast Response</div>
+                        <small class="text-muted">~2-3 seconds</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item">
+                        <i class="fas fa-bullseye feature-icon text-success"></i>
+                        <div class="fw-bold">High Accuracy</div>
+                        <small class="text-muted">95%+ sentiment</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item">
+                        <i class="fas fa-globe feature-icon text-info"></i>
+                        <div class="fw-bold">Multi-language</div>
+                        <small class="text-muted">50+ languages</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt feature-icon text-warning"></i>
+                        <div class="fw-bold">Enterprise Security</div>
+                        <small class="text-muted">Bank-grade encryption</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Demo functions for testing
+        function analyzeSentiment() {
+            const message = document.getElementById('sentiment-message').value;
+            const resultsDiv = document.getElementById('sentiment-results');
+
+            resultsDiv.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p class="mt-2">Analyzing sentiment...</p></div>';
+
+            setTimeout(() => {
+                const isNegative = message.toLowerCase().includes('dirty') || message.toLowerCase().includes('rude') || message.toLowerCase().includes('disappointed');
+                const sentiment = isNegative ? 'negative' : 'positive';
+                const score = isNegative ? '15%' : '85%';
+                const color = isNegative ? 'danger' : 'success';
+
+                resultsDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="sentiment-${sentiment} d-inline-block mb-3">
+                            <i class="fas fa-${isNegative ? 'frown' : 'smile'} me-2"></i>
+                            ${sentiment.toUpperCase()} (${score})
+                        </div>
+                        <div class="small text-muted">
+                            <strong>Analysis:</strong> ${isNegative ? 'Guest expresses dissatisfaction with room cleanliness and staff behavior' : 'Guest shows positive sentiment'}
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function generateResponse() {
+            const message = document.getElementById('response-message').value;
+            const context = document.getElementById('response-context').value;
+            const resultsDiv = document.getElementById('response-results');
+
+            resultsDiv.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p class="mt-2">Generating AI response...</p></div>';
+
+            setTimeout(() => {
+                let response = '';
+                switch(context) {
+                    case 'booking':
+                        response = "Hello! I'd be happy to help you with your room booking. Could you please provide me with your booking reference number or the dates you're looking to stay? I'll check our availability and assist you right away.";
+                        break;
+                    case 'complaint':
+                        response = "I sincerely apologize for any inconvenience you've experienced. Your feedback is very important to us, and I want to make this right immediately. Could you please tell me more details about the issue so I can address it properly?";
+                        break;
+                    case 'request':
+                        response = "Of course! I'm here to help with any service requests you may have. Please let me know what you need, and I'll coordinate with our team to ensure you receive prompt assistance.";
+                        break;
+                    default:
+                        response = "Thank you for contacting us! I'm here to assist you with any questions or concerns you may have about your stay. How can I help you today?";
+                }
+
+                resultsDiv.innerHTML = `
+                    <div class="p-3">
+                        <div class="message-ai">
+                            ${response}
+                        </div>
+                        <div class="small text-muted mt-2">
+                            <i class="fas fa-clock me-1"></i>Response time: 2.3s
+                        </div>
+                    </div>
+                `;
+            }, 2300);
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatContainer = document.getElementById('chat-messages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message-user';
+            userMsg.textContent = message;
+            chatContainer.appendChild(userMsg);
+
+            // Clear input
+            input.value = '';
+
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message-ai';
+            typingDiv.innerHTML = '<div class="loading-spinner"></div> AI is typing...';
+            chatContainer.appendChild(typingDiv);
+
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Generate AI response
+            setTimeout(() => {
+                chatContainer.removeChild(typingDiv);
+
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message-ai';
+                aiMsg.textContent = "Thank you for your message! I understand you need assistance. Let me help you with that right away. Is there anything specific I can clarify or help you with?";
+                chatContainer.appendChild(aiMsg);
+
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 2000);
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function clearChat() {
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-comments fa-3x mb-3"></i>
+                    <p>Start a conversation to see AI responses in real-time</p>
+                </div>
+            `;
+        }
+
+        function exportChat() {
+            alert('Chat export functionality would be implemented here');
+        }
+
+        function testTrigger(type, delay) {
+            const activeDiv = document.getElementById('active-triggers');
+
+            const triggerItem = document.createElement('div');
+            triggerItem.className = 'alert alert-info alert-dismissible fade show';
+            triggerItem.innerHTML = `
+                <strong>${type.replace('_', ' ').toUpperCase()}</strong> trigger activated
+                <small class="d-block">Will fire in ${delay} seconds</small>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            if (activeDiv.querySelector('.text-center')) {
+                activeDiv.innerHTML = '';
+            }
+
+            activeDiv.appendChild(triggerItem);
+
+            if (delay > 0) {
+                setTimeout(() => {
+                    if (triggerItem.parentNode) {
+                        triggerItem.className = 'alert alert-success alert-dismissible fade show';
+                        triggerItem.innerHTML = `
+                            <strong>${type.replace('_', ' ').toUpperCase()}</strong> trigger fired!
+                            <small class="d-block">Message sent to guest</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                    }
+                }, delay * 1000);
+            }
+        }
+
+        function clearTriggerTests() {
+            document.getElementById('active-triggers').innerHTML = `
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-bolt fa-2x mb-2"></i>
+                    <p class="mb-0">No active tests</p>
+                </div>
+            `;
+        }
+
+        // Load hotels on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const hotelSelect = document.getElementById('sentiment-hotel');
+            hotelSelect.innerHTML = `
+                <option value="1">Grand Hotel Plaza</option>
+                <option value="2">Seaside Resort & Spa</option>
+                <option value="3">Mountain View Lodge</option>
+                <option value="4">City Center Business Hotel</option>
+            `;
+        });
+    </script>
+</body>
+</html>

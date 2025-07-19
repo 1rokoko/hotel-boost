@@ -5,7 +5,8 @@ Hotel settings model for WhatsApp Hotel Bot application
 import uuid
 from typing import Dict, Any, Optional, List
 from sqlalchemy import Column, String, Boolean, Integer, Float, Index, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from datetime import time
 import re
@@ -128,16 +129,16 @@ class HotelSettings(TenantBaseModel):
     )
     
     supported_languages = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=["en", "es", "fr"],
         server_default='["en", "es", "fr"]',
         comment="List of supported language codes"
     )
     
-    # Advanced settings (stored as JSONB for flexibility)
+    # Advanced settings (stored as JSON for flexibility)
     advanced_settings = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',

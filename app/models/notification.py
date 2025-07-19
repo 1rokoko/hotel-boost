@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from sqlalchemy import Column, String, Text, DateTime, Index, ForeignKey, CheckConstraint
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql import UUID, ENUM
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import enum
@@ -124,7 +125,7 @@ class StaffNotification(TenantBaseModel):
     
     # Additional metadata
     notification_metadata = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',

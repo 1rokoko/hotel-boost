@@ -10,6 +10,9 @@ Here's the English translation of your document with the same structure preserve
 
 ### 🛡️ CODE REWRITE PROTECTION
 
+#### ⚠️ CRITICAL: PRESERVE EXISTING FUNCTIONALITY
+**NEVER remove existing functionality from Hotels, Triggers, Templates, or other admin dashboard sections when editing admin_dashboard.html. Only add or modify specific requested features while preserving all existing code.**
+
 #### MANDATORY SEQUENCE BEFORE ANY CHANGES:
 ```bash
 # 1. ALWAYS verify development authorization
@@ -169,6 +172,14 @@ Full structure: `c:\Users\Arkadiy\Documents\augment-projects\hotel-boost\.taskma
 - Project status: Enhanced Production System (tasks 001-025), fully operational
 - Production Status: ✅ ENHANCED & READY
 - Latest additions: Advanced Triggers, Travel Advisory, Language Detection
+- **NEW: Standalone DeepSeek Pages** ✅
+  - DeepSeek Testing: `/api/v1/admin/deepseek-testing` - Standalone AI testing interface
+  - AI Configuration: `/api/v1/admin/ai-configuration` - Standalone AI settings page
+  - Both pages are menu-free with modern gradient design and full functionality
+- **FIXED: Admin Dashboard Navigation** ✅
+  - Hotels section functionality restored
+  - Triggers section functionality restored
+  - Menu links updated to use correct section IDs
 - Next phase: Continuous optimization and feature expansion
 
 ### 🎯 FINAL REMINDER

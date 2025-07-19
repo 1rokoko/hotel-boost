@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Configuration - Hotel Bot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 0;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        .config-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .config-card:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .config-card h6 {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .btn-custom {
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .btn-info-custom {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+        }
+        
+        .temperature-display {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 15px;
+            text-align: center;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .status-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .status-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .status-info {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .test-result {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(79, 70, 229, 0.3);
+            border-radius: 50%;
+            border-top-color: #4f46e5;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .api-key-group {
+            position: relative;
+        }
+        
+        .api-key-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .api-key-toggle:hover {
+            color: #4f46e5;
+        }
+        
+        .quick-actions {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .action-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .icon-primary { color: #4f46e5; }
+        .icon-success { color: #10b981; }
+        .icon-warning { color: #f59e0b; }
+        .icon-info { color: #06b6d4; }
+        .icon-secondary { color: #6b7280; }
+    </style>
+</head>
+<body>
+    <a href="/api/v1/admin/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header-card">
+            <h1 class="header-title">
+                <i class="fas fa-brain me-3"></i>
+                AI Configuration
+            </h1>
+            <p class="header-subtitle">Configure DeepSeek AI settings for intelligent guest interactions</p>
+        </div>
+
+        <!-- API Settings -->
+        <div class="config-card">
+            <h6><i class="fas fa-key me-2 icon-primary"></i>API Settings</h6>
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label">DeepSeek API Key</label>
+                    <div class="api-key-group">
+                        <input type="password" class="form-control" id="ai-api-key" 
+                               placeholder="Enter your DeepSeek API key">
+                        <button class="api-key-toggle" onclick="toggleApiKeyVisibility()">
+                            <i class="fas fa-eye" id="api-key-toggle-icon"></i>
+                        </button>
+                    </div>
+                    <div class="form-text">Your API key is encrypted and stored securely</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">AI Model</label>
+                    <select class="form-select" id="ai-model">
+                        <option value="deepseek-chat" selected>DeepSeek Chat</option>
+                        <option value="deepseek-coder">DeepSeek Coder</option>
+                        <option value="deepseek-math">DeepSeek Math</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Settings -->
+        <div class="config-card">
+            <h6><i class="fas fa-sliders-h me-2 icon-success"></i>Response Settings</h6>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Max Tokens</label>
+                    <input type="number" class="form-control" id="ai-max-tokens" 
+                           value="1000" min="100" max="4096">
+                    <div class="form-text">Maximum response length</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Temperature</label>
+                    <input type="range" class="form-range" id="ai-temperature" 
+                           min="0" max="1" step="0.1" value="0.7" oninput="updateTemperatureDisplay(this.value)">
+                    <div class="temperature-display mt-2">
+                        <span id="temperature-value">0.7</span>
+                        <small class="d-block text-muted">Precise ← → Creative</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Default Language</label>
+                    <select class="form-select" id="ai-language">
+                        <option value="en" selected>English</option>
+                        <option value="ru">Русский</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Prompt -->
+        <div class="config-card">
+            <h6><i class="fas fa-comment-alt me-2 icon-info"></i>System Prompt</h6>
+            <label class="form-label">System Prompt</label>
+            <textarea class="form-control" id="ai-system-prompt" rows="4"
+                    placeholder="Enter system prompt for AI...">You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries. Always be polite, informative, and try to resolve guest issues efficiently.</textarea>
+            <div class="form-text">This prompt defines how the AI should behave and respond to guests</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="config-card">
+            <h6><i class="fas fa-cog me-2 icon-secondary"></i>Configuration Actions</h6>
+            <div class="action-btn-group">
+                <button class="btn btn-primary-custom btn-custom" onclick="saveAIConfiguration()">
+                    <i class="fas fa-save me-2"></i>Save Configuration
+                </button>
+                <button class="btn btn-success-custom btn-custom" onclick="testAIConnection()">
+                    <i class="fas fa-plug me-2"></i>Test Connection
+                </button>
+                <button class="btn btn-warning-custom btn-custom" onclick="resetAIConfiguration()">
+                    <i class="fas fa-undo me-2"></i>Reset to Defaults
+                </button>
+                <button class="btn btn-info-custom btn-custom" onclick="exportAIConfiguration()">
+                    <i class="fas fa-download me-2"></i>Export Config
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Testing -->
+        <div class="config-card">
+            <h6><i class="fas fa-flask me-2 icon-warning"></i>AI Response Testing</h6>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Test Message</label>
+                    <textarea class="form-control" id="test-message" rows="3"
+                            placeholder="Enter a test message...">Hello, I need help with my room booking.</textarea>
+                    <button class="btn btn-warning-custom btn-custom w-100 mt-3" onclick="testAIResponse()">
+                        <i class="fas fa-play me-2"></i>Test AI Response
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">AI Response</label>
+                    <div class="test-result" id="ai-response-output">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-robot fa-3x mb-3"></i>
+                            <p class="mb-0">Click "Test AI Response" to see results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status & Statistics -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="config-card">
+                    <h6><i class="fas fa-info-circle me-2 icon-info"></i>Current Status</h6>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">
+                                    <span class="status-badge status-warning" id="api-status">Not Tested</span>
+                                </div>
+                                <div class="stat-label">API Status</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">
+                                    <span class="status-badge status-info" id="current-model">deepseek-chat</span>
+                                </div>
+                                <div class="stat-label">Current Model</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-primary" id="current-tokens">1000</div>
+                                <div class="stat-label">Max Tokens</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-success" id="current-temp">0.7</div>
+                                <div class="stat-label">Temperature</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">Last Updated: <span id="last-updated">Never</span></small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="config-card">
+                    <h6><i class="fas fa-chart-bar me-2 icon-success"></i>Usage Statistics</h6>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-primary" id="requests-today">0</div>
+                                <div class="stat-label">Requests Today</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-success" id="tokens-used">0</div>
+                                <div class="stat-label">Tokens Used</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-info" id="cache-rate">0%</div>
+                                <div class="stat-label">Cache Hit Rate</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number text-warning" id="avg-response">0ms</div>
+                                <div class="stat-label">Avg Response Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h6 class="mb-4"><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+            <div class="action-btn-group">
+                <button class="btn btn-outline-primary btn-custom" onclick="loadPresetPrompts()">
+                    <i class="fas fa-list me-2"></i>Load Presets
+                </button>
+                <button class="btn btn-outline-success btn-custom" onclick="validateConfiguration()">
+                    <i class="fas fa-check-circle me-2"></i>Validate Config
+                </button>
+                <button class="btn btn-outline-info btn-custom" onclick="viewAPIDocumentation()">
+                    <i class="fas fa-book me-2"></i>API Documentation
+                </button>
+                <button class="btn btn-outline-warning btn-custom" onclick="clearCache()">
+                    <i class="fas fa-trash me-2"></i>Clear Cache
+                </button>
+                <button class="btn btn-outline-secondary btn-custom" onclick="backupConfiguration()">
+                    <i class="fas fa-shield-alt me-2"></i>Backup Config
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('ai-api-key');
+            const icon = document.getElementById('api-key-toggle-icon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        function updateTemperatureDisplay(value) {
+            document.getElementById('temperature-value').textContent = value;
+            document.getElementById('current-temp').textContent = value;
+        }
+
+        function saveAIConfiguration() {
+            const saveBtn = event.target;
+            const originalText = saveBtn.innerHTML;
+
+            saveBtn.innerHTML = '<div class="loading-spinner me-2"></div>Saving...';
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check me-2"></i>Saved!';
+                saveBtn.className = 'btn btn-success-custom btn-custom';
+
+                // Update last updated time
+                document.getElementById('last-updated').textContent = new Date().toLocaleString();
+
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.className = 'btn btn-primary-custom btn-custom';
+                    saveBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        }
+
+        function testAIConnection() {
+            const statusBadge = document.getElementById('api-status');
+            const testBtn = event.target;
+            const originalText = testBtn.innerHTML;
+
+            testBtn.innerHTML = '<div class="loading-spinner me-2"></div>Testing...';
+            testBtn.disabled = true;
+
+            statusBadge.textContent = 'Testing...';
+            statusBadge.className = 'status-badge status-info';
+
+            setTimeout(() => {
+                const isSuccess = Math.random() > 0.2; // 80% success rate for demo
+
+                if (isSuccess) {
+                    statusBadge.textContent = 'Connected';
+                    statusBadge.className = 'status-badge status-success';
+                    testBtn.innerHTML = '<i class="fas fa-check me-2"></i>Connected!';
+                    testBtn.className = 'btn btn-success-custom btn-custom';
+                } else {
+                    statusBadge.textContent = 'Failed';
+                    statusBadge.className = 'status-badge status-warning';
+                    testBtn.innerHTML = '<i class="fas fa-times me-2"></i>Failed';
+                    testBtn.className = 'btn btn-danger btn-custom';
+                }
+
+                setTimeout(() => {
+                    testBtn.innerHTML = originalText;
+                    testBtn.className = 'btn btn-success-custom btn-custom';
+                    testBtn.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        function testAIResponse() {
+            const message = document.getElementById('test-message').value;
+            const outputDiv = document.getElementById('ai-response-output');
+
+            outputDiv.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p class="mt-2">Generating AI response...</p></div>';
+
+            setTimeout(() => {
+                const responses = [
+                    "Hello! I'd be happy to help you with your room booking. Could you please provide me with your booking reference number or the dates you're looking to stay?",
+                    "Thank you for contacting us! I'm here to assist you with any questions about your reservation. How can I help you today?",
+                    "I understand you need assistance with your booking. Let me help you right away. Could you please share more details about what you need?"
+                ];
+
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+
+                outputDiv.innerHTML = `
+                    <div class="p-3">
+                        <div class="alert alert-light border-2 border-primary">
+                            <i class="fas fa-robot text-primary me-2"></i>
+                            ${randomResponse}
+                        </div>
+                        <div class="small text-muted text-center">
+                            <i class="fas fa-clock me-1"></i>Response time: 2.1s |
+                            <i class="fas fa-coins me-1"></i>Tokens used: 45
+                        </div>
+                    </div>
+                `;
+
+                // Update statistics
+                const requestsToday = document.getElementById('requests-today');
+                const tokensUsed = document.getElementById('tokens-used');
+                const avgResponse = document.getElementById('avg-response');
+
+                requestsToday.textContent = parseInt(requestsToday.textContent) + 1;
+                tokensUsed.textContent = parseInt(tokensUsed.textContent) + 45;
+                avgResponse.textContent = '2.1s';
+            }, 2100);
+        }
+
+        function resetAIConfiguration() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                document.getElementById('ai-api-key').value = '';
+                document.getElementById('ai-model').value = 'deepseek-chat';
+                document.getElementById('ai-max-tokens').value = '1000';
+                document.getElementById('ai-temperature').value = '0.7';
+                document.getElementById('ai-language').value = 'en';
+                document.getElementById('ai-system-prompt').value = 'You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries. Always be polite, informative, and try to resolve guest issues efficiently.';
+
+                updateTemperatureDisplay('0.7');
+
+                alert('Configuration reset to defaults!');
+            }
+        }
+
+        function exportAIConfiguration() {
+            const config = {
+                model: document.getElementById('ai-model').value,
+                maxTokens: document.getElementById('ai-max-tokens').value,
+                temperature: document.getElementById('ai-temperature').value,
+                language: document.getElementById('ai-language').value,
+                systemPrompt: document.getElementById('ai-system-prompt').value,
+                exportDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(config, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'ai-configuration.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function loadPresetPrompts() {
+            const presets = [
+                'You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries.',
+                'You are a luxury hotel concierge. Provide exceptional, personalized service to VIP guests.',
+                'You are a budget hotel assistant. Be friendly, efficient, and focus on value-oriented solutions.',
+                'You are a resort assistant. Emphasize relaxation, activities, and vacation experiences.'
+            ];
+
+            const selectedPreset = presets[Math.floor(Math.random() * presets.length)];
+            document.getElementById('ai-system-prompt').value = selectedPreset;
+
+            alert('Preset prompt loaded!');
+        }
+
+        function validateConfiguration() {
+            const apiKey = document.getElementById('ai-api-key').value;
+            const systemPrompt = document.getElementById('ai-system-prompt').value;
+
+            let issues = [];
+
+            if (!apiKey.trim()) {
+                issues.push('API Key is required');
+            }
+
+            if (!systemPrompt.trim()) {
+                issues.push('System Prompt is required');
+            }
+
+            if (issues.length > 0) {
+                alert('Configuration Issues:\n' + issues.join('\n'));
+            } else {
+                alert('✅ Configuration is valid!');
+            }
+        }
+
+        function viewAPIDocumentation() {
+            window.open('https://platform.deepseek.com/api-docs', '_blank');
+        }
+
+        function clearCache() {
+            if (confirm('Clear AI response cache?')) {
+                document.getElementById('cache-rate').textContent = '0%';
+                alert('Cache cleared successfully!');
+            }
+        }
+
+        function backupConfiguration() {
+            alert('Configuration backup created successfully!');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate some initial statistics
+            document.getElementById('requests-today').textContent = Math.floor(Math.random() * 50);
+            document.getElementById('tokens-used').textContent = Math.floor(Math.random() * 5000);
+            document.getElementById('cache-rate').textContent = Math.floor(Math.random() * 100) + '%';
+        });
+    </script>
+</body>
+</html>

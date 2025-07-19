@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional
 from sqlalchemy import Column, String, DateTime, Index, ForeignKey, Enum as SQLEnum, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID, INET
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 import enum
 
@@ -119,7 +120,7 @@ class AdminAuditLog(BaseModel, TimestampMixin):
     
     # Request information
     ip_address = Column(
-        INET,
+        String(45),  # IPv6 addresses can be up to 45 characters
         nullable=True,
         comment="IP address of the request"
     )
@@ -145,20 +146,20 @@ class AdminAuditLog(BaseModel, TimestampMixin):
     
     # Data changes
     old_values = Column(
-        JSONB,
+        JSON,
         nullable=True,
         comment="Previous values before the change"
     )
     
     new_values = Column(
-        JSONB,
+        JSON,
         nullable=True,
         comment="New values after the change"
     )
     
     # Additional context
     audit_metadata = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         comment="Additional metadata about the action"

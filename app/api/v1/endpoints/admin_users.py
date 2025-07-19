@@ -35,7 +35,7 @@ def require_permission(permission: AdminPermission):
         current_user = Depends(get_current_admin_user)
     ):
         try:
-        user_service = userService(db)
+            user_service = userService(db)
             AdminSecurity.validate_admin_access(current_user, permission)
             return current_user
         except AdminAuthorizationError as e:

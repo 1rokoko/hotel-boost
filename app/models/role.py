@@ -8,7 +8,8 @@ This module defines user roles and permissions for the general user system
 import enum
 from typing import List, Dict, Any
 from sqlalchemy import Column, String, Index, Enum as SQLEnum
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import validates
 
 from app.models.base import BaseModel, TimestampMixin
@@ -81,7 +82,7 @@ class Role(BaseModel, TimestampMixin):
     
     # Permissions
     permissions = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=list,
         comment="List of permissions for this role"
@@ -104,7 +105,7 @@ class Role(BaseModel, TimestampMixin):
     
     # Additional metadata
     role_metadata = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         comment="Additional role metadata"

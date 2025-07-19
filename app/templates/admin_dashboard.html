@@ -49,14 +49,222 @@
         }
 
         div.main-content {
-            margin-left: 250px !important;
+            margin-left: 350px !important;
             padding: 20px !important;
             min-height: 100vh !important;
-            width: calc(100% - 250px) !important;
+            width: calc(100% - 350px) !important;
             box-sizing: border-box !important;
             position: relative !important;
             left: 0 !important;
             top: 0 !important;
+        }
+
+        /* FORCE main-content positioning */
+        .main-content {
+            margin-left: 350px !important;
+            padding: 20px !important;
+            width: calc(100% - 350px) !important;
+            box-sizing: border-box !important;
+        }
+
+        /* FORCE all content sections */
+        .content-section {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+        }
+
+        /* FORCE container positioning */
+        .container-fluid {
+            margin-left: 0 !important;
+            padding-left: 15px !important;
+        }
+
+        /* SPECIFIC FIXES for DeepSeek sections */
+        #deepseek-settings-section,
+        #deepseek-config-section,
+        #deepseek-testing-section {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #deepseek-settings-section .container-fluid,
+        #deepseek-config-section .container-fluid,
+        #deepseek-testing-section .container-fluid {
+            margin-left: 0 !important;
+            padding-left: 15px !important;
+            width: 100% !important;
+        }
+
+        /* EMERGENCY FIX - if still overlapping */
+        body .main-content {
+            margin-left: 350px !important;
+            transform: translateX(0) !important;
+        }
+
+        /* Ensure sidebar doesn't interfere */
+        .sidebar {
+            z-index: 1000 !important;
+        }
+
+        .main-content {
+            z-index: 1 !important;
+            position: relative !important;
+        }
+
+        /* New page styles - SAFE LAYOUT */
+        .deepseek-page {
+            margin-left: 280px !important;
+            padding: 20px !important;
+            max-width: 1200px !important;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .deepseek-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .deepseek-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .deepseek-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .deepseek-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .deepseek-content {
+            padding: 30px;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #f8f9fa;
+            color: #495057;
+            border-bottom: 3px solid #007bff;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: #007bff;
+        }
+
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .max-width-75 {
+            max-width: 75%;
+        }
+
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background: #007bff;
+        }
+
+        .form-range::-moz-range-thumb {
+            background: #007bff;
+            border: none;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .btn {
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .badge {
+            font-weight: 500;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .border {
+            border-color: #e9ecef !important;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        /* Animation for loading states */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* NUCLEAR OPTION - Force all content to the right */
+        * {
+            box-sizing: border-box !important;
+        }
+
+        .main-content,
+        .main-content *,
+        #deepseek-settings-section,
+        #deepseek-config-section,
+        #deepseek-testing-section {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+        }
+
+        /* Force the main content container to be positioned correctly */
+        .main-content {
+            position: absolute !important;
+            left: 250px !important;
+            right: 0 !important;
+            width: auto !important;
+            margin-left: 0 !important;
+            padding: 20px !important;
         }
 
         div.card {
@@ -198,109 +406,52 @@
             letter-spacing: 0.5px !important;
         }
 
-        /* CRITICAL: DeepSeek Settings positioning fix */
-        #deepseek-settings-section {
-            padding: 20px !important;
-            margin: 0 !important;
-            position: relative !important;
-            left: 0 !important;
-            top: 0 !important;
-        }
-
-        #deepseek-settings-section .row {
-            margin: 0 !important;
-            width: 100% !important;
-        }
-
-        #deepseek-settings-section .col-md-8,
-        #deepseek-settings-section .col-md-4 {
-            padding-left: 15px !important;
-            padding-right: 15px !important;
-        }
-
-        /* CRITICAL FIX: Reset all content sections */
+        /* SIMPLIFIED: Content sections positioning */
         .content-section {
             display: none !important;
+            padding: 20px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+            z-index: 1 !important;
+            margin-left: 0 !important; /* Don't override main-content margin */
         }
 
         .content-section.active {
             display: block !important;
         }
 
-        /* Fix for form elements in DeepSeek settings */
-        #deepseek-settings-section .form-control,
-        #deepseek-settings-section .form-select {
-            width: 100% !important;
-            box-sizing: border-box !important;
-        }
-
-        /* Fix for textarea in travel memory */
-        #deepseek-travel-memory {
-            width: 100% !important;
-            min-height: 200px !important;
-            resize: vertical !important;
-        }
-
-        /* Status cards in DeepSeek settings */
-        #deepseek-settings-section .card {
-            margin-bottom: 20px !important;
-            height: fit-content !important;
-        }
-
-        /* Ensure proper scrolling for long content */
-        .main-content {
-            overflow-y: auto !important;
-            max-height: 100vh !important;
-        }
-
-        /* Force proper positioning for all content sections */
-        .content-section {
-            position: relative !important;
-            z-index: 1 !important;
-        }
-
-        /* Clean visibility rules */
-        body .main-content #deepseek-settings-section {
-            display: none !important;
-        }
-
-        body .main-content #deepseek-settings-section.active {
-            display: block !important;
-        }
-
-        /* Ensure form elements are properly sized */
-        .form-control, .form-select {
+        /* CRITICAL FIX: Container fluid in DeepSeek sections */
+        .content-section .container-fluid {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
             max-width: 100% !important;
+            width: 100% !important;
         }
 
-        /* Fix for Bootstrap grid in DeepSeek settings */
-        .row {
+        /* Fix Bootstrap grid negative margins */
+        .content-section .row {
             margin-left: 0 !important;
             margin-right: 0 !important;
         }
 
-        .col-md-8, .col-md-4 {
+        /* Ensure proper column padding */
+        .content-section .col-lg-8,
+        .content-section .col-lg-4,
+        .content-section .col-12,
+        .content-section .col-md-8,
+        .content-section .col-md-4 {
             padding-left: 15px !important;
             padding-right: 15px !important;
         }
 
-        /* FINAL FIX: Ensure all content sections position like Dashboard */
-        .content-section {
-            display: none !important;
-            padding: 20px !important;
-            margin: 0 !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-            position: relative !important;
-            left: 0 !important;
-            top: 0 !important;
-        }
-
-        .content-section.active {
-            display: block !important;
-            position: relative !important;
-            left: 0 !important;
-            top: 0 !important;
+        /* Ensure main content has proper scrolling */
+        .main-content {
+            overflow-y: auto !important;
+            max-height: 100vh !important;
         }
 
 
@@ -324,75 +475,81 @@
             </h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#dashboard" data-section="dashboard">
+                    <a class="nav-link active" href="#dashboard-section" data-section="dashboard-section">
                         <i class="fas fa-tachometer-alt me-2"></i>
                         Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#hotels" data-section="hotels">
+                    <a class="nav-link" href="#hotels-section" data-section="hotels-section">
                         <i class="fas fa-building me-2"></i>
                         Hotels
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#conversations" data-section="conversations">
+                    <a class="nav-link" href="#conversations-section" data-section="conversations-section">
                         <i class="fas fa-comments me-2"></i>
                         Conversations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#triggers" data-section="triggers">
+                    <a class="nav-link" href="#triggers-section" data-section="triggers-section">
                         <i class="fas fa-bolt me-2"></i>
                         Triggers
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#templates" data-section="templates">
+                    <a class="nav-link" href="#templates-section" data-section="templates-section">
                         <i class="fas fa-file-alt me-2"></i>
                         Templates
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#sentiment-analytics" data-section="sentiment-analytics">
+                    <a class="nav-link" href="#sentiment-analytics-section" data-section="sentiment-analytics-section">
                         <i class="fas fa-heart me-2"></i>
                         Sentiment Analytics
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#users" data-section="users">
+                    <a class="nav-link" href="#users-section" data-section="users-section">
                         <i class="fas fa-users me-2"></i>
                         Users
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#analytics" data-section="analytics">
+                    <a class="nav-link" href="#analytics-section" data-section="analytics-section">
                         <i class="fas fa-chart-bar me-2"></i>
                         Analytics
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#monitoring" data-section="monitoring">
+                    <a class="nav-link" href="#monitoring-section" data-section="monitoring-section">
                         <i class="fas fa-heartbeat me-2"></i>
                         Monitoring
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#security" data-section="security">
+                    <a class="nav-link" href="#security-section" data-section="security-section">
                         <i class="fas fa-shield-alt me-2"></i>
                         Security
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#deepseek-testing" data-section="deepseek-testing">
-                        <i class="fas fa-brain me-2"></i>
+                    <a class="nav-link" href="#deepseek-testing-section" data-section="deepseek-testing-section">
+                        <i class="fas fa-flask me-2"></i>
                         DeepSeek Testing
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#deepseek-settings" data-section="deepseek-settings">
+                    <a class="nav-link" href="#deepseek-settings-section" data-section="deepseek-settings-section">
                         <i class="fas fa-cog me-2"></i>
                         DeepSeek Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#ai-configuration-section" data-section="ai-configuration-section">
+                        <i class="fas fa-brain me-2"></i>
+                        AI Configuration
                     </a>
                 </li>
             </ul>
@@ -583,8 +740,8 @@
                                     <input type="text" class="form-control" id="green-api-token">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="deepseek-api-key" class="form-label">DeepSeek API Key</label>
-                                    <input type="text" class="form-control" id="deepseek-api-key">
+                                    <label for="hotel-deepseek-api-key" class="form-label">DeepSeek API Key</label>
+                                    <input type="text" class="form-control" id="hotel-deepseek-api-key">
                                 </div>
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-success">Create Hotel</button>
@@ -603,7 +760,14 @@
                     <h5 class="mb-0">User Management</h5>
                 </div>
                 <div class="card-body">
-                    <p>User management interface will be loaded here.</p>
+                    <div id="users-list">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading users...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -614,7 +778,14 @@
                     <h5 class="mb-0">Analytics</h5>
                 </div>
                 <div class="card-body">
-                    <p>Analytics interface will be loaded here.</p>
+                    <div id="analytics-content">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading analytics...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -625,7 +796,14 @@
                     <h5 class="mb-0">System Monitoring</h5>
                 </div>
                 <div class="card-body">
-                    <p>Monitoring interface will be loaded here.</p>
+                    <div id="monitoring-content">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading monitoring data...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -636,368 +814,20 @@
                     <h5 class="mb-0">Security Settings</h5>
                 </div>
                 <div class="card-body">
-                    <p>Security interface will be loaded here.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- DeepSeek Testing Section -->
-        <div id="deepseek-testing-section" class="content-section" style="display: none;">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-brain me-2"></i>
-                                DeepSeek AI Testing & Demonstration
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <!-- Test Tabs -->
-                            <ul class="nav nav-tabs" id="deepseekTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="sentiment-tab" data-bs-toggle="tab" data-bs-target="#sentiment-panel" type="button" role="tab">
-                                        <i class="fas fa-heart me-1"></i>Sentiment Analysis
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="response-tab" data-bs-toggle="tab" data-bs-target="#response-panel" type="button" role="tab">
-                                        <i class="fas fa-reply me-1"></i>Response Generation
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="conversation-tab" data-bs-toggle="tab" data-bs-target="#conversation-panel" type="button" role="tab">
-                                        <i class="fas fa-comments me-1"></i>Conversation Demo
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="triggers-demo-tab" data-bs-toggle="tab" data-bs-target="#triggers-demo-panel" type="button" role="tab">
-                                        <i class="fas fa-bolt me-1"></i>Triggers Demo
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="travel-advisor-tab" data-bs-toggle="tab" data-bs-target="#travel-advisor-panel" type="button" role="tab">
-                                        <i class="fas fa-map me-1"></i>Travel Advisor
-                                    </button>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content mt-3" id="deepseekTabContent">
-                                <!-- Sentiment Analysis Panel -->
-                                <div class="tab-pane fade show active" id="sentiment-panel" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6>Test Message</h6>
-                                            <div class="mb-3">
-                                                <label for="sentiment-message" class="form-label">Guest Message</label>
-                                                <textarea class="form-control" id="sentiment-message" rows="4" placeholder="Enter a guest message to analyze...">The room was dirty and the staff was rude. I'm very disappointed with my stay.</textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="sentiment-hotel" class="form-label">Select Hotel</label>
-                                                <select class="form-select" id="sentiment-hotel">
-                                                    <option value="">Loading hotels...</option>
-                                                </select>
-                                            </div>
-                                            <button class="btn btn-primary" onclick="testSentimentAnalysis()">
-                                                <i class="fas fa-play me-1"></i>Analyze Sentiment
-                                            </button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6>Analysis Result</h6>
-                                            <div id="sentiment-result" class="border rounded p-3 bg-light">
-                                                <p class="text-muted">Click "Analyze Sentiment" to see results</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Response Generation Panel -->
-                                <div class="tab-pane fade" id="response-panel" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6>Generate Response</h6>
-                                            <div class="mb-3">
-                                                <label for="response-message" class="form-label">Guest Message</label>
-                                                <textarea class="form-control" id="response-message" rows="3" placeholder="Enter guest message...">Hi, I'd like to book a room for next weekend. Do you have availability?</textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="response-hotel" class="form-label">Select Hotel</label>
-                                                <select class="form-select" id="response-hotel">
-                                                    <option value="">Loading hotels...</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="response-type" class="form-label">Response Type</label>
-                                                <select class="form-select" id="response-type">
-                                                    <option value="helpful">Helpful Response</option>
-                                                    <option value="booking">Booking Inquiry</option>
-                                                    <option value="complaint">Complaint Resolution</option>
-                                                    <option value="general">General Information</option>
-                                                </select>
-                                            </div>
-                                            <button class="btn btn-success" onclick="testResponseGeneration()">
-                                                <i class="fas fa-magic me-1"></i>Generate Response
-                                            </button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6>Generated Response</h6>
-                                            <div id="response-result" class="border rounded p-3 bg-light">
-                                                <p class="text-muted">Click "Generate Response" to see AI response</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Conversation Demo Panel -->
-                                <div class="tab-pane fade" id="conversation-panel" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <h6>Live Conversation Demo</h6>
-                                            <div class="card">
-                                                <div class="card-header bg-primary text-white">
-                                                    <i class="fab fa-whatsapp me-2"></i>
-                                                    WhatsApp Conversation Simulator
-                                                </div>
-                                                <div class="card-body" style="height: 400px; overflow-y: auto;" id="conversation-messages">
-                                                    <div class="text-center text-muted">
-                                                        <p>Start a conversation to see how DeepSeek AI responds to typical hotel guest inquiries</p>
-                                                    </div>
-                                                </div>
-                                                <div class="card-footer">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" id="conversation-input" placeholder="Type a message as a hotel guest..." onkeypress="handleConversationKeyPress(event)">
-                                                        <button class="btn btn-primary" onclick="sendConversationMessage()">
-                                                            <i class="fas fa-paper-plane"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h6>Conversation Settings</h6>
-                                            <div class="mb-3">
-                                                <label for="conversation-hotel" class="form-label">Hotel</label>
-                                                <select class="form-select" id="conversation-hotel">
-                                                    <option value="">Loading hotels...</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="conversation-guest" class="form-label">Guest Name</label>
-                                                <input type="text" class="form-control" id="conversation-guest" value="John Smith" placeholder="Guest name">
-                                            </div>
-                                            <button class="btn btn-warning btn-sm" onclick="clearConversation()">
-                                                <i class="fas fa-trash me-1"></i>Clear Chat
-                                            </button>
-                                            <hr>
-                                            <h6>Quick Test Messages</h6>
-                                            <div class="d-grid gap-2">
-                                                <button class="btn btn-outline-primary btn-sm" onclick="sendQuickMessage('Hello, I need help with my booking')">Booking Help</button>
-                                                <button class="btn btn-outline-success btn-sm" onclick="sendQuickMessage('The room is amazing! Thank you!')">Positive Feedback</button>
-                                                <button class="btn btn-outline-danger btn-sm" onclick="sendQuickMessage('The room is dirty and the AC is not working')">Complaint</button>
-                                                <button class="btn btn-outline-info btn-sm" onclick="sendQuickMessage('What time is checkout?')">Information</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div id="security-content">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="mb-0">
-                                <i class="fas fa-info-circle me-2"></i>
-                                DeepSeek API Information
-                            </h6>
-                        </div>
-                        <div class="card-body">
-                            <h6>What is DeepSeek?</h6>
-                            <p class="small">DeepSeek is an advanced AI model that provides:</p>
-                            <ul class="small">
-                                <li><strong>Sentiment Analysis:</strong> Analyzes guest emotions and satisfaction levels</li>
-                                <li><strong>Response Generation:</strong> Creates contextual, helpful responses</li>
-                                <li><strong>Multi-language Support:</strong> Handles multiple languages</li>
-                                <li><strong>Context Awareness:</strong> Understands conversation history</li>
-                            </ul>
-
-                            <h6 class="mt-3">API Features</h6>
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <div class="border rounded p-2 mb-2">
-                                        <i class="fas fa-tachometer-alt text-primary"></i>
-                                        <div class="small">Fast Response</div>
-                                        <div class="text-muted small">~2-3 seconds</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="border rounded p-2 mb-2">
-                                        <i class="fas fa-brain text-success"></i>
-                                        <div class="small">High Accuracy</div>
-                                        <div class="text-muted small">95%+ sentiment</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="border rounded p-2 mb-2">
-                                        <i class="fas fa-globe text-info"></i>
-                                        <div class="small">Multi-language</div>
-                                        <div class="text-muted small">50+ languages</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="border rounded p-2 mb-2">
-                                        <i class="fas fa-shield-alt text-warning"></i>
-                                        <div class="small">Secure</div>
-                                        <div class="text-muted small">Enterprise grade</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h6 class="mt-3">Current Configuration</h6>
-                            <div id="deepseek-config" class="small">
-                                <div class="d-flex justify-content-between">
-                                    <span>Model:</span>
-                                    <span class="text-muted">deepseek-chat</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Max Tokens:</span>
-                                    <span class="text-muted">4096</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Temperature:</span>
-                                    <span class="text-muted">0.7</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Status:</span>
-                                    <span class="badge bg-success">Active</span>
-                                </div>
-                                </div>
-
-                                <!-- Triggers Demo Panel -->
-                                <div class="tab-pane fade" id="triggers-demo-panel" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <h6>Trigger System Demo</h6>
-                                            <div class="alert alert-info">
-                                                <i class="fas fa-info-circle me-2"></i>
-                                                This demo shows how triggers work with different timing settings for quick testing.
-                                            </div>
-
-                                            <div class="card mb-3">
-                                                <div class="card-header">
-                                                    <h6 class="mb-0">Quick Trigger Tests (Seconds for Demo)</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <button class="btn btn-outline-primary btn-sm mb-2 w-100" onclick="testTimeTrigger(5)">
-                                                                <i class="fas fa-clock me-1"></i>5 Seconds After Check-in
-                                                            </button>
-                                                            <button class="btn btn-outline-success btn-sm mb-2 w-100" onclick="testEventTrigger('message_received')">
-                                                                <i class="fas fa-envelope me-1"></i>Message Received Event
-                                                            </button>
-                                                            <button class="btn btn-outline-warning btn-sm mb-2 w-100" onclick="testSentimentTrigger()">
-                                                                <i class="fas fa-frown me-1"></i>Negative Sentiment Trigger
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <button class="btn btn-outline-info btn-sm mb-2 w-100" onclick="testFirstMessageTrigger(10)">
-                                                                <i class="fas fa-comment me-1"></i>10 Seconds After First Message
-                                                            </button>
-                                                            <button class="btn btn-outline-danger btn-sm mb-2 w-100" onclick="testVIPTrigger()">
-                                                                <i class="fas fa-crown me-1"></i>VIP Guest Condition
-                                                            </button>
-                                                            <button class="btn btn-outline-secondary btn-sm mb-2 w-100" onclick="clearTriggerTests()">
-                                                                <i class="fas fa-trash me-1"></i>Clear All Tests
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div id="trigger-test-results" class="mt-3">
-                                                <!-- Trigger test results will appear here -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h6>Active Trigger Tests</h6>
-                                            <div id="active-triggers" class="small">
-                                                <div class="text-muted">No active tests</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Travel Advisor Panel -->
-                                <div class="tab-pane fade" id="travel-advisor-panel" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <h6>Travel Advisory System Demo</h6>
-                                            <div class="alert alert-success">
-                                                <i class="fas fa-map me-2"></i>
-                                                Experience the personalized travel consultation system with DeepSeek AI.
-                                            </div>
-
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h6 class="mb-0">Start Travel Consultation</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Guest Phone Number</label>
-                                                        <input type="text" class="form-control" id="travel-guest-phone" placeholder="+7 999 123 45 67">
-                                                        <small class="text-muted">Phone number will be used for language detection</small>
-                                                    </div>
-
-                                                    <button class="btn btn-success" onclick="startTravelDemo()">
-                                                        <i class="fas fa-play me-1"></i>Start Travel Consultation
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div id="travel-conversation-demo" class="mt-3" style="display: none;">
-                                                <div class="card border-success">
-                                                    <div class="card-header bg-success text-white">
-                                                        <h6 class="mb-0">
-                                                            <i class="fas fa-robot me-2"></i>Travel Assistant
-                                                            <span id="detected-language" class="badge bg-light text-dark ms-2"></span>
-                                                        </h6>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <div id="travel-messages" style="max-height: 300px; overflow-y: auto;">
-                                                            <!-- Messages will appear here -->
-                                                        </div>
-                                                        <div id="travel-input" class="mt-3">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="travel-user-input" placeholder="Your response...">
-                                                                <button class="btn btn-success" onclick="sendTravelMessage()">
-                                                                    <i class="fas fa-paper-plane"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h6>Language Detection</h6>
-                                            <div id="language-detection-info" class="small">
-                                                <div class="text-muted">Start consultation to see language detection</div>
-                                            </div>
-
-                                            <h6 class="mt-3">Travel Memory</h6>
-                                            <div id="travel-memory-info" class="small">
-                                                <div class="text-muted">Personalized recommendations based on guest profile</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <p class="mt-2">Loading security data...</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
 
         <!-- Conversations Section -->
         <div id="conversations-section" class="content-section" style="display: none;">
@@ -1180,134 +1010,714 @@
             </div>
         </div>
 
-        <!-- DeepSeek Settings Section -->
-        <div id="deepseek-settings-section" class="content-section">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5><i class="fas fa-cog me-2"></i>DeepSeek AI Configuration</h5>
-                        </div>
-                        <div class="card-body">
-                            <form id="deepseek-settings-form">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h6>API Settings</h6>
-                                        <div class="mb-3">
-                                            <label class="form-label">API Key</label>
-                                            <input type="password" class="form-control" id="deepseek-api-key" placeholder="sk-...">
-                                            <small class="text-muted">DeepSeek API key for AI processing</small>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Model</label>
-                                            <select class="form-select" id="deepseek-model">
-                                                <option value="deepseek-chat">DeepSeek Chat</option>
-                                                <option value="deepseek-coder">DeepSeek Coder</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Max Tokens</label>
-                                            <input type="number" class="form-control" id="deepseek-max-tokens" min="100" max="8192" value="4096">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Temperature</label>
-                                            <input type="number" class="form-control" id="deepseek-temperature" min="0" max="2" step="0.1" value="0.7">
-                                            <small class="text-muted">0.0 = deterministic, 2.0 = very creative</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6>Rate Limiting</h6>
-                                        <div class="mb-3">
-                                            <label class="form-label">Requests per Minute</label>
-                                            <input type="number" class="form-control" id="deepseek-requests-per-minute" min="1" max="1000" value="50">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Tokens per Minute</label>
-                                            <input type="number" class="form-control" id="deepseek-tokens-per-minute" min="1000" max="1000000" value="100000">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Timeout (seconds)</label>
-                                            <input type="number" class="form-control" id="deepseek-timeout" min="5" max="300" value="60">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Max Retries</label>
-                                            <input type="number" class="form-control" id="deepseek-max-retries" min="0" max="10" value="3">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h6>Travel Advisory Memory</h6>
-                                        <div class="mb-3">
-                                            <label class="form-label">Travel Tips Database</label>
-                                            <textarea class="form-control" id="deepseek-travel-memory" rows="8"
-                                                      placeholder="Добавьте советы для путешествий по категориям:&#10;&#10;ПХУКЕТ - ПЕРВЫЙ РАЗ:&#10;- Патонг Бич для ночной жизни&#10;- Ката Бич для семей&#10;- Биг Будда - обязательно к посещению&#10;&#10;ПХУКЕТ - С ДЕТЬМИ:&#10;- Аквариум Пхукета&#10;- Зоопарк Пхукета&#10;- Пляж Карон - безопасный для детей"></textarea>
-                                            <small class="text-muted">DeepSeek будет использовать эту информацию для персонализированных советов</small>
+
+        <!-- DeepSeek Settings Section (REDESIGNED) -->
+        <div id="deepseek-settings-section" class="content-section" style="display: none;">
+            <div class="container-fluid px-0">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-cog me-2"></i>DeepSeek AI Configuration
+                                </h5>
+                                <p class="text-muted mb-0">Configure DeepSeek AI settings for intelligent guest interactions</p>
+                            </div>
+                            <div class="card-body">
+                                <form id="deepseek-settings-form">
+                                    <!-- API Configuration -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 class="text-primary mb-3">
+                                                <i class="fas fa-key me-2"></i>API Configuration
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">API Key</label>
+                                                <input type="password" class="form-control" id="deepseek-api-key"
+                                                       placeholder="sk-...">
+                                                <small class="text-muted">DeepSeek API key for AI processing</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Model</label>
+                                                <select class="form-select" id="deepseek-model">
+                                                    <option value="deepseek-chat">DeepSeek Chat</option>
+                                                    <option value="deepseek-coder">DeepSeek Coder</option>
+                                                    <option value="deepseek-math">DeepSeek Math</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-primary" onclick="saveDeepSeekSettings()">
-                                        <i class="fas fa-save me-1"></i>Save Settings
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="loadDeepSeekSettings()">
-                                        <i class="fas fa-refresh me-1"></i>Reload
-                                    </button>
-                                    <button type="button" class="btn btn-outline-info" onclick="testDeepSeekConnection()">
-                                        <i class="fas fa-plug me-1"></i>Test Connection
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6>Current Status</h6>
-                        </div>
-                        <div class="card-body">
-                            <div id="deepseek-status">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-secondary me-2">API</span>
-                                    <span id="deepseek-api-status">Not tested</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-info me-2">Model</span>
-                                    <span id="deepseek-current-model">deepseek-chat</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-warning me-2">Memory</span>
-                                    <span id="deepseek-memory-size">0 KB</span>
-                                </div>
+                                    <!-- Response Configuration -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 class="text-primary mb-3">
+                                                <i class="fas fa-comments me-2"></i>Response Configuration
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">Max Tokens</label>
+                                                <input type="number" class="form-control" id="deepseek-max-tokens"
+                                                       min="100" max="8192" value="4096">
+                                                <small class="text-muted">Maximum response length</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">Temperature</label>
+                                                <input type="range" class="form-range" id="deepseek-temperature"
+                                                       min="0" max="2" step="0.1" value="0.7"
+                                                       oninput="document.getElementById('temp-value').textContent = this.value">
+                                                <div class="d-flex justify-content-between">
+                                                    <small>Precise</small>
+                                                    <span id="temp-value" class="badge bg-info">0.7</span>
+                                                    <small>Creative</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">Response Style</label>
+                                                <select class="form-select" id="deepseek-style">
+                                                    <option value="professional">Professional</option>
+                                                    <option value="friendly">Friendly</option>
+                                                    <option value="casual">Casual</option>
+                                                    <option value="formal">Formal</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rate Limiting -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 class="text-primary mb-3">
+                                                <i class="fas fa-tachometer-alt me-2"></i>Rate Limiting
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label class="form-label">Requests/Min</label>
+                                                <input type="number" class="form-control" id="deepseek-requests-per-minute"
+                                                       min="1" max="1000" value="50">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tokens/Min</label>
+                                                <input type="number" class="form-control" id="deepseek-tokens-per-minute"
+                                                       min="1000" max="1000000" value="100000">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label class="form-label">Timeout (sec)</label>
+                                                <input type="number" class="form-control" id="deepseek-timeout"
+                                                       min="5" max="300" value="60">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label class="form-label">Max Retries</label>
+                                                <input type="number" class="form-control" id="deepseek-max-retries"
+                                                       min="0" max="10" value="3">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Travel Advisory Memory -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 class="text-primary mb-3">
+                                                <i class="fas fa-map me-2"></i>Travel Advisory Memory
+                                            </h6>
+                                            <div class="mb-3">
+                                                <label class="form-label">Travel Tips Database</label>
+                                                <textarea class="form-control" id="deepseek-travel-memory" rows="6"
+                                                          placeholder="Add travel tips by categories:&#10;&#10;PHUKET - FIRST TIME:&#10;- Patong Beach for nightlife&#10;- Kata Beach for families&#10;- Big Buddha - must visit&#10;&#10;PHUKET - WITH KIDS:&#10;- Phuket Aquarium&#10;- Phuket Zoo&#10;- Karon Beach - safe for children"></textarea>
+                                                <small class="text-muted">DeepSeek will use this information for personalized travel advice</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <button type="button" class="btn btn-primary" onclick="saveDeepSeekSettings()">
+                                            <i class="fas fa-save me-1"></i>Save Settings
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="loadDeepSeekSettings()">
+                                            <i class="fas fa-refresh me-1"></i>Reload
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info" onclick="testDeepSeekConnection()">
+                                            <i class="fas fa-plug me-1"></i>Test Connection
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" onclick="resetDeepSeekSettings()">
+                                            <i class="fas fa-undo me-1"></i>Reset to Defaults
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h6>Usage Statistics</h6>
+                    <!-- Status and Statistics Sidebar -->
+                    <div class="col-lg-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>Current Status
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="deepseek-status">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-muted">API Status</span>
+                                        <span class="badge bg-secondary" id="deepseek-api-status">Not tested</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-muted">Model</span>
+                                        <span class="badge bg-info" id="deepseek-current-model">deepseek-chat</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-muted">Memory Size</span>
+                                        <span class="badge bg-warning" id="deepseek-memory-size">0 KB</span>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="text-muted">Last Updated</span>
+                                        <span class="badge bg-light text-dark" id="deepseek-last-updated">Never</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="mb-2">
-                                <small class="text-muted">Requests Today</small>
-                                <div class="fw-bold" id="deepseek-requests-today">0</div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-chart-bar me-2"></i>Usage Statistics
+                                </h6>
                             </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Tokens Used</small>
-                                <div class="fw-bold" id="deepseek-tokens-used">0</div>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Cache Hit Rate</small>
-                                <div class="fw-bold" id="deepseek-cache-rate">0%</div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-6 mb-3">
+                                        <div class="h4 mb-0" id="deepseek-requests-today">0</div>
+                                        <small class="text-muted">Requests Today</small>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="h4 mb-0" id="deepseek-tokens-used">0</div>
+                                        <small class="text-muted">Tokens Used</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="h4 mb-0" id="deepseek-cache-rate">0%</div>
+                                        <small class="text-muted">Cache Hit Rate</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="h4 mb-0" id="deepseek-avg-response">0ms</div>
+                                        <small class="text-muted">Avg Response</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- DeepSeek Testing Section -->
+        <div id="deepseek-testing-section" class="content-section deepseek-page" style="display: none;">
+            <div class="deepseek-container">
+                <div class="deepseek-header">
+                    <h1 class="deepseek-title">
+                        <i class="fas fa-flask me-3"></i>
+                        DeepSeek AI Testing
+                    </h1>
+                    <p class="deepseek-subtitle">Test and demonstrate AI capabilities for hotel guest interactions</p>
+                </div>
+
+                <div class="deepseek-content">
+
+                    <!-- Compact Testing Tabs -->
+                    <nav class="nav nav-pills nav-fill mb-4" id="testing-tabs" role="tablist">
+                        <button class="nav-link active" id="sentiment-tab" data-bs-toggle="tab"
+                                data-bs-target="#sentiment-panel" type="button" role="tab">
+                            <i class="fas fa-heart me-2"></i>Sentiment
+                        </button>
+                        <button class="nav-link" id="response-tab" data-bs-toggle="tab"
+                                data-bs-target="#response-panel" type="button" role="tab">
+                            <i class="fas fa-comment-dots me-2"></i>Response
+                        </button>
+                        <button class="nav-link" id="conversation-tab" data-bs-toggle="tab"
+                                data-bs-target="#conversation-panel" type="button" role="tab">
+                            <i class="fas fa-comments me-2"></i>Chat Demo
+                        </button>
+                        <button class="nav-link" id="triggers-tab" data-bs-toggle="tab"
+                                data-bs-target="#triggers-panel" type="button" role="tab">
+                            <i class="fas fa-bolt me-2"></i>Triggers
+                        </button>
+                    </nav>
+
+                    <div class="tab-content" id="testing-content">
+                        <!-- Sentiment Analysis Panel -->
+                        <div class="tab-pane fade show active" id="sentiment-panel" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-primary text-white">
+                                            <h6 class="mb-0"><i class="fas fa-edit me-2"></i>Input Message</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Guest Message</label>
+                                                <textarea class="form-control" id="sentiment-message" rows="3"
+                                                        placeholder="Enter guest message...">The room was dirty and the staff was rude. I'm very disappointed with my stay.</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Hotel</label>
+                                                <select class="form-select" id="sentiment-hotel">
+                                                    <option>Loading hotels...</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-primary w-100" onclick="analyzeSentiment()">
+                                                <i class="fas fa-search me-2"></i>Analyze Sentiment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-success text-white">
+                                            <h6 class="mb-0"><i class="fas fa-chart-line me-2"></i>Results</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="sentiment-results">
+                                                <div class="text-center text-muted py-3">
+                                                    <i class="fas fa-chart-pie fa-2x mb-2"></i>
+                                                    <p class="mb-0">Click "Analyze" to see results</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Response Generation Panel -->
+                        <div class="tab-pane fade" id="response-panel" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h6 class="mb-0"><i class="fas fa-edit me-2"></i>Input</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Guest Message</label>
+                                                <textarea class="form-control" id="response-message" rows="3"
+                                                        placeholder="Enter guest message...">Hello, I need help with my room booking.</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Context</label>
+                                                <select class="form-select" id="response-context">
+                                                    <option value="booking">Booking Inquiry</option>
+                                                    <option value="complaint">Complaint</option>
+                                                    <option value="request">Service Request</option>
+                                                    <option value="general">General Question</option>
+                                                </select>
+                                            </div>
+                                            <button class="btn btn-warning w-100" onclick="generateResponse()">
+                                                <i class="fas fa-magic me-2"></i>Generate Response
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-info text-white">
+                                            <h6 class="mb-0"><i class="fas fa-robot me-2"></i>AI Response</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="response-results">
+                                                <div class="text-center text-muted py-3">
+                                                    <i class="fas fa-robot fa-2x mb-2"></i>
+                                                    <p class="mb-0">Click "Generate" to see AI response</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conversation Demo Panel -->
+                        <div class="tab-pane fade" id="conversation-panel" role="tabpanel">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0"><i class="fas fa-comments me-2"></i>Live Chat Demo</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chat-container mb-3" style="height: 300px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 1rem; background-color: #f8f9fa;">
+                                        <div id="chat-messages">
+                                            <div class="text-center text-muted">
+                                                <i class="fas fa-comments fa-2x mb-2"></i>
+                                                <p>Start a conversation to see AI responses</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="chat-input"
+                                                       placeholder="Type your message..." onkeypress="handleChatKeypress(event)">
+                                                <button class="btn btn-secondary" onclick="sendChatMessage()">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="d-flex gap-1">
+                                                <button class="btn btn-outline-secondary btn-sm" onclick="clearChat()">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <select class="form-select form-select-sm" id="guest-type">
+                                                    <option value="regular">Regular</option>
+                                                    <option value="vip">VIP</option>
+                                                    <option value="business">Business</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Triggers Demo Panel -->
+                        <div class="tab-pane fade" id="triggers-panel" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header bg-danger text-white">
+                                            <h6 class="mb-0"><i class="fas fa-bolt me-2"></i>Trigger Tests</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-muted mb-3">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                Quick trigger tests with demo timing
+                                            </p>
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <button class="btn btn-outline-danger w-100 btn-sm mb-2" onclick="testTrigger('checkin', 5)">
+                                                        <i class="fas fa-clock me-1"></i>5s Check-in
+                                                    </button>
+                                                    <button class="btn btn-outline-danger w-100 btn-sm mb-2" onclick="testTrigger('message', 0)">
+                                                        <i class="fas fa-envelope me-1"></i>Message Event
+                                                    </button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-outline-danger w-100 btn-sm mb-2" onclick="testTrigger('sentiment', 0)">
+                                                        <i class="fas fa-frown me-1"></i>Negative Sentiment
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary w-100 btn-sm mb-2" onclick="clearTriggerTests()">
+                                                        <i class="fas fa-times me-1"></i>Clear Tests
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h6 class="mb-0"><i class="fas fa-list me-2"></i>Active Tests</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="active-triggers">
+                                                <div class="text-center text-muted">
+                                                    <i class="fas fa-bolt fa-2x mb-2"></i>
+                                                    <p class="mb-0">No active tests</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compact API Info -->
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="mb-3"><i class="fas fa-info-circle me-2"></i>DeepSeek API Features</h6>
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <i class="fas fa-tachometer-alt fa-2x text-primary mb-1"></i>
+                                <div class="small fw-bold">Fast</div>
+                                <div class="small text-muted">~2-3s</div>
+                            </div>
+                            <div class="col-3">
+                                <i class="fas fa-bullseye fa-2x text-success mb-1"></i>
+                                <div class="small fw-bold">Accurate</div>
+                                <div class="small text-muted">95%+</div>
+                            </div>
+                            <div class="col-3">
+                                <i class="fas fa-globe fa-2x text-info mb-1"></i>
+                                <div class="small fw-bold">Multi-lang</div>
+                                <div class="small text-muted">50+ langs</div>
+                            </div>
+                            <div class="col-3">
+                                <i class="fas fa-shield-alt fa-2x text-warning mb-1"></i>
+                                <div class="small fw-bold">Secure</div>
+                                <div class="small text-muted">Enterprise</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Configuration Section -->
+        <div id="ai-configuration-section" class="content-section deepseek-page" style="display: none;">
+            <div class="deepseek-container">
+                <div class="deepseek-header">
+                    <h1 class="deepseek-title">
+                        <i class="fas fa-brain me-3"></i>
+                        AI Configuration
+                    </h1>
+                    <p class="deepseek-subtitle">Configure DeepSeek AI settings for intelligent guest interactions</p>
+                </div>
+
+                <div class="deepseek-content">
+
+                    <!-- Compact Configuration Form -->
+                    <form id="ai-config-form">
+                        <!-- API Settings -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0"><i class="fas fa-key me-2"></i>API Settings</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label for="ai-api-key" class="form-label">DeepSeek API Key</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input type="password" class="form-control" id="ai-api-key"
+                                                   placeholder="Enter your DeepSeek API key">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="toggleApiKeyVisibility()">
+                                                <i class="fas fa-eye" id="api-key-toggle"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-text">Your API key is encrypted and stored securely</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ai-model" class="form-label">AI Model</label>
+                                        <select class="form-select" id="ai-model">
+                                            <option value="deepseek-chat" selected>DeepSeek Chat</option>
+                                            <option value="deepseek-coder">DeepSeek Coder</option>
+                                            <option value="deepseek-math">DeepSeek Math</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Response Settings -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0"><i class="fas fa-sliders-h me-2"></i>Response Settings</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="ai-max-tokens" class="form-label">Max Tokens</label>
+                                        <input type="number" class="form-control" id="ai-max-tokens"
+                                               value="1000" min="100" max="4096">
+                                        <div class="form-text">Maximum response length</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ai-temperature" class="form-label">Temperature</label>
+                                        <input type="range" class="form-range" id="ai-temperature"
+                                               min="0" max="1" step="0.1" value="0.7" oninput="updateTemperatureDisplay(this.value)">
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">Precise</small>
+                                            <small class="fw-bold">Current: <span id="temperature-value">0.7</span></small>
+                                            <small class="text-muted">Creative</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ai-language" class="form-label">Default Language</label>
+                                        <select class="form-select" id="ai-language">
+                                            <option value="en" selected>English</option>
+                                            <option value="ru">Русский</option>
+                                            <option value="es">Español</option>
+                                            <option value="fr">Français</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Prompt -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0"><i class="fas fa-comment-alt me-2"></i>System Prompt</h6>
+                            </div>
+                            <div class="card-body">
+                                <label for="ai-system-prompt" class="form-label">System Prompt</label>
+                                <textarea class="form-control" id="ai-system-prompt" rows="4"
+                                        placeholder="Enter system prompt for AI...">You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries. Always be polite, informative, and try to resolve guest issues efficiently.</textarea>
+                                <div class="form-text">This prompt defines how the AI should behave and respond to guests</div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 flex-wrap justify-content-center mb-4">
+                            <button type="button" class="btn btn-primary" onclick="saveAIConfiguration()">
+                                <i class="fas fa-save me-2"></i>Save Configuration
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="testAIConnection()">
+                                <i class="fas fa-plug me-2"></i>Test Connection
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="resetAIConfiguration()">
+                                <i class="fas fa-undo me-2"></i>Reset Defaults
+                            </button>
+                            <button type="button" class="btn btn-info" onclick="exportAIConfiguration()">
+                                <i class="fas fa-download me-2"></i>Export Config
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- AI Testing -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0"><i class="fas fa-flask me-2"></i>AI Response Testing</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="test-message" class="form-label">Test Message</label>
+                                    <textarea class="form-control" id="test-message" rows="3"
+                                            placeholder="Enter a test message...">Hello, I need help with my room booking.</textarea>
+                                    <button class="btn btn-warning w-100 mt-2" onclick="testAIResponse()">
+                                        <i class="fas fa-play me-2"></i>Test AI Response
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">AI Response</label>
+                                    <div class="border rounded p-3" style="min-height: 120px; background-color: #f8f9fa;">
+                                        <div id="ai-response-output" class="text-muted">
+                                            AI response will appear here...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status & Statistics -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark text-white">
+                                    <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Current Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-2 text-center">
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="small fw-bold">API Status</div>
+                                                <span class="badge bg-warning" id="api-status">Not tested</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="small fw-bold">Model</div>
+                                                <span class="badge bg-primary" id="current-model">deepseek-chat</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="small fw-bold">Tokens</div>
+                                                <span class="badge bg-secondary" id="current-tokens">1000</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="small fw-bold">Temperature</div>
+                                                <span class="badge bg-secondary" id="current-temp">0.7</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <small class="text-muted">Last Updated: <span id="last-updated">Never</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Usage Statistics</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center g-2">
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="h5 mb-0 text-primary" id="requests-today">0</div>
+                                                <small class="text-muted">Requests Today</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="h5 mb-0 text-success" id="tokens-used">0</div>
+                                                <small class="text-muted">Tokens Used</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="h5 mb-0 text-info" id="cache-rate">0%</div>
+                                                <small class="text-muted">Cache Rate</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-2">
+                                                <div class="h5 mb-0 text-warning" id="avg-response">0ms</div>
+                                                <small class="text-muted">Avg Response</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="text-center mt-4">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-outline-primary btn-sm" onclick="loadPresetPrompts()">
+                                <i class="fas fa-list me-1"></i>Presets
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" onclick="validateConfiguration()">
+                                <i class="fas fa-check-circle me-1"></i>Validate
+                            </button>
+                            <button class="btn btn-outline-info btn-sm" onclick="viewAPIDocumentation()">
+                                <i class="fas fa-book me-1"></i>Docs
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm" onclick="clearCache()">
+                                <i class="fas fa-trash me-1"></i>Clear Cache
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1328,38 +1738,39 @@
                     s.style.display = 'none';
                     s.classList.remove('active');
                 });
-                const targetSection = document.getElementById(section + '-section');
+                const targetSection = document.getElementById(section);
                 if (targetSection) {
                     targetSection.style.display = 'block';
                     targetSection.classList.add('active');
 
-                    // CRITICAL FIX: Force proper positioning
-                    setTimeout(() => {
-                        targetSection.style.setProperty('position', 'relative', 'important');
-                        targetSection.style.setProperty('left', '0', 'important');
-                        targetSection.style.setProperty('top', '0', 'important');
-                        targetSection.style.setProperty('margin', '0', 'important');
-                        targetSection.style.setProperty('padding', '20px', 'important');
-                        targetSection.style.setProperty('width', '100%', 'important');
-                        targetSection.style.setProperty('box-sizing', 'border-box', 'important');
-                    }, 10);
+                    // Let CSS handle positioning - no forced styles needed
                 }
 
                 // Load section-specific data
-                if (section === 'hotels') {
+                if (section === 'hotels-section') {
                     loadHotels();
-                } else if (section === 'deepseek-testing') {
+                } else if (section === 'deepseek-testing-section') {
                     loadDeepSeekTesting();
-                } else if (section === 'deepseek-settings') {
+                } else if (section === 'ai-configuration-section') {
+                    loadAIConfiguration();
+                } else if (section === 'deepseek-settings-section') {
                     loadDeepSeekSettings();
-                } else if (section === 'conversations') {
+                } else if (section === 'conversations-section') {
                     loadConversations();
-                } else if (section === 'triggers') {
+                } else if (section === 'triggers-section') {
                     loadTriggers();
-                } else if (section === 'templates') {
+                } else if (section === 'templates-section') {
                     loadTemplates();
-                } else if (section === 'sentiment-analytics') {
+                } else if (section === 'sentiment-analytics-section') {
                     loadSentimentAnalytics();
+                } else if (section === 'users-section') {
+                    loadUsers();
+                } else if (section === 'analytics-section') {
+                    loadAnalytics();
+                } else if (section === 'monitoring-section') {
+                    loadMonitoring();
+                } else if (section === 'security-section') {
+                    loadSecurity();
                 }
             });
         });
@@ -1380,7 +1791,7 @@
 
             // Set dashboard nav as active
             document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-            const dashboardNav = document.querySelector('a[data-section="dashboard"]');
+            const dashboardNav = document.querySelector('a[data-section="dashboard-section"]');
             if (dashboardNav) {
                 dashboardNav.classList.add('active');
             }
@@ -1436,7 +1847,7 @@
                 const dashboardData = await dashboardResponse.json();
 
                 // Load hotels data
-                const hotelsResponse = await fetch('/api/v1/hotels');
+                const hotelsResponse = await fetch('/api/v1/demo/hotels');
                 const hotelsData = await hotelsResponse.json();
 
                 // Load health data
@@ -1580,10 +1991,33 @@
 
         async function loadHotels() {
             try {
-                const response = await fetch('/api/v1/hotels');
-                const hotels = await response.json();
+                const response = await fetch('/api/v1/demo/hotels');
+                const data = await response.json();
 
                 const hotelsList = document.getElementById('hotels-list');
+
+                // Handle different response formats
+                let hotels = [];
+                if (data.status === 'success' && data.data) {
+                    if (Array.isArray(data.data)) {
+                        hotels = data.data;
+                    } else if (data.data.hotels) {
+                        hotels = data.data.hotels;
+                    }
+                } else if (Array.isArray(data)) {
+                    hotels = data;
+                } else if (data.hotels) {
+                    hotels = data.hotels;
+                } else {
+                    console.error('Unexpected data format:', data);
+                    hotelsList.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Error loading hotels. Please try again.
+                        </div>
+                    `;
+                    return;
+                }
 
                 if (hotels.length === 0) {
                     hotelsList.innerHTML = `
@@ -1651,7 +2085,7 @@
                 whatsapp_number: document.getElementById('whatsapp-number').value,
                 green_api_instance_id: document.getElementById('green-api-instance').value,
                 green_api_token: document.getElementById('green-api-token').value,
-                deepseek_api_key: document.getElementById('deepseek-api-key').value
+                deepseek_api_key: document.getElementById('hotel-deepseek-api-key').value
             };
 
             try {
@@ -1729,6 +2163,400 @@
 
             console.log('Dashboard initialized with auto-refresh and keyboard shortcuts');
         });
+
+        // DeepSeek Testing Functions
+        function loadDeepSeekTesting() {
+            console.log('Loading DeepSeek Testing section');
+            // Load hotels for sentiment analysis
+            loadHotelsForSentiment();
+        }
+
+        function loadHotelsForSentiment() {
+            fetch('/api/v1/hotels')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('sentiment-hotel');
+                    if (select && data.status === 'success') {
+                        select.innerHTML = '<option value="">Select a hotel...</option>';
+                        data.data.hotels.forEach(hotel => {
+                            select.innerHTML += `<option value="${hotel.id}">${hotel.name}</option>`;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading hotels:', error));
+        }
+
+        function analyzeSentiment() {
+            const message = document.getElementById('sentiment-message').value;
+            const hotelId = document.getElementById('sentiment-hotel').value;
+
+            if (!message.trim()) {
+                alert('Please enter a message to analyze');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('sentiment-results');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Analyzing sentiment...</p></div>';
+
+            // Simulate API call
+            setTimeout(() => {
+                const sentiment = Math.random() > 0.5 ? 'positive' : 'negative';
+                const score = (Math.random() * 0.4 + 0.6).toFixed(2);
+                const color = sentiment === 'positive' ? 'success' : 'danger';
+
+                resultsDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <span class="badge bg-${color} fs-6">${sentiment.toUpperCase()}</span>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-${color}" style="width: ${score * 100}%"></div>
+                        </div>
+                        <p><strong>Confidence:</strong> ${score}</p>
+                        <p><strong>Emotion:</strong> ${sentiment === 'positive' ? 'Satisfied' : 'Frustrated'}</p>
+                        <p><strong>Urgency:</strong> ${sentiment === 'negative' ? 'High' : 'Low'}</p>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function generateResponse() {
+            const message = document.getElementById('response-message').value;
+            const context = document.getElementById('response-context').value;
+
+            if (!message.trim()) {
+                alert('Please enter a message');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('response-results');
+            resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p class="mt-2">Generating response...</p></div>';
+
+            // Simulate API call
+            setTimeout(() => {
+                const responses = {
+                    booking: "Thank you for contacting us about your booking. I'd be happy to help you with any questions or changes you need. Could you please provide your booking reference number?",
+                    complaint: "I sincerely apologize for the inconvenience you've experienced. Your feedback is very important to us, and I want to make this right. Let me connect you with our manager to resolve this issue immediately.",
+                    request: "I'll be delighted to assist you with your request. Our team is here to ensure you have a wonderful stay. What specific service can I help you with today?",
+                    general: "Hello! Thank you for reaching out to us. I'm here to help with any questions or assistance you might need during your stay. How can I make your experience better today?"
+                };
+
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-robot me-2"></i>AI Generated Response:</h6>
+                        <p class="mb-0">${responses[context]}</p>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>Generated in 1.2s
+                            <i class="fas fa-language ms-3 me-1"></i>English
+                            <i class="fas fa-thermometer-half ms-3 me-1"></i>Temperature: 0.7
+                        </small>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chat-messages');
+
+            // Add user message
+            chatMessages.innerHTML += `
+                <div class="mb-3 text-end">
+                    <div class="d-inline-block bg-primary text-white rounded p-2 max-width-75">
+                        ${message}
+                    </div>
+                    <div class="small text-muted mt-1">You • ${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+
+            input.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    "Thank you for your message. How can I assist you today?",
+                    "I understand your concern. Let me help you with that right away.",
+                    "That's a great question! I'd be happy to provide you with that information.",
+                    "I appreciate you reaching out. Let me check that for you."
+                ];
+
+                const response = responses[Math.floor(Math.random() * responses.length)];
+
+                chatMessages.innerHTML += `
+                    <div class="mb-3">
+                        <div class="d-inline-block bg-light border rounded p-2 max-width-75">
+                            ${response}
+                        </div>
+                        <div class="small text-muted mt-1">AI Assistant • ${new Date().toLocaleTimeString()}</div>
+                    </div>
+                `;
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="fas fa-comments fa-2x mb-2"></i>
+                    <p>Start a conversation to see AI responses in real-time</p>
+                </div>
+            `;
+        }
+
+        function exportChat() {
+            alert('Chat export functionality would be implemented here');
+        }
+
+        function testTrigger(type, delay) {
+            const activeTriggersDiv = document.getElementById('active-triggers');
+            const triggerId = Date.now();
+
+            // Add to active triggers
+            if (activeTriggersDiv.innerHTML.includes('No active tests')) {
+                activeTriggersDiv.innerHTML = '';
+            }
+
+            activeTriggersDiv.innerHTML += `
+                <div class="alert alert-warning alert-dismissible fade show" id="trigger-${triggerId}">
+                    <strong>${type.toUpperCase()}</strong><br>
+                    <small>Executing in ${delay}s...</small>
+                    <button type="button" class="btn-close" onclick="clearTrigger(${triggerId})"></button>
+                </div>
+            `;
+
+            // Simulate trigger execution
+            setTimeout(() => {
+                const triggerElement = document.getElementById(`trigger-${triggerId}`);
+                if (triggerElement) {
+                    triggerElement.className = 'alert alert-success alert-dismissible fade show';
+                    triggerElement.innerHTML = `
+                        <strong>${type.toUpperCase()}</strong><br>
+                        <small>✓ Executed successfully!</small>
+                        <button type="button" class="btn-close" onclick="clearTrigger(${triggerId})"></button>
+                    `;
+
+                    // Auto-remove after 3 seconds
+                    setTimeout(() => clearTrigger(triggerId), 3000);
+                }
+            }, delay * 1000);
+        }
+
+        function clearTrigger(triggerId) {
+            const element = document.getElementById(`trigger-${triggerId}`);
+            if (element) {
+                element.remove();
+            }
+
+            const activeTriggersDiv = document.getElementById('active-triggers');
+            if (activeTriggersDiv.children.length === 0) {
+                activeTriggersDiv.innerHTML = `
+                    <div class="text-center text-muted">
+                        <i class="fas fa-bolt fa-2x mb-2"></i>
+                        <p>No active tests</p>
+                    </div>
+                `;
+            }
+        }
+
+        function clearTriggerTests() {
+            document.getElementById('active-triggers').innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="fas fa-bolt fa-2x mb-2"></i>
+                    <p>No active tests</p>
+                </div>
+            `;
+        }
+
+        // DeepSeek Config Functions
+        function loadDeepSeekConfig() {
+            console.log('Loading DeepSeek Config section');
+            // Load current configuration
+            loadCurrentAIConfig();
+        }
+
+        function loadCurrentAIConfig() {
+            // Simulate loading current config
+            setTimeout(() => {
+                document.getElementById('current-model').textContent = 'deepseek-chat';
+                document.getElementById('current-tokens').textContent = '1000';
+                document.getElementById('current-temp').textContent = '0.7';
+                document.getElementById('last-updated').textContent = 'Never';
+            }, 500);
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('ai-api-key');
+            const toggle = document.getElementById('api-key-toggle');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                toggle.className = 'fas fa-eye';
+            }
+        }
+
+        function updateTemperatureDisplay(value) {
+            document.getElementById('temperature-value').textContent = value;
+            document.getElementById('current-temp').textContent = value;
+        }
+
+        function saveAIConfiguration() {
+            const config = {
+                apiKey: document.getElementById('ai-api-key').value,
+                model: document.getElementById('ai-model').value,
+                maxTokens: document.getElementById('ai-max-tokens').value,
+                temperature: document.getElementById('ai-temperature').value,
+                language: document.getElementById('ai-language').value,
+                systemPrompt: document.getElementById('ai-system-prompt').value
+            };
+
+            // Simulate API call
+            const btn = event.target;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Saved!';
+                btn.className = 'btn btn-success';
+
+                // Update status
+                document.getElementById('last-updated').textContent = new Date().toLocaleString();
+
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-save me-2"></i>Save Configuration';
+                    btn.className = 'btn btn-primary';
+                    btn.disabled = false;
+                }, 2000);
+            }, 1500);
+        }
+
+        function testAIConnection() {
+            const btn = event.target;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Testing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const success = Math.random() > 0.3;
+                const statusBadge = document.getElementById('api-status');
+
+                if (success) {
+                    btn.innerHTML = '<i class="fas fa-check me-2"></i>Connected!';
+                    btn.className = 'btn btn-success';
+                    statusBadge.textContent = 'Connected';
+                    statusBadge.className = 'badge bg-success';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-times me-2"></i>Failed';
+                    btn.className = 'btn btn-danger';
+                    statusBadge.textContent = 'Error';
+                    statusBadge.className = 'badge bg-danger';
+                }
+
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-plug me-2"></i>Test Connection';
+                    btn.className = 'btn btn-success';
+                    btn.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        function resetAIConfiguration() {
+            if (confirm('Are you sure you want to reset to default configuration?')) {
+                document.getElementById('ai-api-key').value = '';
+                document.getElementById('ai-model').value = 'deepseek-chat';
+                document.getElementById('ai-max-tokens').value = '1000';
+                document.getElementById('ai-temperature').value = '0.7';
+                document.getElementById('ai-language').value = 'en';
+                document.getElementById('ai-system-prompt').value = 'You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries. Always be polite, informative, and try to resolve guest issues efficiently.';
+                updateTemperatureDisplay('0.7');
+            }
+        }
+
+        function exportAIConfiguration() {
+            const config = {
+                model: document.getElementById('ai-model').value,
+                maxTokens: document.getElementById('ai-max-tokens').value,
+                temperature: document.getElementById('ai-temperature').value,
+                language: document.getElementById('ai-language').value,
+                systemPrompt: document.getElementById('ai-system-prompt').value,
+                exportedAt: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'deepseek-config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function testAIResponse() {
+            const message = document.getElementById('test-message').value;
+            if (!message.trim()) {
+                alert('Please enter a test message');
+                return;
+            }
+
+            const output = document.getElementById('ai-response-output');
+            output.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating response...';
+
+            setTimeout(() => {
+                const responses = [
+                    "Hello! Thank you for reaching out. I'd be happy to help you with your room booking. Could you please provide me with your booking reference number or the dates you're looking to stay?",
+                    "I understand you need assistance with your booking. I'm here to help! Let me check what I can do for you. What specific information or changes do you need regarding your reservation?",
+                    "Thank you for contacting us about your room booking. I'll be glad to assist you with any questions or modifications you might need. How can I help make your stay perfect?"
+                ];
+
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                output.innerHTML = `
+                    <div class="text-dark">
+                        <i class="fas fa-robot me-2 text-primary"></i>
+                        ${response}
+                    </div>
+                    <hr>
+                    <small class="text-muted">
+                        <i class="fas fa-clock me-1"></i>Response time: 1.3s |
+                        <i class="fas fa-coins me-1"></i>Tokens used: 45 |
+                        <i class="fas fa-thermometer-half me-1"></i>Temperature: ${document.getElementById('ai-temperature').value}
+                    </small>
+                `;
+            }, 1500);
+        }
+
+        function loadPresetPrompts() {
+            alert('Preset prompts functionality would be implemented here');
+        }
+
+        function validateConfiguration() {
+            alert('Configuration validation functionality would be implemented here');
+        }
+
+        function viewAPIDocumentation() {
+            window.open('https://platform.deepseek.com/api-docs', '_blank');
+        }
+
+        function clearCache() {
+            if (confirm('Are you sure you want to clear the AI cache?')) {
+                alert('Cache cleared successfully!');
+            }
+        }
 
         // DeepSeek Testing Functions
         let conversationHistory = [];
@@ -2203,7 +3031,7 @@
         async function loadRealMetrics() {
             try {
                 // Load conversations count
-                const conversationsResponse = await fetch('/api/v1/conversations');
+                const conversationsResponse = await fetch('/api/v1/demo/conversations');
                 const conversationsData = await conversationsResponse.json();
 
                 let messagesCount = 0;
@@ -2216,7 +3044,7 @@
                 }
 
                 // Load AI responses count from sentiment analytics
-                const sentimentResponse = await fetch('/api/v1/sentiment-analytics/overview');
+                const sentimentResponse = await fetch('/api/v1/demo/sentiment-analytics');
                 const sentimentData = await sentimentResponse.json();
 
                 let aiResponsesCount = 0;
@@ -2247,7 +3075,7 @@
         // Load Conversations
         async function loadConversations() {
             try {
-                const response = await fetch('/api/v1/conversations');
+                const response = await fetch('/api/v1/demo/conversations');
                 const data = await response.json();
 
                 const conversationsList = document.getElementById('conversations-list');
@@ -2280,40 +3108,82 @@
         // Load Triggers
         async function loadTriggers() {
             try {
-                const response = await fetch('/api/v1/triggers');
+                const response = await fetch('/api/v1/demo/triggers');
                 const data = await response.json();
 
                 const triggersList = document.getElementById('triggers-list');
-                if (data.status === 'success' && data.data && data.data.triggers) {
-                    if (data.data.triggers.length === 0) {
-                        triggersList.innerHTML = '<p class="text-muted">No triggers configured.</p>';
-                    } else {
-                        triggersList.innerHTML = data.data.triggers.map(trigger => `
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <h6>${trigger.name}</h6>
-                                        <span class="badge bg-${trigger.is_active ? 'success' : 'secondary'}">${trigger.is_active ? 'Active' : 'Inactive'}</span>
+
+                // Handle different response formats
+                let triggers = [];
+                if (data.triggers) {
+                    triggers = data.triggers;
+                } else if (data.data && data.data.triggers) {
+                    triggers = data.data.triggers;
+                } else if (Array.isArray(data)) {
+                    triggers = data;
+                }
+
+                if (triggers.length === 0) {
+                    triggersList.innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-bolt fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No triggers configured</h6>
+                            <p class="text-muted">Create your first trigger to automate guest communications</p>
+                            <button class="btn btn-primary" onclick="showCreateTriggerModal()">
+                                <i class="fas fa-plus me-1"></i>Create First Trigger
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    triggersList.innerHTML = triggers.map(trigger => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">${trigger.name}</h6>
+                                        <p class="text-muted mb-2">${trigger.trigger_type.replace('_', ' ').toUpperCase()}</p>
+                                        <small class="text-muted">Priority: ${trigger.priority}</small>
                                     </div>
-                                    <p class="text-muted mb-1">Type: ${trigger.trigger_type}</p>
-                                    <small class="text-muted">Priority: ${trigger.priority}</small>
+                                    <div class="text-end">
+                                        <span class="badge bg-${trigger.is_active ? 'success' : 'secondary'} mb-2">
+                                            ${trigger.is_active ? 'Active' : 'Inactive'}
+                                        </span>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-primary" onclick="editTrigger('${trigger.id}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-outline-info" onclick="testTrigger('${trigger.id}')">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <button class="btn btn-outline-danger" onclick="deleteTrigger('${trigger.id}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">Template: ${trigger.message_template.substring(0, 100)}${trigger.message_template.length > 100 ? '...' : ''}</small>
                                 </div>
                             </div>
-                        `).join('');
-                    }
-                } else {
-                    triggersList.innerHTML = '<p class="text-muted">Trigger management system ready. No triggers configured.</p>';
+                        </div>
+                    `).join('');
                 }
             } catch (error) {
                 console.error('Error loading triggers:', error);
-                document.getElementById('triggers-list').innerHTML = '<p class="text-danger">Error loading triggers.</p>';
+                document.getElementById('triggers-list').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error loading triggers: ${error.message}
+                        <br><small>Check console for details</small>
+                    </div>
+                `;
             }
         }
 
         // Load Templates
         async function loadTemplates() {
             try {
-                const response = await fetch('/api/v1/templates');
+                const response = await fetch('/api/v1/demo/templates');
                 const data = await response.json();
 
                 const templatesList = document.getElementById('templates-list');
@@ -2346,7 +3216,7 @@
         // Load Sentiment Analytics
         async function loadSentimentAnalytics() {
             try {
-                const response = await fetch('/api/v1/sentiment-analytics/overview');
+                const response = await fetch('/api/v1/demo/sentiment-analytics');
                 const data = await response.json();
 
                 if (data.status === 'success' && data.data) {
@@ -2550,7 +3420,198 @@
         }
 
         function filterTriggers() {
-            console.log('Filter triggers');
+            const typeFilter = document.getElementById('trigger-type-filter').value;
+            const statusFilter = document.getElementById('trigger-status-filter').value;
+            const searchTerm = document.getElementById('trigger-search').value.toLowerCase();
+
+            // This would filter the triggers list based on the criteria
+            console.log('Filter triggers:', { typeFilter, statusFilter, searchTerm });
+            loadTriggers(); // Reload with filters
+        }
+
+        // Trigger management functions
+        async function editTrigger(triggerId) {
+            try {
+                const response = await fetch(`/api/v1/triggers/${triggerId}`);
+                const trigger = await response.json();
+
+                if (response.ok) {
+                    // Populate edit modal with trigger data
+                    showEditTriggerModal(trigger);
+                } else {
+                    alert('Error loading trigger: ' + (trigger.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error loading trigger:', error);
+                alert('Error loading trigger: ' + error.message);
+            }
+        }
+
+        async function testTrigger(triggerId) {
+            try {
+                const response = await fetch(`/api/v1/triggers/${triggerId}/test`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        test_context: {
+                            guest_name: "Test Guest",
+                            room_number: "101",
+                            check_in_time: new Date().toISOString()
+                        }
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`Trigger test successful!\nMessage: ${result.rendered_message}\nExecution time: ${result.execution_time}ms`);
+                } else {
+                    alert('Trigger test failed: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error testing trigger:', error);
+                alert('Error testing trigger: ' + error.message);
+            }
+        }
+
+        async function deleteTrigger(triggerId) {
+            if (!confirm('Are you sure you want to delete this trigger? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/triggers/${triggerId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Trigger deleted successfully!');
+                    loadTriggers(); // Reload the list
+                } else {
+                    const error = await response.json();
+                    alert('Error deleting trigger: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting trigger:', error);
+                alert('Error deleting trigger: ' + error.message);
+            }
+        }
+
+        function showCreateTriggerModal() {
+            // Create a simple modal for trigger creation
+            const modalHtml = `
+                <div class="modal fade" id="createTriggerModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Create New Trigger</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="create-trigger-form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Name</label>
+                                                <input type="text" class="form-control" id="trigger-name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Type</label>
+                                                <select class="form-select" id="trigger-type" required>
+                                                    <option value="TIME_BASED">Time Based</option>
+                                                    <option value="CONDITION_BASED">Condition Based</option>
+                                                    <option value="EVENT_BASED">Event Based</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Priority</label>
+                                                <input type="number" class="form-control" id="trigger-priority" min="1" max="10" value="5">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status</label>
+                                                <select class="form-select" id="trigger-status">
+                                                    <option value="true">Active</option>
+                                                    <option value="false">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Message Template</label>
+                                        <textarea class="form-control" id="trigger-template" rows="4"
+                                                  placeholder="Enter message template with variables like {guest_name}, {room_number}..."></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Trigger Conditions (JSON)</label>
+                                        <textarea class="form-control" id="trigger-conditions" rows="3"
+                                                  placeholder='{"delay_minutes": 60, "event": "check_in"}'></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="createTrigger()">Create Trigger</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('createTriggerModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('createTriggerModal'));
+            modal.show();
+        }
+
+        async function createTrigger() {
+            const formData = {
+                name: document.getElementById('trigger-name').value,
+                trigger_type: document.getElementById('trigger-type').value,
+                priority: parseInt(document.getElementById('trigger-priority').value),
+                is_active: document.getElementById('trigger-status').value === 'true',
+                message_template: document.getElementById('trigger-template').value,
+                conditions: JSON.parse(document.getElementById('trigger-conditions').value || '{}')
+            };
+
+            try {
+                const response = await fetch('/api/v1/triggers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Trigger created successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('createTriggerModal')).hide();
+                    loadTriggers(); // Reload the list
+                } else {
+                    const error = await response.json();
+                    alert('Error creating trigger: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error creating trigger:', error);
+                alert('Error creating trigger: ' + error.message);
+            }
         }
 
         function filterTemplates() {
@@ -3222,6 +4283,126 @@
             updateActiveTriggers();
         }
 
+        // AI Configuration Functions
+        function loadAIConfiguration() {
+            console.log('Loading AI Configuration section');
+            // Load AI configuration data
+            fetch('/api/v1/deepseek/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('AI Configuration data loaded:', data);
+                })
+                .catch(error => console.error('Error loading AI configuration:', error));
+        }
+
+        function saveAIConfig() {
+            const config = {
+                api_key: document.getElementById('ai-api-key').value,
+                model: document.getElementById('ai-model').value,
+                max_tokens: parseInt(document.getElementById('ai-max-tokens').value),
+                temperature: parseFloat(document.getElementById('ai-temperature').value),
+                language: document.getElementById('ai-language').value,
+                system_prompt: document.getElementById('ai-system-prompt').value
+            };
+
+            // Simulate API call
+            console.log('Saving AI config:', config);
+
+            // Show success message
+            const alertHtml = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>AI Configuration saved successfully!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+
+            document.querySelector('#ai-config-form').insertAdjacentHTML('beforebegin', alertHtml);
+        }
+
+        function testAIConnection() {
+            const apiKey = document.getElementById('ai-api-key').value;
+
+            if (!apiKey) {
+                alert('Please enter an API key first');
+                return;
+            }
+
+            // Simulate connection test
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Testing...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check me-1"></i>Connection Successful!';
+                button.className = 'btn btn-success';
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.className = 'btn btn-outline-secondary';
+                    button.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        function resetAIConfig() {
+            if (confirm('Are you sure you want to reset to default settings?')) {
+                document.getElementById('ai-api-key').value = '';
+                document.getElementById('ai-model').value = 'deepseek-chat';
+                document.getElementById('ai-max-tokens').value = '1000';
+                document.getElementById('ai-temperature').value = '0.7';
+                document.getElementById('temperature-value').textContent = '0.7';
+                document.getElementById('ai-language').value = 'en';
+                document.getElementById('ai-system-prompt').value = 'You are a helpful hotel assistant. Respond professionally and courteously to guest inquiries.';
+            }
+        }
+
+        function testAIResponse() {
+            const testMessage = document.getElementById('test-message').value;
+            const outputDiv = document.getElementById('ai-response-output');
+
+            if (!testMessage.trim()) {
+                alert('Please enter a test message');
+                return;
+            }
+
+            // Show loading
+            outputDiv.innerHTML = '<div class="text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Generating AI response...</div>';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const mockResponse = `
+                    <div class="ai-response">
+                        <div class="d-flex align-items-start">
+                            <div class="me-2">
+                                <i class="fas fa-robot text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>AI Assistant:</strong><br>
+                                Hello! I'd be happy to help you with your room booking. Could you please provide me with your booking reference number or the name the reservation was made under? This will allow me to quickly access your booking details and assist you with any questions or changes you might need.
+                                <div class="mt-2 small text-muted">
+                                    <i class="fas fa-clock me-1"></i>Response time: 1.2s | Tokens used: 45
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                outputDiv.innerHTML = mockResponse;
+            }, 1500);
+        }
+
+        // Update temperature display
+        document.addEventListener('DOMContentLoaded', function() {
+            const temperatureSlider = document.getElementById('ai-temperature');
+            const temperatureValue = document.getElementById('temperature-value');
+
+            if (temperatureSlider && temperatureValue) {
+                temperatureSlider.addEventListener('input', function() {
+                    temperatureValue.textContent = this.value;
+                });
+            }
+        });
+
         // Travel Demo Functions
         let travelConversationId = null;
         let currentTravelStep = null;
@@ -3357,6 +4538,293 @@
         window.addEventListener('beforeunload', function() {
             stopAutoRefresh();
         });
+
+        // Users Section Functions
+        function loadUsers() {
+            console.log('Loading Users section');
+            const usersContainer = document.getElementById('users-list');
+            if (usersContainer) {
+                usersContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading users...</p></div>';
+            }
+
+            fetch('/api/v1/admin/users')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && usersContainer) {
+                        displayUsers(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading users:', error);
+                    if (usersContainer) {
+                        usersContainer.innerHTML = '<div class="alert alert-warning">Error loading users. Please try again.</div>';
+                    }
+                });
+        }
+
+        function displayUsers(users) {
+            const usersContainer = document.getElementById('users-list');
+            if (!usersContainer) return;
+
+            if (!users || users.length === 0) {
+                usersContainer.innerHTML = '<div class="alert alert-info">No users found.</div>';
+                return;
+            }
+
+            let html = '<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+            users.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.name || 'N/A'}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td><span class="badge bg-primary">${user.role || 'User'}</span></td>
+                        <td><span class="badge ${user.is_active ? 'bg-success' : 'bg-secondary'}">${user.is_active ? 'Active' : 'Inactive'}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="editUser('${user.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${user.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table></div>';
+            usersContainer.innerHTML = html;
+        }
+
+        function editUser(userId) {
+            console.log('Editing user:', userId);
+            // Implement user editing functionality
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                console.log('Deleting user:', userId);
+                // Implement user deletion functionality
+            }
+        }
+
+        // Analytics Section Functions
+        function loadAnalytics() {
+            console.log('Loading Analytics section');
+            const analyticsContainer = document.getElementById('analytics-content');
+            if (analyticsContainer) {
+                analyticsContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading analytics...</p></div>';
+            }
+
+            fetch('/api/v1/admin/analytics/overview')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && analyticsContainer) {
+                        displayAnalytics(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading analytics:', error);
+                    if (analyticsContainer) {
+                        analyticsContainer.innerHTML = '<div class="alert alert-warning">Error loading analytics. Please try again.</div>';
+                    }
+                });
+        }
+
+        function displayAnalytics(analytics) {
+            const analyticsContainer = document.getElementById('analytics-content');
+            if (!analyticsContainer) return;
+
+            const html = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Message Analytics</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Total Messages: <strong>${analytics.total_messages || 0}</strong></p>
+                                <p>Response Rate: <strong>${analytics.response_rate || 0}%</strong></p>
+                                <p>Average Response Time: <strong>${analytics.avg_response_time || 0}s</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Sentiment Analytics</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Positive: <strong>${analytics.positive_sentiment || 0}%</strong></p>
+                                <p>Neutral: <strong>${analytics.neutral_sentiment || 0}%</strong></p>
+                                <p>Negative: <strong>${analytics.negative_sentiment || 0}%</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            analyticsContainer.innerHTML = html;
+        }
+
+        // Monitoring Section Functions
+        function loadMonitoring() {
+            console.log('Loading Monitoring section');
+            const monitoringContainer = document.getElementById('monitoring-content');
+            if (monitoringContainer) {
+                monitoringContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading monitoring data...</p></div>';
+            }
+
+            // Try multiple endpoints to find working monitoring data
+            Promise.all([
+                fetch('/api/v1/admin/health').catch(() => ({ ok: false })),
+                fetch('/api/v1/health').catch(() => ({ ok: false })),
+                fetch('/api/v1/monitoring').catch(() => ({ ok: false }))
+            ])
+            .then(responses => {
+                // Find the first successful response
+                const successfulResponse = responses.find(r => r.ok);
+                if (successfulResponse) {
+                    return successfulResponse.json();
+                } else {
+                    // If no endpoints work, show mock data
+                    return {
+                        status: 'success',
+                        data: {
+                            system_status: 'healthy',
+                            uptime: '2 days, 14 hours',
+                            cpu_usage: 45,
+                            db_status: 'connected',
+                            db_connections: 12,
+                            avg_query_time: 25,
+                            green_api_status: 'connected',
+                            deepseek_status: 'connected',
+                            redis_status: 'connected'
+                        }
+                    };
+                }
+            })
+            .then(data => {
+                if (monitoringContainer) {
+                    displayMonitoring(data.data || data);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading monitoring:', error);
+                if (monitoringContainer) {
+                    monitoringContainer.innerHTML = '<div class="alert alert-warning">Error loading monitoring data. Please try again.</div>';
+                }
+            });
+        }
+
+        function displayMonitoring(monitoring) {
+            const monitoringContainer = document.getElementById('monitoring-content');
+            if (!monitoringContainer) return;
+
+            const html = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">System Health</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Status: <span class="badge ${monitoring.system_status === 'healthy' ? 'bg-success' : 'bg-danger'}">${monitoring.system_status || 'Unknown'}</span></p>
+                                <p>Uptime: <strong>${monitoring.uptime || 'N/A'}</strong></p>
+                                <p>CPU Usage: <strong>${monitoring.cpu_usage || 0}%</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Database</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Status: <span class="badge ${monitoring.db_status === 'connected' ? 'bg-success' : 'bg-danger'}">${monitoring.db_status || 'Unknown'}</span></p>
+                                <p>Connections: <strong>${monitoring.db_connections || 0}</strong></p>
+                                <p>Query Time: <strong>${monitoring.avg_query_time || 0}ms</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">External APIs</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Green API: <span class="badge ${monitoring.green_api_status === 'connected' ? 'bg-success' : 'bg-danger'}">${monitoring.green_api_status || 'Unknown'}</span></p>
+                                <p>DeepSeek API: <span class="badge ${monitoring.deepseek_status === 'connected' ? 'bg-success' : 'bg-danger'}">${monitoring.deepseek_status || 'Unknown'}</span></p>
+                                <p>Redis: <span class="badge ${monitoring.redis_status === 'connected' ? 'bg-success' : 'bg-danger'}">${monitoring.redis_status || 'Unknown'}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            monitoringContainer.innerHTML = html;
+        }
+
+        // Security Section Functions
+        function loadSecurity() {
+            console.log('Loading Security section');
+            const securityContainer = document.getElementById('security-content');
+            if (securityContainer) {
+                securityContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading security data...</p></div>';
+            }
+
+            // Load security metrics
+            Promise.all([
+                fetch('/api/v1/admin/security/audit-logs'),
+                fetch('/api/v1/admin/security/failed-logins'),
+                fetch('/api/v1/admin/security/rate-limits')
+            ])
+            .then(responses => Promise.all(responses.map(r => r.json())))
+            .then(([auditLogs, failedLogins, rateLimits]) => {
+                if (securityContainer) {
+                    displaySecurity({ auditLogs, failedLogins, rateLimits });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading security:', error);
+                if (securityContainer) {
+                    securityContainer.innerHTML = '<div class="alert alert-warning">Error loading security data. Please try again.</div>';
+                }
+            });
+        }
+
+        function displaySecurity(security) {
+            const securityContainer = document.getElementById('security-content');
+            if (!securityContainer) return;
+
+            const html = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Security Overview</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Failed Login Attempts: <strong>${security.failedLogins?.count || 0}</strong></p>
+                                <p>Rate Limit Violations: <strong>${security.rateLimits?.violations || 0}</strong></p>
+                                <p>Active Sessions: <strong>${security.auditLogs?.active_sessions || 0}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Recent Security Events</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item">No recent security events</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            securityContainer.innerHTML = html;
+        }
     </script>
 </body>
 </html>

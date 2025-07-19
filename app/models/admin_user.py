@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from sqlalchemy import Column, String, DateTime, Boolean, Index, ForeignKey, Enum as SQLEnum
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import enum
@@ -100,7 +101,7 @@ class AdminUser(BaseModel, TimestampMixin):
     )
     
     permissions = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=list,
         comment="List of specific permissions"
@@ -151,7 +152,7 @@ class AdminUser(BaseModel, TimestampMixin):
     
     # Additional metadata
     user_metadata = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         comment="Additional admin user metadata"

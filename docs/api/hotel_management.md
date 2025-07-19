@@ -503,6 +503,43 @@ if (response.ok) {
 }
 ```
 
+## Admin Interface Routes
+
+### DeepSeek AI Management
+
+**Standalone DeepSeek Testing Interface**
+- **Route:** `GET /api/v1/admin/deepseek-testing`
+- **Description:** Standalone page for testing DeepSeek AI functionality
+- **Features:**
+  - Sentiment analysis testing
+  - AI response generation
+  - Live chat demo
+  - Trigger system testing
+- **Template:** `app/templates/deepseek_testing.html`
+- **Access:** Direct URL, no menu navigation required
+
+**Standalone AI Configuration Interface**
+- **Route:** `GET /api/v1/admin/ai-configuration`
+- **Description:** Standalone page for configuring DeepSeek AI settings
+- **Features:**
+  - API key management
+  - Model selection and parameters
+  - System prompt configuration
+  - Response testing
+  - Usage statistics
+- **Template:** `app/templates/ai_configuration.html`
+- **Access:** Direct URL, no menu navigation required
+
+**Main Admin Dashboard**
+- **Route:** `GET /api/v1/admin/dashboard`
+- **Description:** Main admin interface with navigation menu
+- **Features:**
+  - Hotels management (restored functionality)
+  - Triggers management (restored functionality)
+  - Templates, Analytics, Monitoring
+  - Links to standalone DeepSeek pages
+- **Template:** `app/templates/admin_dashboard.html`
+
 ## Support
 
 For additional support or questions about the Hotel Management API, please refer to the main documentation or contact the development team.

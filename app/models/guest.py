@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from sqlalchemy import Column, String, DateTime, Index, UniqueConstraint, ForeignKey, CheckConstraint
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import re
@@ -46,7 +47,7 @@ class Guest(TenantBaseModel):
     
     # Guest preferences and data
     preferences = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',

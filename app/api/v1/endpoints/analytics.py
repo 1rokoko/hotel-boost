@@ -48,7 +48,7 @@ def require_permission(permission: AdminPermission):
 
 
 @router.get("/dashboard/overview", response_model=DashboardOverviewResponse)
-def get_dashboard_overview(
+async def get_dashboard_overview(
     hotel_id: Optional[uuid.UUID] = Query(None, description="Hotel ID for hotel-specific overview"),
     time_range: AnalyticsTimeRange = Query(AnalyticsTimeRange.LAST_30_DAYS, description="Time range for analytics"),
     current_user = Depends(require_permission(AdminPermission.VIEW_ANALYTICS)),
@@ -96,7 +96,7 @@ def get_dashboard_overview(
 
 
 @router.get("/messages/stats", response_model=MessageStatisticsResponse)
-def get_message_statistics(
+async def get_message_statistics(
     hotel_id: Optional[uuid.UUID] = Query(None, description="Hotel ID for hotel-specific stats"),
     time_range: AnalyticsTimeRange = Query(AnalyticsTimeRange.LAST_7_DAYS, description="Time range for statistics"),
     include_sentiment: bool = Query(True, description="Include sentiment analysis in statistics"),
@@ -239,7 +239,7 @@ async def get_system_metrics(
 async def get_sentiment_trends(
     hotel_id: Optional[uuid.UUID] = Query(None, description="Hotel ID for hotel-specific trends"),
     time_range: AnalyticsTimeRange = Query(AnalyticsTimeRange.LAST_30_DAYS, description="Time range for trends"),
-    granularity: str = Query("daily", regex="^(hourly|daily|weekly)$", description="Data granularity"),
+    granularity: str = Query("daily", pattern="^(hourly|daily|weekly)$", description="Data granularity"),
     current_user = Depends(require_permission(AdminPermission.VIEW_ANALYTICS)),
     db: Session = Depends(get_db)
 ):

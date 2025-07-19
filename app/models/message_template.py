@@ -6,7 +6,8 @@ import uuid
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from sqlalchemy import Column, String, Text, Boolean, Enum as SQLEnum, ForeignKey, Index
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship
 from enum import Enum
 
@@ -62,7 +63,7 @@ class MessageTemplate(TenantBaseModel):
 
     # Template metadata
     variables = Column(
-        JSONB,
+        JSON,
         default=list,
         nullable=False,
         comment="List of variable names used in the template"
@@ -92,7 +93,7 @@ class MessageTemplate(TenantBaseModel):
 
     # Usage tracking
     usage_count = Column(
-        JSONB,
+        JSON,
         default=dict,
         nullable=False,
         comment="Usage statistics for the template"

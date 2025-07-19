@@ -107,7 +107,7 @@ class StaffAlert(TenantAuditableModel):
     
     sentiment_analysis_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("sentiment_analyses.id", ondelete="CASCADE"),
+        ForeignKey("sentiment_analysis.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
         comment="Related sentiment analysis"

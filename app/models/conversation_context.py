@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional
 from sqlalchemy import Column, String, DateTime, ForeignKey, Index, Text
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -43,7 +44,7 @@ class ConversationContext(TenantBaseModel):
     )
     
     context_value = Column(
-        JSONB,
+        JSON,
         nullable=False,
         comment="Context value stored as JSON"
     )

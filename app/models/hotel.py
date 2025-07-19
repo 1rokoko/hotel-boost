@@ -5,7 +5,8 @@ Hotel model for WhatsApp Hotel Bot application
 import uuid
 from typing import Dict, Any, Optional, List
 from sqlalchemy import Column, String, Boolean, Index, UniqueConstraint, CheckConstraint
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import re
@@ -57,7 +58,7 @@ class Hotel(BaseModel):
     
     # Hotel settings and configuration
     settings = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',

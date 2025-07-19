@@ -9,9 +9,9 @@ from app.api.v1.endpoints import (
     admin_users,
     admin_roles,
     admin_permissions,
-    admin_system_settings,
-    admin_reports,
-    admin_monitoring
+    admin_system_settings,  # Re-enabled
+    # admin_reports,  # Temporarily disabled
+    # admin_monitoring  # Temporarily disabled
 )
 
 admin_router = APIRouter()
@@ -22,6 +22,6 @@ admin_router.include_router(analytics.router, prefix="/analytics", tags=["admin-
 admin_router.include_router(admin_users.router, prefix="/users", tags=["admin-users"])
 admin_router.include_router(admin_roles.router, prefix="/roles", tags=["admin-roles"])
 admin_router.include_router(admin_permissions.router, prefix="/permissions", tags=["admin-permissions"])
-admin_router.include_router(admin_system_settings.router, prefix="/settings", tags=["admin-settings"])
-admin_router.include_router(admin_reports.router, prefix="/reports", tags=["admin-reports"])
-admin_router.include_router(admin_monitoring.router, prefix="/monitoring", tags=["admin-monitoring"])
+admin_router.include_router(admin_system_settings.router, prefix="/settings", tags=["admin-settings"])  # Re-enabled
+# admin_router.include_router(admin_reports.router, prefix="/reports", tags=["admin-reports"])  # Temporarily disabled
+# admin_router.include_router(admin_monitoring.router, prefix="/monitoring", tags=["admin-monitoring"])  # Temporarily disabled

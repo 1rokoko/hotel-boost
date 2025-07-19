@@ -6,7 +6,8 @@ import uuid
 from typing import List, Dict, Any, Optional
 from datetime import datetime, time
 from sqlalchemy import Column, String, Text, Boolean, Integer, Time, ForeignKey, Index
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship
 from enum import Enum
 
@@ -73,14 +74,14 @@ class AutoResponseRule(TenantBaseModel):
 
     # Trigger conditions
     trigger_conditions = Column(
-        JSONB,
+        JSON,
         nullable=False,
         comment="JSON array of conditions that must be met to trigger the rule"
     )
 
     # Response actions
     response_actions = Column(
-        JSONB,
+        JSON,
         nullable=False,
         comment="JSON array of actions to take when rule is triggered"
     )
@@ -100,7 +101,7 @@ class AutoResponseRule(TenantBaseModel):
 
     # Language constraints
     languages = Column(
-        JSONB,
+        JSON,
         default=list,
         nullable=False,
         comment="List of language codes this rule applies to (empty = all languages)"
@@ -123,7 +124,7 @@ class AutoResponseRule(TenantBaseModel):
     )
 
     last_triggered = Column(
-        JSONB,
+        JSON,
         default=dict,
         nullable=False,
         comment="Timestamp and context of last trigger"

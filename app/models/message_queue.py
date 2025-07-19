@@ -7,7 +7,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from decimal import Decimal
 from sqlalchemy import Column, String, Text, DateTime, Index, ForeignKey, CheckConstraint, Integer
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql import UUID, ENUM
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import enum
@@ -98,7 +99,7 @@ class MessageQueue(TenantBaseModel):
     
     # Message content and metadata
     message_data = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',
@@ -172,11 +173,11 @@ class MessageQueue(TenantBaseModel):
             name='ck_message_queue_retry_count'
         ),
         
-        # Check constraint for phone number format
-        CheckConstraint(
-            "phone_number ~ '^\\+?[1-9]\\d{1,14}$'",
-            name='ck_message_queue_phone_format'
-        ),
+        # Check constraint for phone number format (removed for SQLite compatibility)
+        # CheckConstraint(
+        #     "phone_number ~ '^\\+?[1-9]\\d{1,14}$'",
+        #     name='ck_message_queue_phone_format'
+        # ),
         
         # Indexes for performance
         Index('idx_message_queue_hotel_id', 'hotel_id'),

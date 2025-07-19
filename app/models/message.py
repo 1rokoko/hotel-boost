@@ -7,7 +7,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List
 from decimal import Decimal
 from sqlalchemy import Column, String, Text, DateTime, Index, ForeignKey, CheckConstraint, Numeric
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql import UUID, ENUM
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import enum
@@ -113,7 +114,7 @@ class Conversation(TenantBaseModel):
     )
 
     context = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         comment="Conversation context and memory storage"
@@ -314,7 +315,7 @@ class Message(TenantBaseModel):
     
     # Message metadata
     message_metadata = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',

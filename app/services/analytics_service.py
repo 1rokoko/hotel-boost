@@ -596,3 +596,14 @@ class AnalyticsService:
     async def _get_error_rate(self, db: AsyncSession, hotel_id: Optional[uuid.UUID], start_date: datetime, end_date: datetime) -> float:
         """Get message error rate"""
         return 1.5  # Placeholder: 1.5% error rate
+
+
+# Global analytics service instance
+_analytics_service = None
+
+def get_analytics_service() -> AnalyticsService:
+    """Get analytics service instance"""
+    global _analytics_service
+    if _analytics_service is None:
+        _analytics_service = AnalyticsService()
+    return _analytics_service

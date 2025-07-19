@@ -6,7 +6,8 @@ import uuid
 from datetime import datetime, time
 from typing import Dict, Any, Optional, List, Union
 from sqlalchemy import Column, String, Text, Integer, Boolean, Index, ForeignKey, CheckConstraint
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ENUM
+from sqlalchemy.dialects.postgresql import UUID, ENUM
+from sqlalchemy import JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 import enum
@@ -60,7 +61,7 @@ class Trigger(TenantBaseModel):
     
     # Trigger conditions and configuration
     conditions = Column(
-        JSONB,
+        JSON,
         nullable=False,
         default=dict,
         server_default='{}',
