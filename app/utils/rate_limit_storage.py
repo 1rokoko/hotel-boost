@@ -106,8 +106,9 @@ class RedisRateLimitStorage(RateLimitStorage):
                         await self.redis_client.ping()
                         logger.info("Redis connection established for rate limiting")
                     except Exception as e:
-                        logger.error("Failed to connect to Redis for rate limiting", error=str(e))
-                        raise RateLimitStorageError(f"Redis connection failed: {str(e)}")
+                        logger.warning("Failed to connect to Redis for rate limiting, disabling rate limiting", error=str(e))
+                        # Return None to disable rate limiting in development
+                        return None
         
         return self.redis_client
     

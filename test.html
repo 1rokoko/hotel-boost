@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p>This is a test page to verify browser functionality.</p>
+    
+    <h2>Triggers Test</h2>
+    <div id="triggers-section">
+        <h3>Available Triggers</h3>
+        <ul>
+            <li>Welcome Message - Sent when guest first contacts hotel</li>
+            <li>Check-in Reminder - Sent 24 hours before check-in</li>
+            <li>Check-out Reminder - Sent on check-out day</li>
+            <li>Feedback Request - Sent after check-out</li>
+        </ul>
+        
+        <h3>Trigger Configuration</h3>
+        <form>
+            <label>Trigger Type:</label>
+            <select>
+                <option>Welcome Message</option>
+                <option>Check-in Reminder</option>
+                <option>Check-out Reminder</option>
+                <option>Feedback Request</option>
+            </select>
+            
+            <label>Delay (hours):</label>
+            <input type="number" value="0" min="0" max="168">
+            
+            <label>Message Template:</label>
+            <textarea rows="4" cols="50">Welcome to our hotel! How can we help you today?</textarea>
+            
+            <button type="button" onclick="saveTrigger()">Save Trigger</button>
+        </form>
+    </div>
+    
+    <h2>API Test</h2>
+    <button onclick="testAPI()">Test API Connection</button>
+    <div id="api-result"></div>
+    
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:8002/api/v1/admin/settings');
+                const data = await response.json();
+                document.getElementById('api-result').innerHTML =
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('api-result').innerHTML =
+                    '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function saveTrigger() {
+            const triggerType = document.querySelector('select').value;
+            const delay = document.querySelector('input[type="number"]').value;
+            const template = document.querySelector('textarea').value;
+
+            const triggerData = {
+                type: triggerType,
+                delay_hours: parseInt(delay),
+                message_template: template,
+                enabled: true
+            };
+
+            try {
+                const response = await fetch('http://localhost:8002/api/v1/triggers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(triggerData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Trigger saved successfully!');
+                    console.log('Saved trigger:', result);
+                } else {
+                    const error = await response.json();
+                    alert('Error saving trigger: ' + error.message);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

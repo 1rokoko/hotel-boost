@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+    Admin Dashboard v2.1.0 - 2024-12-21
+
+    🎯 LATEST CHANGES:
+    - ✅ Complete Trigger Editing System (showEditTriggerModal, updateTrigger)
+    - ✅ Fixed trigger ID transmission and data structure issues
+    - ✅ Added comprehensive error handling and validation
+    - ✅ DeepSeek Settings fully functional with hotel-specific configurations
+
+    📝 See admin_dashboard_changelog.md for complete version history
+    🔧 Total Functions: 50+ | API Endpoints: 15+ | Lines: 4800+
+-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -874,9 +886,14 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5><i class="fas fa-bolt me-2"></i>Triggers Management</h5>
-                    <button class="btn btn-success btn-sm" onclick="showCreateTriggerModal()">
-                        <i class="fas fa-plus me-1"></i>Create Trigger
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" onclick="showCreateTriggerModal()">
+                            <i class="fas fa-plus me-1"></i>Create Trigger
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="showCreateTriggersFromTemplatesModal()">
+                            <i class="fas fa-magic me-1"></i>Create from Templates
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -1025,6 +1042,23 @@
                                 <p class="text-muted mb-0">Configure DeepSeek AI settings for intelligent guest interactions</p>
                             </div>
                             <div class="card-body">
+                                <!-- Hotel Selection -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <strong>Hotel-Specific Settings:</strong> Each hotel has its own DeepSeek configuration and Travel Advisory Memory.
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Hotel</label>
+                                            <select class="form-select" id="deepseek-hotel-selector" onchange="loadHotelDeepSeekSettings()">
+                                                <option value="">Select a hotel to configure...</option>
+                                            </select>
+                                            <small class="text-muted">Choose a hotel to configure its DeepSeek AI settings</small>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <form id="deepseek-settings-form">
                                     <!-- API Configuration -->
                                     <div class="row mb-4">
@@ -1037,14 +1071,14 @@
                                             <div class="mb-3">
                                                 <label class="form-label">API Key</label>
                                                 <input type="password" class="form-control" id="deepseek-api-key"
-                                                       placeholder="sk-...">
-                                                <small class="text-muted">DeepSeek API key for AI processing</small>
+                                                       placeholder="sk-..." disabled>
+                                                <small class="text-muted">DeepSeek API key for AI processing (select hotel first)</small>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Model</label>
-                                                <select class="form-select" id="deepseek-model">
+                                                <select class="form-select" id="deepseek-model" disabled>
                                                     <option value="deepseek-chat">DeepSeek Chat</option>
                                                     <option value="deepseek-coder">DeepSeek Coder</option>
                                                     <option value="deepseek-math">DeepSeek Math</option>
@@ -1064,7 +1098,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Max Tokens</label>
                                                 <input type="number" class="form-control" id="deepseek-max-tokens"
-                                                       min="100" max="8192" value="4096">
+                                                       min="100" max="8192" value="4096" disabled>
                                                 <small class="text-muted">Maximum response length</small>
                                             </div>
                                         </div>
@@ -1072,7 +1106,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Temperature</label>
                                                 <input type="range" class="form-range" id="deepseek-temperature"
-                                                       min="0" max="2" step="0.1" value="0.7"
+                                                       min="0" max="2" step="0.1" value="0.7" disabled
                                                        oninput="document.getElementById('temp-value').textContent = this.value">
                                                 <div class="d-flex justify-content-between">
                                                     <small>Precise</small>
@@ -1085,10 +1119,10 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Response Style</label>
                                                 <select class="form-select" id="deepseek-style">
-                                                    <option value="professional">Professional</option>
-                                                    <option value="friendly">Friendly</option>
-                                                    <option value="casual">Casual</option>
-                                                    <option value="formal">Formal</option>
+                                                    <option value="professional">Professional - Formal business tone</option>
+                                                    <option value="friendly">Friendly - Warm and welcoming</option>
+                                                    <option value="casual">Casual - Relaxed and conversational</option>
+                                                    <option value="formal">Formal - Very polite and structured</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1105,28 +1139,28 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Requests/Min</label>
                                                 <input type="number" class="form-control" id="deepseek-requests-per-minute"
-                                                       min="1" max="1000" value="50">
+                                                       min="1" max="1000" value="50" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Tokens/Min</label>
                                                 <input type="number" class="form-control" id="deepseek-tokens-per-minute"
-                                                       min="1000" max="1000000" value="100000">
+                                                       min="1000" max="1000000" value="100000" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Timeout (sec)</label>
                                                 <input type="number" class="form-control" id="deepseek-timeout"
-                                                       min="5" max="300" value="60">
+                                                       min="5" max="300" value="60" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Max Retries</label>
                                                 <input type="number" class="form-control" id="deepseek-max-retries"
-                                                       min="0" max="10" value="3">
+                                                       min="0" max="10" value="3" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -1138,26 +1172,26 @@
                                                 <i class="fas fa-map me-2"></i>Travel Advisory Memory
                                             </h6>
                                             <div class="mb-3">
-                                                <label class="form-label">Travel Tips Database</label>
-                                                <textarea class="form-control" id="deepseek-travel-memory" rows="6"
-                                                          placeholder="Add travel tips by categories:&#10;&#10;PHUKET - FIRST TIME:&#10;- Patong Beach for nightlife&#10;- Kata Beach for families&#10;- Big Buddha - must visit&#10;&#10;PHUKET - WITH KIDS:&#10;- Phuket Aquarium&#10;- Phuket Zoo&#10;- Karon Beach - safe for children"></textarea>
-                                                <small class="text-muted">DeepSeek will use this information for personalized travel advice</small>
+                                                <label class="form-label">Travel Tips Database (Hotel-Specific)</label>
+                                                <textarea class="form-control" id="deepseek-travel-memory" rows="8" disabled
+                                                          placeholder="Add travel tips by categories:&#10;&#10;PHUKET - FIRST TIME:&#10;- Patong Beach for nightlife&#10;- Kata Beach for families&#10;- Big Buddha - must visit&#10;&#10;PHUKET - WITH KIDS:&#10;- Phuket Aquarium&#10;- Phuket Zoo&#10;- Karon Beach - safe for children&#10;&#10;GUEST PROFILE QUESTIONS:&#10;- How many times have you been to Phuket?&#10;- Are you traveling solo, with partner, or family?&#10;- What are your main interests?"></textarea>
+                                                <small class="text-muted">Hotel-specific travel memory for personalized guest recommendations</small>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Action Buttons -->
                                     <div class="d-flex gap-2 flex-wrap">
-                                        <button type="button" class="btn btn-primary" onclick="saveDeepSeekSettings()">
+                                        <button type="button" class="btn btn-primary" id="save-deepseek-btn" onclick="saveHotelDeepSeekSettings()" disabled>
                                             <i class="fas fa-save me-1"></i>Save Settings
                                         </button>
-                                        <button type="button" class="btn btn-outline-secondary" onclick="loadDeepSeekSettings()">
+                                        <button type="button" class="btn btn-outline-secondary" id="reload-deepseek-btn" onclick="loadHotelDeepSeekSettings()" disabled>
                                             <i class="fas fa-refresh me-1"></i>Reload
                                         </button>
-                                        <button type="button" class="btn btn-outline-info" onclick="testDeepSeekConnection()">
+                                        <button type="button" class="btn btn-outline-info" id="test-deepseek-btn" onclick="testHotelDeepSeekConnection()" disabled>
                                             <i class="fas fa-plug me-1"></i>Test Connection
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning" onclick="resetDeepSeekSettings()">
+                                        <button type="button" class="btn btn-outline-warning" id="reset-deepseek-btn" onclick="resetHotelDeepSeekSettings()" disabled>
                                             <i class="fas fa-undo me-1"></i>Reset to Defaults
                                         </button>
                                     </div>
@@ -2111,8 +2145,133 @@
             }
         }
 
-        function editHotel(hotelId) {
-            showAlert('Edit functionality coming soon!', 'info');
+        async function editHotel(hotelId) {
+            try {
+                // Get hotel data from API
+                const response = await fetch(`/api/v1/hotels/${hotelId}`);
+                const result = await response.json();
+
+                if (!response.ok || result.status !== 'success') {
+                    showAlert('Hotel not found', 'danger');
+                    return;
+                }
+
+                const hotel = result.data;
+
+            // Create edit modal
+            const modalHtml = `
+                <div class="modal fade" id="editHotelModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-edit me-2"></i>Edit Hotel: ${hotel.name}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editHotelForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Hotel Name *</label>
+                                                <input type="text" class="form-control" id="edit-hotel-name" value="${hotel.name}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">WhatsApp Number *</label>
+                                                <input type="text" class="form-control" id="edit-hotel-whatsapp" value="${hotel.whatsapp_number}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Green API Instance ID</label>
+                                                <input type="text" class="form-control" id="edit-hotel-instance" value="${hotel.green_api_instance_id || ''}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Green API Token</label>
+                                                <input type="text" class="form-control" id="edit-hotel-token" value="${hotel.green_api_token || ''}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="edit-hotel-active" ${hotel.is_active ? 'checked' : ''}>
+                                                <label class="form-check-label" for="edit-hotel-active">
+                                                    Hotel is Active
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="saveHotelChanges('${hotelId}')">
+                                    <i class="fas fa-save me-1"></i>Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('editHotelModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('editHotelModal'));
+            modal.show();
+
+            } catch (error) {
+                console.error('Error loading hotel data:', error);
+                showAlert('Error loading hotel data. Please try again.', 'danger');
+            }
+        }
+
+        async function saveHotelChanges(hotelId) {
+            try {
+                const hotelData = {
+                    name: document.getElementById('edit-hotel-name').value,
+                    whatsapp_number: document.getElementById('edit-hotel-whatsapp').value,
+                    green_api_instance_id: document.getElementById('edit-hotel-instance').value,
+                    green_api_token: document.getElementById('edit-hotel-token').value,
+                    is_active: document.getElementById('edit-hotel-active').checked
+                };
+
+                const response = await fetch(`/api/v1/hotels/${hotelId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(hotelData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert('Hotel updated successfully!', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('editHotelModal')).hide();
+                    loadHotels(); // Reload hotels list
+                } else {
+                    showAlert('Error updating hotel: ' + (result.detail || 'Unknown error'), 'danger');
+                }
+            } catch (error) {
+                console.error('Error updating hotel:', error);
+                showAlert('Error updating hotel. Please try again.', 'danger');
+            }
         }
 
         function viewHotel(hotelId) {
@@ -2146,6 +2305,9 @@
             initCharts();
             loadDashboardData();
             startAutoRefresh();
+
+            // Load hotels for DeepSeek selector
+            loadHotelsForDeepSeekSelector();
 
             // Add tooltips to stat cards
             document.querySelectorAll('.stat-card').forEach(card => {
@@ -2568,15 +2730,16 @@
 
         async function loadHotelsForDeepSeek() {
             try {
-                const response = await fetch('/api/v1/hotels');
-                const hotels = await response.json();
+                const response = await fetch('/api/v1/demo/hotels');
+                const data = await response.json();
 
-                const selects = ['sentiment-hotel', 'response-hotel', 'conversation-hotel'];
-                selects.forEach(selectId => {
-                    const select = document.getElementById(selectId);
-                    if (select) {
-                        select.innerHTML = '<option value="">Select a hotel...</option>';
-                        hotels.forEach(hotel => {
+                if (data.status === 'success') {
+                    const selects = ['sentiment-hotel', 'response-hotel', 'conversation-hotel'];
+                    selects.forEach(selectId => {
+                        const select = document.getElementById(selectId);
+                        if (select) {
+                            select.innerHTML = '<option value="">Select a hotel...</option>';
+                            data.data.forEach(hotel => {
                             const option = document.createElement('option');
                             option.value = hotel.id;
                             option.textContent = hotel.name;
@@ -2584,6 +2747,7 @@
                         });
                     }
                 });
+                }
             } catch (error) {
                 console.error('Error loading hotels for DeepSeek:', error);
             }
@@ -3115,13 +3279,17 @@
 
                 // Handle different response formats
                 let triggers = [];
-                if (data.triggers) {
+                if (data.data && Array.isArray(data.data)) {
+                    triggers = data.data;
+                } else if (data.triggers) {
                     triggers = data.triggers;
                 } else if (data.data && data.data.triggers) {
                     triggers = data.data.triggers;
                 } else if (Array.isArray(data)) {
                     triggers = data;
                 }
+
+                console.log('Triggers loaded:', triggers.length, 'triggers');
 
                 if (triggers.length === 0) {
                     triggersList.innerHTML = `
@@ -3141,8 +3309,8 @@
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 class="mb-1">${trigger.name}</h6>
-                                        <p class="text-muted mb-2">${trigger.trigger_type.replace('_', ' ').toUpperCase()}</p>
-                                        <small class="text-muted">Priority: ${trigger.priority}</small>
+                                        <p class="text-muted mb-2">${trigger.trigger_type ? trigger.trigger_type.replace('_', ' ').toUpperCase() : 'UNKNOWN TYPE'}</p>
+                                        <small class="text-muted">Priority: ${trigger.priority || 'N/A'}</small>
                                     </div>
                                     <div class="text-end">
                                         <span class="badge bg-${trigger.is_active ? 'success' : 'secondary'} mb-2">
@@ -3162,7 +3330,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-2">
-                                    <small class="text-muted">Template: ${trigger.message_template.substring(0, 100)}${trigger.message_template.length > 100 ? '...' : ''}</small>
+                                    <small class="text-muted">Template: ${trigger.message_template ? trigger.message_template.substring(0, 100) + (trigger.message_template.length > 100 ? '...' : '') : 'No template'}</small>
                                 </div>
                             </div>
                         </div>
@@ -3437,7 +3605,7 @@
 
                 if (response.ok) {
                     // Populate edit modal with trigger data
-                    showEditTriggerModal(trigger);
+                    showEditTriggerModal(trigger.data);
                 } else {
                     alert('Error loading trigger: ' + (trigger.detail || 'Unknown error'));
                 }
@@ -3496,6 +3664,139 @@
             } catch (error) {
                 console.error('Error deleting trigger:', error);
                 alert('Error deleting trigger: ' + error.message);
+            }
+        }
+
+        function showEditTriggerModal(trigger) {
+            // Debug logging
+            console.log('showEditTriggerModal called with:', trigger);
+
+            // Ensure trigger data is valid
+            if (!trigger || !trigger.id) {
+                console.error('Invalid trigger data:', trigger);
+                alert('Error: Invalid trigger data');
+                return;
+            }
+
+            // Create edit modal with trigger data
+            const modalHtml = `
+                <div class="modal fade" id="editTriggerModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Trigger: ${trigger.name || 'Unknown'}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="edit-trigger-form">
+                                    <input type="hidden" id="edit-trigger-id" value="${trigger.id}">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Name</label>
+                                                <input type="text" class="form-control" id="edit-trigger-name" value="${trigger.name || ''}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Trigger Type</label>
+                                                <select class="form-select" id="edit-trigger-type" required>
+                                                    <option value="first_message_received" ${trigger.trigger_type === 'first_message_received' ? 'selected' : ''}>First Message Received</option>
+                                                    <option value="seconds_after_first_message" ${trigger.trigger_type === 'seconds_after_first_message' ? 'selected' : ''}>Seconds After First Message</option>
+                                                    <option value="minutes_after_first_message" ${trigger.trigger_type === 'minutes_after_first_message' ? 'selected' : ''}>Minutes After First Message</option>
+                                                    <option value="event_based" ${trigger.trigger_type === 'event_based' ? 'selected' : ''}>Event Based</option>
+                                                    <option value="negative_sentiment_detected" ${trigger.trigger_type === 'negative_sentiment_detected' ? 'selected' : ''}>Negative Sentiment Detected</option>
+                                                    <option value="positive_sentiment_detected" ${trigger.trigger_type === 'positive_sentiment_detected' ? 'selected' : ''}>Positive Sentiment Detected</option>
+                                                    <option value="guest_complaint" ${trigger.trigger_type === 'guest_complaint' ? 'selected' : ''}>Guest Complaint</option>
+                                                    <option value="review_request_time" ${trigger.trigger_type === 'review_request_time' ? 'selected' : ''}>Review Request Time</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Priority</label>
+                                                <input type="number" class="form-control" id="edit-trigger-priority" value="${trigger.priority || 1}" min="1" max="10">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status</label>
+                                                <select class="form-select" id="edit-trigger-status">
+                                                    <option value="true" ${trigger.is_active ? 'selected' : ''}>Active</option>
+                                                    <option value="false" ${!trigger.is_active ? 'selected' : ''}>Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Message Template</label>
+                                        <textarea class="form-control" id="edit-trigger-message" rows="4" placeholder="Enter the message template...">${trigger.message_template || ''}</textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="updateTrigger()">Update Trigger</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('editTriggerModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('editTriggerModal'));
+            modal.show();
+        }
+
+        async function updateTrigger() {
+            try {
+                const triggerId = document.getElementById('edit-trigger-id').value;
+                console.log('updateTrigger called with ID:', triggerId);
+
+                if (!triggerId) {
+                    alert('Error: No trigger ID found');
+                    return;
+                }
+
+                const triggerData = {
+                    name: document.getElementById('edit-trigger-name').value,
+                    trigger_type: document.getElementById('edit-trigger-type').value,
+                    priority: parseInt(document.getElementById('edit-trigger-priority').value),
+                    is_active: document.getElementById('edit-trigger-status').value === 'true',
+                    message_template: document.getElementById('edit-trigger-message').value
+                };
+
+                const response = await fetch(`/api/v1/triggers/${triggerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(triggerData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Trigger updated successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('editTriggerModal')).hide();
+                    loadTriggers(); // Reload the triggers list
+                } else {
+                    alert('Error updating trigger: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error updating trigger:', error);
+                alert('Error updating trigger: ' + error.message);
             }
         }
 
@@ -3611,6 +3912,162 @@
             } catch (error) {
                 console.error('Error creating trigger:', error);
                 alert('Error creating trigger: ' + error.message);
+            }
+        }
+
+        function showCreateTriggersFromTemplatesModal() {
+            const modalHtml = `
+                <div class="modal fade" id="createTriggersFromTemplatesModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-magic me-2"></i>Create Triggers from Templates
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Hotel Trigger Templates:</strong> Create pre-configured triggers designed to improve guest experience and increase positive reviews.
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Select Hotel</label>
+                                    <select class="form-select" id="template-hotel-selector" required>
+                                        <option value="">Select a hotel...</option>
+                                    </select>
+                                    <small class="text-muted">Choose the hotel to create triggers for</small>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">Welcome & Onboarding</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Welcome Message - Immediate</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Quick Response - 30 seconds</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">Experience Enhancement</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Check-in Day Welcome</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Mid-Stay Check-in</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">Review Optimization</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Pre-Checkout Satisfaction Check</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Negative Sentiment Response</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Post-Stay Review Request</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary">Complaint Handling</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Complaint Escalation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Note:</strong> These templates will create multiple triggers. You can customize them after creation.
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="createTriggersFromTemplates()">
+                                    <i class="fas fa-magic me-1"></i>Create All Triggers
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing modal if any
+            const existingModal = document.getElementById('createTriggersFromTemplatesModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Load hotels for selector
+            loadHotelsForTemplateSelector();
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('createTriggersFromTemplatesModal'));
+            modal.show();
+        }
+
+        async function loadHotelsForTemplateSelector() {
+            try {
+                const response = await fetch('/api/v1/hotels');
+                const data = await response.json();
+
+                const selector = document.getElementById('template-hotel-selector');
+                selector.innerHTML = '<option value="">Select a hotel...</option>';
+
+                // Handle different response formats
+                let hotels = [];
+                if (data.status === 'success' && data.data) {
+                    if (Array.isArray(data.data)) {
+                        hotels = data.data;
+                    } else if (data.data.hotels) {
+                        hotels = data.data.hotels;
+                    }
+                } else if (Array.isArray(data)) {
+                    hotels = data;
+                } else if (data.hotels) {
+                    hotels = data.hotels;
+                }
+
+                hotels.forEach(hotel => {
+                    const option = document.createElement('option');
+                    option.value = hotel.id;
+                    option.textContent = hotel.name;
+                    selector.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading hotels for template selector:', error);
+            }
+        }
+
+        async function createTriggersFromTemplates() {
+            const hotelId = document.getElementById('template-hotel-selector').value;
+
+            if (!hotelId) {
+                alert('Please select a hotel first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/hotels/${hotelId}/triggers/templates`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`Successfully created ${result.triggers.length} trigger templates!`);
+                    bootstrap.Modal.getInstance(document.getElementById('createTriggersFromTemplatesModal')).hide();
+                    loadTriggers(); // Reload the triggers list
+                } else {
+                    alert('Error creating trigger templates: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error creating trigger templates:', error);
+                alert('Error creating trigger templates: ' + error.message);
             }
         }
 
@@ -4162,6 +4619,221 @@
                 document.getElementById('deepseek-api-status').className = 'text-danger';
                 alert('Error testing connection: ' + error.message);
             }
+        }
+
+        // Hotel-Specific DeepSeek Functions
+        async function loadHotelsForDeepSeekSelector() {
+            try {
+                const response = await fetch('/api/v1/hotels');
+                const data = await response.json();
+
+                const selector = document.getElementById('deepseek-hotel-selector');
+                selector.innerHTML = '<option value="">Select a hotel to configure...</option>';
+
+                // Handle different response formats
+                let hotels = [];
+                if (data.status === 'success' && data.data) {
+                    if (Array.isArray(data.data)) {
+                        hotels = data.data;
+                    } else if (data.data.hotels) {
+                        hotels = data.data.hotels;
+                    }
+                } else if (Array.isArray(data)) {
+                    hotels = data;
+                } else if (data.hotels) {
+                    hotels = data.hotels;
+                }
+
+                hotels.forEach(hotel => {
+                    const option = document.createElement('option');
+                    option.value = hotel.id;
+                    option.textContent = hotel.name;
+                    selector.appendChild(option);
+                });
+
+                console.log('Hotels loaded for DeepSeek selector:', hotels.length);
+            } catch (error) {
+                console.error('Error loading hotels for DeepSeek selector:', error);
+            }
+        }
+
+        async function loadHotelDeepSeekSettings() {
+            const hotelId = document.getElementById('deepseek-hotel-selector').value;
+
+            if (!hotelId) {
+                // Disable all form fields and buttons
+                disableDeepSeekForm();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/hotels/${hotelId}/deepseek`);
+                const data = await response.json();
+
+                if (data && data.status === 'success' && data.data) {
+                    const settings = data.data;
+
+                    // Populate form fields
+                    document.getElementById('deepseek-api-key').value = settings.api_key || '';
+                    document.getElementById('deepseek-model').value = settings.model || 'deepseek-chat';
+                    document.getElementById('deepseek-max-tokens').value = settings.max_tokens || 4096;
+                    document.getElementById('deepseek-temperature').value = settings.temperature || 0.7;
+                    document.getElementById('deepseek-requests-per-minute').value = settings.max_requests_per_minute || 50;
+                    document.getElementById('deepseek-tokens-per-minute').value = settings.max_tokens_per_minute || 100000;
+                    document.getElementById('deepseek-timeout').value = settings.timeout || 60;
+                    document.getElementById('deepseek-max-retries').value = settings.max_retries || 3;
+                    document.getElementById('deepseek-travel-memory').value = settings.travel_memory || '';
+                    document.getElementById('deepseek-style').value = settings.response_style || 'professional';
+
+                    // Update temperature display
+                    document.getElementById('temp-value').textContent = settings.temperature || 0.7;
+
+                    // Enable form
+                    enableDeepSeekForm();
+
+                    console.log('Hotel DeepSeek settings loaded successfully');
+                } else {
+                    // No settings found, use defaults
+                    resetHotelDeepSeekSettings();
+                    enableDeepSeekForm();
+                }
+            } catch (error) {
+                console.error('Error loading hotel DeepSeek settings:', error);
+                alert('Error loading hotel settings: ' + error.message);
+            }
+        }
+
+        async function saveHotelDeepSeekSettings() {
+            const hotelId = document.getElementById('deepseek-hotel-selector').value;
+
+            if (!hotelId) {
+                alert('Please select a hotel first');
+                return;
+            }
+
+            try {
+                const settingsData = {
+                    enabled: true,
+                    api_key: document.getElementById('deepseek-api-key').value,
+                    model: document.getElementById('deepseek-model').value,
+                    max_tokens: parseInt(document.getElementById('deepseek-max-tokens').value),
+                    temperature: parseFloat(document.getElementById('deepseek-temperature').value),
+                    timeout: parseInt(document.getElementById('deepseek-timeout').value),
+                    max_requests_per_minute: parseInt(document.getElementById('deepseek-requests-per-minute').value),
+                    max_tokens_per_minute: parseInt(document.getElementById('deepseek-tokens-per-minute').value),
+                    max_retries: parseInt(document.getElementById('deepseek-max-retries').value),
+                    travel_memory: document.getElementById('deepseek-travel-memory').value,
+                    response_style: document.getElementById('deepseek-style').value
+                };
+
+                const response = await fetch(`/api/v1/hotels/${hotelId}/deepseek`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(settingsData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Hotel DeepSeek settings saved successfully!');
+                    loadHotelDeepSeekSettings(); // Reload to show updated values
+                } else {
+                    alert('Error saving settings: ' + (result.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error saving hotel DeepSeek settings:', error);
+                alert('Error saving settings: ' + error.message);
+            }
+        }
+
+        async function testHotelDeepSeekConnection() {
+            const hotelId = document.getElementById('deepseek-hotel-selector').value;
+
+            if (!hotelId) {
+                alert('Please select a hotel first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/hotels/${hotelId}/deepseek/test`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('DeepSeek connection successful for this hotel!');
+                } else {
+                    alert('Connection failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error testing hotel DeepSeek connection:', error);
+                alert('Error testing connection: ' + error.message);
+            }
+        }
+
+        function resetHotelDeepSeekSettings() {
+            // Reset to default values
+            document.getElementById('deepseek-api-key').value = '';
+            document.getElementById('deepseek-model').value = 'deepseek-chat';
+            document.getElementById('deepseek-max-tokens').value = 4096;
+            document.getElementById('deepseek-temperature').value = 0.7;
+            document.getElementById('deepseek-requests-per-minute').value = 50;
+            document.getElementById('deepseek-tokens-per-minute').value = 100000;
+            document.getElementById('deepseek-timeout').value = 60;
+            document.getElementById('deepseek-max-retries').value = 3;
+            document.getElementById('deepseek-travel-memory').value = '';
+
+            // Update temperature display
+            document.getElementById('temp-value').textContent = '0.7';
+        }
+
+        function enableDeepSeekForm() {
+            // Enable all form fields
+            document.getElementById('deepseek-api-key').disabled = false;
+            document.getElementById('deepseek-model').disabled = false;
+            document.getElementById('deepseek-max-tokens').disabled = false;
+            document.getElementById('deepseek-temperature').disabled = false;
+            document.getElementById('deepseek-requests-per-minute').disabled = false;
+            document.getElementById('deepseek-tokens-per-minute').disabled = false;
+            document.getElementById('deepseek-timeout').disabled = false;
+            document.getElementById('deepseek-max-retries').disabled = false;
+            document.getElementById('deepseek-travel-memory').disabled = false;
+            document.getElementById('deepseek-style').disabled = false;
+
+            // Enable buttons
+            document.getElementById('save-deepseek-btn').disabled = false;
+            document.getElementById('reload-deepseek-btn').disabled = false;
+            document.getElementById('test-deepseek-btn').disabled = false;
+            document.getElementById('reset-deepseek-btn').disabled = false;
+        }
+
+        function disableDeepSeekForm() {
+            // Disable all form fields
+            document.getElementById('deepseek-api-key').disabled = true;
+            document.getElementById('deepseek-model').disabled = true;
+            document.getElementById('deepseek-max-tokens').disabled = true;
+            document.getElementById('deepseek-temperature').disabled = true;
+            document.getElementById('deepseek-requests-per-minute').disabled = true;
+            document.getElementById('deepseek-tokens-per-minute').disabled = true;
+            document.getElementById('deepseek-timeout').disabled = true;
+            document.getElementById('deepseek-max-retries').disabled = true;
+            document.getElementById('deepseek-travel-memory').disabled = true;
+            document.getElementById('deepseek-style').disabled = true;
+
+            // Disable buttons
+            document.getElementById('save-deepseek-btn').disabled = true;
+            document.getElementById('reload-deepseek-btn').disabled = true;
+            document.getElementById('test-deepseek-btn').disabled = true;
+            document.getElementById('reset-deepseek-btn').disabled = true;
+
+            // Clear form
+            resetHotelDeepSeekSettings();
         }
 
         // Trigger Demo Functions

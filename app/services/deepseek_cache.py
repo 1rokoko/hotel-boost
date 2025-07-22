@@ -50,6 +50,11 @@ class DeepSeekCacheService:
     
     def _create_redis_client(self) -> redis.Redis:
         """Create Redis client connection"""
+        # If caching is disabled, return mock client
+        if not self.cache_enabled:
+            logger.info("DeepSeek cache disabled, using mock client")
+            return MockRedisClient()
+
         try:
             client = redis.Redis(
                 host=getattr(settings, 'REDIS_HOST', 'localhost'),
@@ -62,15 +67,15 @@ class DeepSeekCacheService:
                 retry_on_timeout=True,
                 health_check_interval=30
             )
-            
+
             # Test connection
             client.ping()
             logger.info("Redis connection established for DeepSeek cache")
-            
+
             return client
-            
+
         except Exception as e:
-            logger.error("Failed to connect to Redis for DeepSeek cache", error=str(e))
+            logger.warning("Failed to connect to Redis for DeepSeek cache, using mock client", error=str(e))
             # Return a mock client that does nothing
             return MockRedisClient()
     

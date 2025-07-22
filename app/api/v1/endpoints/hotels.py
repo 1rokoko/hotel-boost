@@ -29,6 +29,8 @@ from app.schemas.hotel import (
     HotelSettingsUpdate,
     HotelConfigurationResponse
 )
+from app.services.hotel_trigger_templates import HotelTriggerTemplates
+from app.services.trigger_service import TriggerService
 from app.core.tenant import require_tenant_context
 from app.middleware.tenant import get_current_tenant_id
 
@@ -44,16 +46,17 @@ def get_hotel_service_dep(db: Session = Depends(get_db)) -> HotelService:
 
 @router.post("/", response_model=HotelResponse, status_code=status.HTTP_201_CREATED)
 def create_hotel(
-    hotel_data: HotelCreate
+    hotel_data: HotelCreate,
+    db: Session = Depends(get_db)
 ):
     """
     Create a new hotel
-    
+
     Creates a new hotel with the provided information. The hotel will be
     associated with the current tenant context.
     """
     try:
-        hotel_service = hotelService(db)
+        hotel_service = HotelService(db)
         hotel = hotel_service.create_hotel(hotel_data)
         
         logger.info(
@@ -87,7 +90,8 @@ def search_hotels(
     page: int = Query(1, ge=1, description="Page number"),
     size: int = Query(20, ge=1, le=100, description="Page size"),
     sort_by: str = Query("name", description="Sort field"),
-    sort_order: str = Query("asc", description="Sort order")
+    sort_order: str = Query("asc", description="Sort order"),
+    db: Session = Depends(get_db)
 ):
     """
     Search and list hotels with pagination
@@ -486,6 +490,86 @@ def update_deepseek_settings(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to update DeepSeek settings"
+        )
+
+
+@router.post("/{hotel_id}/deepseek/test")
+def test_hotel_deepseek_connection(
+    hotel_id: uuid.UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Test DeepSeek AI connection for a specific hotel
+
+    Tests the DeepSeek AI configuration for the specified hotel.
+    """
+    try:
+        hotel_service = HotelService(db)
+        result = hotel_service.test_deepseek_connection(hotel_id)
+
+        return result
+
+    except HotelServiceError as e:
+        logger.error("DeepSeek connection test failed", hotel_id=str(hotel_id), error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to test DeepSeek connection"
+        )
+
+
+@router.post("/{hotel_id}/triggers/templates")
+def create_triggers_from_templates(
+    hotel_id: uuid.UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Create useful trigger templates for a hotel
+
+    Creates pre-configured triggers designed to improve guest experience
+    and increase positive reviews.
+    """
+    try:
+        # Check if hotel exists
+        hotel_service = HotelService(db)
+        hotel = hotel_service.get_hotel(hotel_id)
+        if not hotel:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Hotel not found"
+            )
+
+        # Create trigger service
+        trigger_service = TriggerService(db)
+
+        # Get trigger templates
+        trigger_templates = HotelTriggerTemplates.create_triggers_for_hotel(str(hotel_id))
+
+        created_triggers = []
+        for trigger_template in trigger_templates:
+            try:
+                trigger = trigger_service.create_trigger(hotel_id, trigger_template)
+                created_triggers.append(trigger)
+            except Exception as e:
+                logger.warning("Failed to create trigger template",
+                             trigger_name=trigger_template.name, error=str(e))
+                continue
+
+        logger.info("Trigger templates created for hotel",
+                   hotel_id=str(hotel_id), count=len(created_triggers))
+
+        return {
+            "status": "success",
+            "message": f"Created {len(created_triggers)} trigger templates",
+            "triggers": created_triggers
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("Failed to create trigger templates", hotel_id=str(hotel_id), error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create trigger templates"
         )
 
 
